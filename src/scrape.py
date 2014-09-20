@@ -76,7 +76,7 @@ def main():
         # Iterate over each syllabus.
         for syllabus_tag in syllabus_tags:
 
-            logging.debug("Syllabus link: %s" % syllabus_tag)
+            logging.debug("Syllabus link: %s" % syllabus_tag['href'])
 
             # Request syllabus page.
             try:
