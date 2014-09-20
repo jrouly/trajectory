@@ -17,7 +17,7 @@ def main():
     url = "http://cs.gmu.edu"
     courses_url = "/courses/"
 
-    path = "../data/gmu"
+    path = "../../data/gmu"
 
     # Create path if need be.
     if os.path.exists( path ):
