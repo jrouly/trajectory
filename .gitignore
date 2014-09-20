@@ -55,3 +55,4 @@ target/
 
 # Data directory
 data/
+logs/
