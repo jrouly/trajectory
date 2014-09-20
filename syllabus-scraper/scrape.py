@@ -3,13 +3,16 @@ from werkzeug import url_fix
 from urllib.parse import urljoin
 from urllib.request import urlopen
 from urllib.error import HTTPError
+
+from datetime import datetime
 import logging
 import re
 import os
 
 def main():
 
-    logging.basicConfig(filename="output.out",level=logging.DEBUG)
+    timestamp = datetime.strftime( datetime.now(), "%s" )
+    logging.basicConfig(filename="../logs/output-%s.log" % timestamp, level=logging.DEBUG)
     logging.info( "Beginning." )
 
     url = "http://cs.gmu.edu"
