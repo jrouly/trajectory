@@ -1,8 +1,8 @@
 from bs4 import BeautifulSoup
 from werkzeug import url_fix
 from urllib.parse import urljoin
-from urllib.error import HTTPError
 from requests import get
+from requests.exceptions import HTTPError
 from datetime import datetime
 import logging
 import re
