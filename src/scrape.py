@@ -53,7 +53,8 @@ def main():
         logging.debug("Semester: %s" % semester_tag.text)
 
         # Store semesters in a directory.
-        semester_path = os.path.join( path, semester_tag.text )
+        semester_path = re.sub(r'\s+', ' ', semester_tag.text)
+        semester_path = os.path.join( path, semester_path )
         if not os.path.exists( semester_tag.text ):
             os.makedirs( semester_path )
 
@@ -91,7 +92,8 @@ def main():
                 continue
 
             # Write syllabus to disk.
-            syllabus_path = os.path.join( semester_path, syllabus_tag.text )
+            syllabus_path = re.sub(r'\s+', ' ', syllabus_tag.text)
+            syllabus_path = os.path.join( semester_path, syllabus_path )
             with open( syllabus_path, 'w' ) as syllabus:
                 contents = syllabus_page.read()
                 syllabus.write( str(contents) )
