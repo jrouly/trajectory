@@ -1,9 +1,8 @@
 from bs4 import BeautifulSoup
 from werkzeug import url_fix
 from urllib.parse import urljoin
-from urllib.request import urlopen
 from urllib.error import HTTPError
-
+from requests import get
 from datetime import datetime
 import logging
 import re
@@ -32,8 +31,8 @@ def main():
         index_link = urljoin( url, courses_url )
         index_link = url_fix( index_link )
         logging.debug( index_link )
-        index_page = urlopen( index_link )
-        index_soup = BeautifulSoup( index_page.read() )
+        index_page = get( index_link )
+        index_soup = BeautifulSoup( index_page.text )
     except Exception as e:
         logging.warning( "Error." )
         logging.debug( index_link )
@@ -62,8 +61,8 @@ def main():
         try:
             semester_link = urljoin( url, semester_tag['href'] )
             semester_link = url_fix( semester_link )
-            semester_page = urlopen( semester_link )
-            semester_soup = BeautifulSoup( semester_page.read() )
+            semester_page = get( semester_link )
+            semester_soup = BeautifulSoup( semester_page.text )
         except Exception:
             logging.warning( "Error." )
             logging.debug( semester_link )
@@ -83,7 +82,7 @@ def main():
             try:
                 syllabus_link = urljoin( semester_link, syllabus_tag['href'] )
                 syllabus_link = url_fix( syllabus_link )
-                syllabus_page = urlopen( syllabus_link )
+                syllabus_page = get( syllabus_link )
             except Exception as e:
                 logging.warning( "Error." )
                 logging.debug( syllabus_link )
@@ -92,11 +91,10 @@ def main():
                 continue
 
             # Write syllabus to disk.
-            syllabus_path = re.sub(r'\s+', ' ', syllabus_tag.text)
+            syllabus_path = re.sub(r'\s+', ' ', syllabus_tag.text) + ".raw"
             syllabus_path = os.path.join( semester_path, syllabus_path )
             with open( syllabus_path, 'w' ) as syllabus:
-                contents = syllabus_page.read()
-                syllabus.write( str(contents) )
+                syllabus.write( syllabus_page.text )
 
     logging.info( "Completed scraping per semester." )
 
