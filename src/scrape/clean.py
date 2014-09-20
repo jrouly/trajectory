@@ -1,3 +1,12 @@
+"""
+clean.py
+Author: Jean Michel Rouly
+
+This file takes the gmu cs syllabi directory as input and removes all HTML
+entities and non-word elements from them.
+"""
+
+
 from bs4 import BeautifulSoup
 from datetime import datetime
 
