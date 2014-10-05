@@ -10,13 +10,16 @@ import os
 
 def main():
 
+    # Set up logging utility.
     timestamp = datetime.strftime( datetime.now(), "%s" )
     logging.basicConfig(filename="../logs/output-%s.log" % timestamp, level=logging.DEBUG)
     logging.info( "Beginning." )
 
+    # Hardcoded GMU CS syllabi repository
     url = "http://cs.gmu.edu"
     courses_url = "/courses/"
 
+    # Hardcoded local data directory
     path = "../../data/gmu"
 
     # Create path if need be.
