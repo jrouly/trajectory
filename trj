@@ -48,15 +48,16 @@ def main():
 
     # Create parser for "scrape" command.
     parser_scrape = subparsers.add_parser("scrape", help="scrape syllabi")
-    parser_scrape.add_argument("target", choices=SCRAPE_TARGETS,
-            help="target website to scrape")
+    parser_scrape.add_argument("targets", choices=SCRAPE_TARGETS,
+            nargs="+",
+            help="target websites to scrape")
 
 
     # Create parser for "clean" command.
     parser_clean = subparsers.add_parser("clean",
             description="The clean subcommand is used to clean up generated content.",
             help="clean data folders")
-    parser_clean.add_argument("target",
+    parser_clean.add_argument("targets",
             choices=CLEAN_TARGETS,
             default=CLEAN_TARGETS[0],
             nargs="*",
@@ -77,7 +78,8 @@ def main():
 
     # Execute subcommand logic.
     if args.subparser_name == "scrape":
-        pass
+        from trajectory.scrape import scrape
+        scrape( args )
     elif args.subparser_name == "clean":
         from trajectory.clean import clean
         clean( args )
