@@ -8,6 +8,7 @@ Configure a global logging system.
 
 import logging
 
+
 def global_logger(name):
 
     formatter = logging.Formatter(fmt='%(asctime)s - %(levelname)s - %(module)s - %(message)s')
