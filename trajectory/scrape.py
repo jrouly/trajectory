@@ -21,7 +21,9 @@ def scrape(args):
     Routes scraping to the appropriate scraper module.
     """
 
-    log.info("Scraping targets: %s" % args.target)
+    log.info("Scraping targets: %s" % args.targets)
 
-    for target in args.target:
+    for target in args.targets:
         log.info("Targeting: %s" % target)
+        packagename = "trajectory.scrapers.%s" % target
+        scraper = __import__( packagename )
