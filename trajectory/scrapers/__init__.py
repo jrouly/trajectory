@@ -2,5 +2,5 @@
 trajectory/scrape/__init__.py
 Author: Jean Michel Rouly
 
-Defines the Scrape package.
+Defines the Scrapers package.
 """
