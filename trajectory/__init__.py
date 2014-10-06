@@ -1,1 +1,1 @@
-__all__ = ["scrape", "cluster"]
+__all__ = ["scrape", "cluster", "log", "clean"]
