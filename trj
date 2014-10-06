@@ -75,19 +75,14 @@ def main():
     log.info("Beginning.")
 
 
-    # Create data directory, if it doesn't already exist.
-    if not os.path.exists( args.data_dir ):
-        log.info("\"%s\" does not exist.  Creating..." % args.data_dir)
-        os.makedirs( args.data_dir )
-
-
     # Execute subcommand logic.
     if args.subparser_name == "scrape":
         pass
     elif args.subparser_name == "clean":
         from trajectory.clean import clean
         clean( args )
-
+    else:
+        log.warn("You did not provide a command.")
 
     # Exit the program.
     log.info("Exiting.")
