@@ -11,10 +11,22 @@ from werkzeug import url_fix
 from urllib.parse import urljoin
 from requests import get
 from requests.exceptions import HTTPError
-from datetime import datetime
-import logging
 import re
 import os
+
+
+import logging
+log = logging.getLogger("root")
+
+
+# Constant values.
+# TODO: These should be read from a configuration at some point.
+
+# GMU CS syllabi repository
+url = "http://cs.gmu.edu"
+courses_url = "/courses/"
+syllabus_url_regex = re.compile("^/syllabus/.*$")
+data_id = "gmu.cs"
 
 
 def scrape( args ):
@@ -23,53 +35,45 @@ def scrape( args ):
     directory.
     """
 
-    # Set up logging utility.
-    timestamp = datetime.strftime( datetime.now(), "%s" )
-    logging.basicConfig(filename="../logs/output-%s.log" % timestamp, level=logging.DEBUG)
-    logging.info( "Beginning." )
+    log.info( "Scraping GMU CS data." )
 
-    # Hardcoded GMU CS syllabi repository
-    url = "http://cs.gmu.edu"
-    courses_url = "/courses/"
+    data_dir = os.path.join( args.data_dir, data_id )
 
-    # Hardcoded local data directory
-    path = "../../data/gmu"
+    # Create data directory, if it doesn't already exist.
+    if not os.path.exists( data_dir ):
+        log.info("\"%s\" does not exist. Creating..." % data_dir)
+        os.makedirs( data_dir )
 
-    # Create path if need be.
-    if os.path.exists( path ):
-        logging.info( "Data path %s exists already. Exiting." % path )
-    else:
-        logging.info( "Data path %s does not exist, creating." % path )
-        os.makedirs( path )
 
     # Request index page and generate soup.
     try:
         index_link = urljoin( url, courses_url )
         index_link = url_fix( index_link )
-        logging.debug( index_link )
+        log.debug( index_link )
         index_page = get( index_link )
         index_soup = BeautifulSoup( index_page.text )
+
     except Exception as e:
-        logging.warning( "Error." )
-        logging.debug( index_link )
-        logging.debug( str(e) )
+        log.warning( "Error." )
+        log.debug( index_link )
+        log.debug( str(e) )
         exit( 2 )
 
-    logging.info( "Generated index soup." )
+    log.debug( "Generated index soup." )
 
     # Find the semester links.
-    semester_tags = index_soup.find_all("a", href=re.compile("^/syllabus/.*$"))
-    logging.info( "Grabbed semester list." )
+    semester_tags = index_soup.find_all("a", href=syllabus_url_regex)
+    log.debug( "Grabbed semester list." )
 
     # Iterate over each semester.
-    logging.info( "Begin scraping per semester." )
+    log.debug( "Begin scraping per semester." )
     for semester_tag in semester_tags:
 
-        logging.debug("Semester: %s" % semester_tag.text)
+        log.debug("Semester: %s" % semester_tag.text)
 
         # Store semesters in a directory.
         semester_path = re.sub(r'\s+', ' ', semester_tag.text)
-        semester_path = os.path.join( path, semester_path )
+        semester_path = os.path.join( data_dir, semester_path )
         if not os.path.exists( semester_tag.text ):
             os.makedirs( semester_path )
 
@@ -80,10 +84,10 @@ def scrape( args ):
             semester_page = get( semester_link )
             semester_soup = BeautifulSoup( semester_page.text )
         except Exception:
-            logging.warning( "Error." )
-            logging.debug( semester_link )
-            logging.debug( semester_tag.text )
-            logging.debug( str(e) )
+            log.warning( "Error." )
+            log.debug( semester_link )
+            log.debug( semester_tag.text )
+            log.debug( str(e) )
             continue
 
         # Find the syllabus links.
@@ -92,7 +96,7 @@ def scrape( args ):
         # Iterate over each syllabus.
         for syllabus_tag in syllabus_tags:
 
-            logging.debug("Syllabus link: %s" % syllabus_tag['href'])
+            log.debug("Syllabus link: %s" % syllabus_tag['href'])
 
             # Request syllabus page.
             try:
@@ -100,10 +104,10 @@ def scrape( args ):
                 syllabus_link = url_fix( syllabus_link )
                 syllabus_page = get( syllabus_link )
             except Exception as e:
-                logging.warning( "Error." )
-                logging.debug( syllabus_link )
-                logging.debug( syllabus_tag.text )
-                logging.debug( str(e) )
+                log.warning( "Error." )
+                log.debug( syllabus_link )
+                log.debug( syllabus_tag.text )
+                log.debug( str(e) )
                 continue
 
             # Write syllabus to disk.
@@ -112,10 +116,7 @@ def scrape( args ):
             with open( syllabus_path, 'w' ) as syllabus:
                 syllabus.write( syllabus_page.text )
 
-    logging.info( "Completed scraping per semester." )
-
-
-
+    log.info( "Completed scraping per semester." )
 
 
 
@@ -125,25 +126,31 @@ def clean( args ):
     all HTML entities and non-word elements from them.
     """
 
-    timestamp = datetime.strftime( datetime.now(), "%s" )
-    logging.basicConfig(level=logging.DEBUG)
-    logging.info( "Beginning." )
+    log.info( "Beginning." )
 
-    path = "../../data/gmu"
+
+    data_dir = os.path.join( args.data_dir, data_id )
+
+    # Create data directory, if it doesn't already exist.
+    if not os.path.exists( data_dir ):
+        log.info("\"%s\" does not exist.  Creating..." % data_dir)
+        os.makedirs( data_dir )
+
+
     whitespace = re.compile("\\\\n|\\\\r|\\\\xa0|\d|\W")
     singletons = re.compile("\s+\w(?=\s+)")
     long_whitespace = re.compile("\s+")
 
     # Generate a list of all data files in the data path.
     files = [os.path.join(root, name)
-             for root, dirs, files in os.walk( path )
+             for root, dirs, files in os.walk( data_dir )
              for name in files
              if name.endswith(".raw")]
 
     # Iterate over each datafile
     for datafile in files:
 
-        logging.debug("Datafile: %s" % datafile)
+        log.debug("Datafile: %s" % datafile)
 
         # Generate a soup object for each and strip it to its textual contents
         try:
@@ -153,7 +160,7 @@ def clean( args ):
             strings = soup.body.stripped_strings
             contents = ' '.join( strings )
         except:
-            logging.warning( "Error detected in %s" % datafile )
+            log.warning( "Error detected in %s" % datafile )
             continue
 
         contents = re.sub(whitespace, ' ', contents) # remove non-letters
@@ -165,4 +172,4 @@ def clean( args ):
         with open( datafile[:-3] + "txt", 'w' ) as out:
             out.write( contents )
 
-    logging.info( "Completed data processing." )
+    log.info( "Completed data processing." )
