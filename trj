@@ -41,6 +41,7 @@ def main():
     parser_scrape.add_argument("target", choices=SCRAPE_TARGETS,
             help="target website to scrape.")
 
+    # Create parser for "clean" command.
     parser_clean = subparsers.add_parser("clean", help="Clean data folders.")
 
     # Parse command line arguments.
