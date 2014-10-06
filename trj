@@ -11,6 +11,7 @@ application structure.
 
 from argparse import ArgumentParser
 from trajectory.clean import CLEAN_TARGETS
+from trajectory.scrape import SCRAPE_TARGETS
 import trajectory.log
 import sys
 import os
@@ -21,7 +22,6 @@ import os
 PROG_NAME = "Trajectory"
 PROG_DESC = "Trajectory is ... desc here ... "
 PROG_VERSION = PROG_NAME + " 0.0"
-SCRAPE_TARGETS = ["gmu.cs"]
 
 
 def main():
@@ -51,6 +51,18 @@ def main():
     parser_scrape.add_argument("targets", choices=SCRAPE_TARGETS,
             nargs="+",
             help="target websites to scrape")
+    parser_scrape.add_argument("--no-download",
+            help="don't download the data",
+            action="store_true")
+    parser_scrape.add_argument("--no-clean",
+            help="don't clean up the data",
+            action="store_true")
+
+
+    # Create parser for "cluster" command.
+    parser_cluster = subparsers.add_parser("cluster", help="cluster syllabi")
+    parser_cluster.add_argument("target", choices=SCRAPE_TARGETS,
+            help="target syllabus pool to cluster")
 
 
     # Create parser for "clean" command.
@@ -83,6 +95,10 @@ def main():
     elif args.subparser_name == "clean":
         from trajectory.clean import clean
         clean( args )
+    elif args.subparser_name == "cluster":
+        from trajectory.cluster.cluster import cluster
+        # TODO: Fix this up to use your stackmining infrastructure.
+        cluster( args )
     else:
         log.warn("You did not provide a command.")
 
