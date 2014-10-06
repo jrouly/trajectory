@@ -10,10 +10,18 @@ application structure.
 
 
 from argparse import ArgumentParser
-
-import logging
-import os
+from trajectory.clean import CLEAN_TARGETS
+import trajectory.log
 import sys
+import os
+
+
+# Constant values.
+# TODO: These should be read from a configuration at some point.
+PROG_NAME = "Trajectory"
+PROG_DESC = "Trajectory is ... desc here ... "
+PROG_VERSION = PROG_NAME + " 0.0"
+SCRAPE_TARGETS = ["gmu.cs"]
 
 
 def main():
@@ -22,19 +30,13 @@ def main():
     logic depending on what the user wants to do.
     """
 
-    # Constant values.
-    # TODO: These should be read from a configuration at some point.
-    PROG_NAME = "Trajectory"
-    PROG_DESC = "Trajectory is ... desc here ... "
-    PROG_VERSION = PROG_NAME + " 0.0"
-    SCRAPE_TARGETS = ["gmu.cs"]
-
-
     # Create top-level command line argument parser.
     parser = ArgumentParser(description=PROG_DESC, prog=PROG_NAME)
     parser.add_argument("--version", action="version", version=PROG_VERSION)
-    parser.add_argument("--debug", action="store_true",
-            help="show debugging output")
+    parser.add_argument("--logging-dir", help="log storage directory",
+            default="logs")
+    parser.add_argument("--data-dir", help="data storage directory",
+            default="data")
 
 
     # Specify subcommands using a subparser.
@@ -47,38 +49,48 @@ def main():
     # Create parser for "scrape" command.
     parser_scrape = subparsers.add_parser("scrape", help="scrape syllabi")
     parser_scrape.add_argument("target", choices=SCRAPE_TARGETS,
-            help="target website to scrape.")
+            help="target website to scrape")
 
 
     # Create parser for "clean" command.
-    parser_clean = subparsers.add_parser("clean", help="clean data folders")
+    parser_clean = subparsers.add_parser("clean",
+            description="The clean subcommand is used to clean up generated content.",
+            help="clean data folders")
+    parser_clean.add_argument("target",
+            choices=CLEAN_TARGETS,
+            default=CLEAN_TARGETS[0],
+            nargs="*",
+            help="what to clean")
 
 
     # Parse command line arguments.
     args = parser.parse_args(sys.argv[1:])
 
 
-    # Logging handlers: stream output by default.
-    handlers = [ logging.StreamHandler( sys.stdout ) ]
-
-
-    # Configure logging object.
-    logging.basicConfig(handlers=handlers,
-                        level=logging.DEBUG if args.debug else logging.INFO,
-                        format="%(levelname)8s: %(message)s")
+    # Construct global logging object.
+    log = trajectory.log.global_logger("root")
 
 
     # Start up program.
-    logging.info("Beginning.")
+    log.info("Beginning.")
 
+
+    # Create data directory, if it doesn't already exist.
+    if not os.path.exists( args.data_dir ):
+        log.info("\"%s\" does not exist.  Creating..." % args.data_dir)
+        os.makedirs( args.data_dir )
+
+
+    # Execute subcommand logic.
     if args.subparser_name == "scrape":
         pass
     elif args.subparser_name == "clean":
-        from trajectory.clean import clean_all
-        clean_all()
+        from trajectory.clean import clean
+        clean( args )
+
 
     # Exit the program.
-    logging.info("Exiting.")
+    log.info("Exiting.")
     sys.exit( 0 )
 
 
