@@ -8,30 +8,30 @@ transform into a tf-idf vector.
 
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn import metrics
-from sklearn import cluster
+from sklearn import cluster as skcluster
 from datetime import datetime
 from time import time
 
 import numpy
-import logging
 import os
 
 
+import logging
+log = logging.getLogger("root")
 
-def main():
 
-    timestamp = datetime.strftime( datetime.now(), "%s" )
-    logging.basicConfig(level=logging.DEBUG)
-    logging.info( "Begin vectorization." )
+def cluster( args ):
 
-    path = "../../data/gmu"
+    log.info( "Begin vectorization." )
+
+    data_dir = os.path.join( args.data_dir, args.target )
 
     max_df = 0.5     # terms must occur in under X documents
     min_df = 2       # terms must occur in at least X documents
 
     # First we build the corpus of documents.
     files = [os.path.join(root, name)
-             for root, dirs, files in os.walk( path )
+             for root, dirs, files in os.walk( data_dir )
              for name in files
              if name.endswith(".txt")]
 
@@ -62,18 +62,18 @@ def main():
 
     vectorized_corpus = tfidf_vectorizer.fit_transform( corpus )
 
-    logging.info("Data vectorized.")
-    logging.info("  Number of entries:    %d." % vectorized_corpus.shape[0])
-    logging.info("  Number of features:   %d." % vectorized_corpus.shape[1])
-    logging.info("  Number of categories: %d." % len( set( labels ) ) )
+    log.info("Data vectorized.")
+    log.info("  Number of entries:    %d." % vectorized_corpus.shape[0])
+    log.info("  Number of features:   %d." % vectorized_corpus.shape[1])
+    log.info("  Number of categories: %d." % len( set( labels ) ) )
 
     # Begin clustering
-    logging.info("Begin clustering.")
+    log.info("Begin clustering.")
 
     true_k = numpy.unique(labels).shape[0]
     true_k = 20
 
-    km = cluster.MiniBatchKMeans(
+    km = skcluster.MiniBatchKMeans(
 
         n_clusters = true_k,    # expected number of clusters
 
@@ -97,22 +97,18 @@ def main():
     adjusted_mutual = metrics.adjusted_mutual_info_score( labels, km.labels_ )
 
     # Output to logs
-    logging.info("  |-        Execution time: %fs"   % runtime)
-    logging.info("  |-           Homogeneity: %0.3f" % homogeneity)
-    logging.info("  |-          Completeness: %0.3f" % completeness)
-    logging.info("  |-             V-measure: %0.3f" % v_measure)
-    logging.info("  |-   Adjusted Rand-Index: %.3f"  % adjusted_rand)
-    logging.info("  |-  Adjusted Mutual Info: %.3f"  % adjusted_mutual)
+    log.info("  |-        Execution time: %fs"   % runtime)
+    log.info("  |-           Homogeneity: %0.3f" % homogeneity)
+    log.info("  |-          Completeness: %0.3f" % completeness)
+    log.info("  |-             V-measure: %0.3f" % v_measure)
+    log.info("  |-   Adjusted Rand-Index: %.3f"  % adjusted_rand)
+    log.info("  |-  Adjusted Mutual Info: %.3f"  % adjusted_mutual)
 
     # Display analysis
-    logging.info("Top terms per cluster:")
+    log.info("Top terms per cluster:")
     order_centroids = km.cluster_centers_.argsort()[:, ::-1]
     terms = tfidf_vectorizer.get_feature_names()
     for i in range(true_k):
-        logging.info("Cluster %d:" % i)
+        log.info("Cluster %d:" % i)
         for ind in order_centroids[i, :10]:
-            logging.info(' %s' % terms[ind])
-
-
-if __name__ == '__main__':
-    main()
+            log.info(' %s' % terms[ind])
