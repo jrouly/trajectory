@@ -25,5 +25,11 @@ def scrape(args):
 
     for target in args.targets:
         log.info("Targeting: %s" % target)
-        packagename = "trajectory.scrapers.%s" % target
-        scraper = __import__( packagename )
+        #packagename = "trajectory.scrapers.%s" % target
+        #scraper = __import__( packagename )
+        # TODO: Make this dynamic.
+        import trajectory.scrapers.gmu.cs as scraper
+        if not args.no_download:
+            scraper.scrape( args )
+        if not args.no_clean:
+            scraper.clean( args )
