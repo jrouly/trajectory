@@ -1,5 +1,5 @@
 """
-clean.py
+trajectory/clean.py
 Author: Jean Michel Rouly
 
 Clean up all generated directories.

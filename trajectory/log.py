@@ -10,6 +10,9 @@ import logging
 
 
 def global_logger(name):
+    """
+    Generate a global logger object.
+    """
 
     formatter = logging.Formatter(fmt='%(asctime)s - %(levelname)s - %(module)s - %(message)s')
 
