@@ -1,8 +1,11 @@
+#! /usr/bin/env python
+
 """
 trajectory.py
 Author: Jean Michel Rouly
 
-Important things should go here.
+This is the main executable file. Use it to call subcommands in the
+application structure.
 """
 
 
@@ -20,10 +23,10 @@ def main():
     """
 
     # Constant values.
+    # TODO: These should be read from a configuration at some point.
     PROG_NAME = "Trajectory"
     PROG_DESC = "Trajectory is ... desc here ... "
     PROG_VERSION = PROG_NAME + " 0.0"
-
     SCRAPE_TARGETS = ["gmu.cs"]
 
     # Create top-level command line argument parser.
@@ -54,6 +57,10 @@ def main():
 
     # Start up program.
     logging.info("Beginning.")
+
+    # Exit the program.
+    logging.info("Exiting.")
+    sys.exit( 0 )
 
 
 if __name__ == '__main__':
