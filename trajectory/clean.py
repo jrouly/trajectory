@@ -22,10 +22,10 @@ def clean(args):
     Cleans all generated content: logs, data, etc.
     """
 
-    log.info("Cleaning: %s" % args.target)
+    log.info("Cleaning: %s" % args.targets)
 
     # Delete log directory.
-    if "logs" in args.target or "all" in args.target:
+    if "logs" in args.targets or "all" in args.targets:
         if os.path.exists( args.logging_dir ):
             log.info("Found log directory \"%s\". Removing...." % args.logging_dir)
             shutil.rmtree( args.logging_dir )
@@ -33,7 +33,7 @@ def clean(args):
             log.info("No logs to remove.")
 
     # Delete data directory.
-    if "data" in args.target or "all" in args.target:
+    if "data" in args.targets or "all" in args.targets:
         if os.path.exists( args.data_dir ):
             log.info("Found data directory \"%s\". Removing...." % args.data_dir)
             shutil.rmtree( args.data_dir )
