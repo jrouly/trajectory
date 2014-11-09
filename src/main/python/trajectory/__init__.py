@@ -5,5 +5,7 @@ Author: Jean Michel Rouly
 Define the trajectory package.
 """
 
+from trajectory.clean import clean
+from trajectory.cluster import cluster
 
-__all__ = ["scrape", "cluster", "log", "clean"]
+__all__ = ["clean", "cluster", "log", "scrape"]
