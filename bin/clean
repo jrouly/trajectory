@@ -1,0 +1,15 @@
+#!/bin/bash
+
+mvn clean
+
+rm -r src/main/python/trajectory/__pycache__
+rm src/main/python/trajectory/*.pyc
+
+rm -r src/main/python/trajectory/*/__pycache__
+rm src/main/python/trajectory/*/*.pyc
+
+rm -r src/main/python/trajectory/scrape/__pycache__
+rm src/main/python/trajectory/scrape/*.pyc
+
+rm -r src/main/python/trajectory/scrape/*/__pycache__
+rm src/main/python/trajectory/scrape/*/*.pyc
