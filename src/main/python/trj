@@ -30,13 +30,21 @@ def main():
     logic depending on what the user wants to do.
     """
 
+    # Verify that the TRJ_HOME variable is set.
+    if os.environ.get("TRJ_HOME") is None:
+        print("TRJ_HOME not found. Exiting.")
+        sys.exit( 1 )
+    else:
+        HOME = os.environ.get("TRJ_HOME")
+
+
     # Create top-level command line argument parser.
     parser = ArgumentParser(description=PROG_DESC, prog=PROG_NAME)
     parser.add_argument("--version", action="version", version=PROG_VERSION)
     parser.add_argument("--logging-dir", help="log storage directory",
-            default="logs")
+            default=os.path.join(HOME, "logs"))
     parser.add_argument("--data-dir", help="data storage directory",
-            default="data")
+            default=os.path.join(HOME, "data"))
 
 
     # Specify subcommands using a subparser.
