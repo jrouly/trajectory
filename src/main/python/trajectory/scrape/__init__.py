@@ -1,8 +1,8 @@
 """
-trajectory/scrape.py
+trajectory/scrape/__init__.py
 Author: Jean Michel Rouly
 
-Route the scraping of syllabi data.
+Defines the Scrape package.
 """
 
 
