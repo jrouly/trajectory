@@ -3,6 +3,9 @@ Date:   2014-10-05
 
 # Setup
 
+Note that this project contains an unholy combination of Bash scripts,
+Python tools, and Java code. Proceed with setup carefully.
+
 ### Install Python requirements
 
     $ virtualenv env
