@@ -1,5 +1,5 @@
 """
-vectorize.py
+cluster.py
 Author: Michel Rouly
 
 Take a bag-of-words input file and vectorize it as a count vector, then
