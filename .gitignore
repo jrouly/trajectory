@@ -8,6 +8,7 @@ env/
 __pycache__/
 *.py[cod]
 
+
 # Distribution / packaging
 .Python
 env/
@@ -43,6 +44,12 @@ release.properties
 *.jar
 *.war
 *.ear
+
+
+# Eclipse Files
+.package
+.classpath
+
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
