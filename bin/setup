@@ -1,0 +1,45 @@
+#!/bin/bash
+
+# Halt on error.
+set -e
+
+
+# Make sure we're in the right folder.
+if ! [ -e bin/setup ] ; then
+    echo "Error: setup should be run from the project folder."
+    echo "Run as: bin/setup"
+    exit 1
+fi
+
+
+# Create basic project output directories.
+mkdir -p data logs
+
+
+# Install python requirements.
+pyreq () {
+  if [ -f "requirements.txt" ] ; then
+    pip install -r requirements.txt
+  else
+    echo "Python requirements file not found."
+    exit 1
+  fi
+}
+
+
+# Attempt to create virtual environment & install requirements.
+if [ ! -d "env" ] ; then
+  virtualenv env
+  pyreq
+else
+  echo "Python environment directory already exists."
+  echo "Attempting to install requirements anyway."
+  pyreq
+fi
+
+
+# Compile java requirements.
+mvn compile
+
+
+exit 0

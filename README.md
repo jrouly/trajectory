@@ -6,18 +6,11 @@ Date:   2014-10-05
 Note that this project contains an unholy combination of Bash scripts,
 Python tools, and Java code. Proceed with setup carefully.
 
-### Install Python requirements
+    $ bin/setup
 
-    $ virtualenv env
-    $ pip install -r requirements.txt
+This script should create and activate a virtual environment, install
+Python requirements, and compile and package the Java.
 
-
-### Compile Java utilities
-
-    $ mvn compile
-
-Note: make sure to define the M2_REPO classpath variable to point to your
-Maven repository.
 
 # Use
 
