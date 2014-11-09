@@ -30,10 +30,12 @@ pyreq () {
 # Attempt to create virtual environment & install requirements.
 if [ ! -d "env" ] ; then
   virtualenv env
+  source env/bin/activate
   pyreq
 else
   echo "Python environment directory already exists."
   echo "Attempting to install requirements anyway."
+  source env/bin/activate
   pyreq
 fi
 
