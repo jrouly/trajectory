@@ -9,9 +9,10 @@ application structure.
 """
 
 
-from argparse import ArgumentParser
 from trajectory.clean import CLEAN_TARGETS
 from trajectory.scrape import SCRAPE_TARGETS
+
+from argparse import ArgumentParser
 import trajectory.log
 import sys
 import os
@@ -98,13 +99,13 @@ def main():
 
     # Execute subcommand logic.
     if args.subparser_name == "scrape":
-        from trajectory.scrape import scrape
+        from trajectory import scrape
         scrape( args )
     elif args.subparser_name == "clean":
-        from trajectory.clean import clean
+        from trajectory import clean
         clean( args )
     elif args.subparser_name == "cluster":
-        from trajectory.cluster.cluster import cluster
+        from trajectory import cluster
         # TODO: Fix this up to use your stackmining infrastructure.
         cluster( args )
     else:
