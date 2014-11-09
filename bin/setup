@@ -44,4 +44,10 @@ fi
 mvn compile
 
 
+# Set environment variable and notify user.
+export TRJ_HOME=$( pwd )
+echo "Place this in your ~/.bashrc file:"
+echo "export TRJ_HOME=$( pwd )"
+
+
 exit 0
