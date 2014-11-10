@@ -113,7 +113,7 @@ def clean( args ):
         return
 
     # Generate a list of all pdf data files in the data path.
-    files = [os.path.join(root, name)
+    pdfs = [os.path.join(root, name)
              for root, dirs, files in os.walk( data_dir )
              for name in files
              if name.endswith(".pdf")]
@@ -121,8 +121,22 @@ def clean( args ):
     # Convert PDFs to text.
     log.info( "Convert PDFs to text." )
     from subprocess import call
-    for pdf in files:
+    for pdf in pdfs:
         call(["pdftotext", pdf])
+
+
+    # Generate a list of all doc data files in the data path.
+    docs = [os.path.join(root, name)
+             for root, dirs, files in os.walk( data_dir )
+             for name in files
+             if name.endswith(".doc")]
+
+    # Convert PDFs to text.
+    log.info( "Convert DOCs to text." )
+    from subprocess import call
+    for doc in docs:
+        with open("%s.txt"%doc,"w") as docout:
+            call(["catdoc", doc], stdout=docout)
 
 
     # Generate a list of the new text files.
@@ -132,7 +146,7 @@ def clean( args ):
              if name.endswith(".txt")]
 
     whitespace = re.compile("\\\\n|\\\\r|\\\\xa0|\d|\W")
-    singletons = re.compile("\s+\w{1,2}(?=\s+)")
+    singletons = re.compile("\s+\w{1,3}(?=\s+)")
     long_whitespace = re.compile("\s+")
 
     # Iterate over each datafile
