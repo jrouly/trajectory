@@ -32,12 +32,21 @@ def scrape(args):
     for target in args.targets:
         log.info("Targeting: %s" % target)
 
-        target_mod = ".%s" % target # prepend with a dot
+        # Prepend the target name with a dot for importing.
+        target_mod = ".%s" % target
         scraper = import_module( target_mod, "trajectory.scrape.engines" )
 
-        try:
-            scraper.scrape( args )
-            if not args.download_only:
+        # If downloading is flagged, run it.
+        if args.download:
+            try:
+                scraper.scrape( args )
+            except NotImplementedError as e:
+                log.warn( "%s has not been defined. Skipping." % target )
+
+        # If cleaning is flagged, run it.
+        if args.clean:
+            try:
                 scraper.clean( args )
-        except NotImplementedError as e:
-            log.warn( "%s has not been defined. Skipping." % target )
+            except NotImplementedError as e:
+                log.warn( "%s has not been defined. Skipping." % target )
+
