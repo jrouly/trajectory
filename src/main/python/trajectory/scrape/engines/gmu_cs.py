@@ -140,7 +140,7 @@ def clean( args ):
 
 
     whitespace = re.compile("\\\\n|\\\\r|\\\\xa0|\d|\W")
-    singletons = re.compile("\s+\w{1,2}(?=\s+)")
+    singletons = re.compile("\s+\w{1,3}(?=\s+)")
     long_whitespace = re.compile("\s+")
 
     # Generate a list of all data files in the data path.
