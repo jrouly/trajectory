@@ -25,7 +25,7 @@ log = logging.getLogger("root")
 url = "http://cs.gmu.edu"
 courses_url = "/courses/"
 syllabus_url_regex = re.compile("^/syllabus/.*$")
-data_id = "gmu.cs"
+data_id = "gmu_cs"
 
 
 def scrape( args ):
@@ -140,7 +140,7 @@ def clean( args ):
 
 
     whitespace = re.compile("\\\\n|\\\\r|\\\\xa0|\d|\W")
-    singletons = re.compile("\s+\w(?=\s+)")
+    singletons = re.compile("\s+\w{1,2}(?=\s+)")
     long_whitespace = re.compile("\s+")
 
     # Generate a list of all data files in the data path.
@@ -166,7 +166,7 @@ def clean( args ):
             continue
 
         contents = re.sub(whitespace, ' ', contents) # remove non-letters
-        contents = re.sub(singletons, ' ', contents) # remove single letters
+        contents = re.sub(singletons, ' ', contents) # remove 1-2 letter words
         contents = re.sub(long_whitespace, ' ', contents)   # remove spaces
         contents = contents.lower()     # make everything lowercase
 
