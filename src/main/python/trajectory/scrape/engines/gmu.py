@@ -1,5 +1,5 @@
 """
-trajectory/scrapers/gmu/cs.py
+trajectory/scrape/engines/gmu.py
 Author: Jean Michel Rouly
 
 This file is the scraping engine tooled to GMU's CS department.
@@ -20,7 +20,6 @@ log = logging.getLogger("root")
 
 
 # Constant values.
-# TODO: These should be read from a configuration at some point.
 
 # GMU CS syllabi repository
 url = "http://cs.gmu.edu"
