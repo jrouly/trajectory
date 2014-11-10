@@ -14,3 +14,6 @@ def list():
     from pkgutil import iter_modules
     modules = iter_modules( __path__ )
     return [ mod[1] for mod in modules ]
+
+
+__all__ = list()
