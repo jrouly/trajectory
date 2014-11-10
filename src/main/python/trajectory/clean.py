@@ -12,9 +12,8 @@ import logging
 log = logging.getLogger("root")
 
 
-# Constant values.
-# TODO: These should be read from a configuration at some point.
-CLEAN_TARGETS = ["all", "data", "logs"]
+# Available targets to clean.
+TARGETS = ["all", "data", "logs"]
 
 
 def clean(args):
