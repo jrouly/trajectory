@@ -15,10 +15,17 @@ def scrape(args):
     """
 
     import logging
+    import os
     from importlib import import_module
 
     log = logging.getLogger("root")
     log.info("Scraping targets: %s" % args.targets)
+
+    # Create data directory, if it doesn't already exist.
+    if not os.path.exists( args.data_dir ):
+        log.info("\"%s\" does not exist. Creating..." % args.data_dir)
+        os.makedirs( args.data_dir )
+
 
 
     # Loop over the requested targets and call their scrape function.
