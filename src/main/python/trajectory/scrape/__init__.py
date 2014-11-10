@@ -2,13 +2,9 @@
 trajectory/scrape/__init__.py
 Author: Jean Michel Rouly
 
-Defines the Scrape package.
+Generates a dataset of syllabus data scraped from a variety of different
+target data sources.
 """
-
-
-import pkgutil
-import logging
-log = logging.getLogger("root")
 
 
 # Constant values.
@@ -16,10 +12,16 @@ log = logging.getLogger("root")
 SCRAPE_TARGETS = ["gmu.cs"]
 
 
+__all__ = ["gmu"]
+
+
 def scrape(args):
     """
     Routes scraping to the appropriate scraper module.
     """
+
+    import logging
+    log = logging.getLogger("root")
 
     log.info("Scraping targets: %s" % args.targets)
 
