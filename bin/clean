@@ -13,3 +13,6 @@ rm src/main/python/trajectory/scrape/*.pyc
 
 rm -r src/main/python/trajectory/scrape/*/__pycache__
 rm src/main/python/trajectory/scrape/*/*.pyc
+
+rm -r src/main/python/trajectory/scrape/*/*/__pycache__
+rm src/main/python/trajectory/scrape/*/*/*.pyc
