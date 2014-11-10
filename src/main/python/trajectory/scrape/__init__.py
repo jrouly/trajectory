@@ -28,6 +28,9 @@ def scrape(args):
         target = ".%s" % target # prepend with a dot
         scraper = import_module( target, "trajectory.scrape.engines" )
 
-        scraper.scrape( args )
-        if not args.download_only:
-            scraper.clean( args )
+        try:
+            scraper.scrape( args )
+            if not args.download_only:
+                scraper.clean( args )
+        except NotImplementedError as e:
+            log.debug( str(e) )
