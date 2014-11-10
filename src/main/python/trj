@@ -9,14 +9,15 @@ application structure.
 """
 
 
-from trajectory.clean import CLEAN_TARGETS
-from trajectory.scrape import SCRAPE_TARGETS
+from trajectory.clean import TARGETS as CLEAN_TARGETS
+from trajectory.scrape import engines
 
 from argparse import ArgumentParser
 import trajectory.log
 import sys
 import os
 
+SCRAPE_TARGETS = engines.list()
 
 # Constant values.
 # TODO: These should be read from a configuration at some point.
@@ -60,11 +61,8 @@ def main():
     parser_scrape.add_argument("targets", choices=SCRAPE_TARGETS,
             nargs="+",
             help="target websites to scrape")
-    parser_scrape.add_argument("--no-download",
-            help="don't download the data",
-            action="store_true")
-    parser_scrape.add_argument("--no-clean",
-            help="don't clean up the data",
+    parser_scrape.add_argument("--download-only",
+            help="only download the data",
             action="store_true")
 
 
@@ -99,7 +97,7 @@ def main():
 
     # Execute subcommand logic.
     if args.subparser_name == "scrape":
-        from trajectory import scrape
+        from trajectory.scrape import scrape
         scrape( args )
     elif args.subparser_name == "clean":
         from trajectory import clean
