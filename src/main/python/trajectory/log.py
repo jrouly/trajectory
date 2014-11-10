@@ -9,7 +9,7 @@ Configure a global logging system.
 import logging
 
 
-def global_logger(name):
+def global_logger(name, debug=False):
     """
     Generate a global logger object.
     """
@@ -21,7 +21,7 @@ def global_logger(name):
     handler.setFormatter(formatter)
 
     logger = logging.getLogger(name)
-    logger.setLevel(logging.DEBUG)
+    logger.setLevel(logging.DEBUG if debug else logging.INFO)
     logger.addHandler(handler)
 
     return logger
