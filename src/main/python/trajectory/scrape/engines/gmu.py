@@ -42,6 +42,9 @@ def scrape( args ):
     if not os.path.exists( data_dir ):
         log.info("\"%s\" does not exist. Creating..." % data_dir)
         os.makedirs( data_dir )
+    else:
+        log.warn("\"%s\" exists already. Skipping." % data_dir)
+        return
 
 
     # Request index page and generate soup.
@@ -130,10 +133,10 @@ def clean( args ):
 
     data_dir = os.path.join( args.data_dir, data_id )
 
-    # Create data directory, if it doesn't already exist.
+    # If there's no data directory, we can't proceed.
     if not os.path.exists( data_dir ):
-        log.info("\"%s\" does not exist.  Creating..." % data_dir)
-        os.makedirs( data_dir )
+        log.warn("No data directory found. Skipping.")
+        return
 
 
     whitespace = re.compile("\\\\n|\\\\r|\\\\xa0|\d|\W")
