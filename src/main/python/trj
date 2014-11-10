@@ -72,7 +72,8 @@ def main():
 
     # Create parser for "cluster" command.
     parser_cluster = subparsers.add_parser("cluster", help="cluster syllabi")
-    parser_cluster.add_argument("target", choices=SCRAPE_TARGETS,
+    parser_cluster.add_argument("targets", choices=SCRAPE_TARGETS,
+            nargs="+",
             help="target syllabus pool to cluster")
 
 

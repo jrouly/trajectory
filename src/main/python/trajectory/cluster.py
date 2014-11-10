@@ -24,13 +24,18 @@ def cluster( args ):
 
     log.info( "Begin vectorization." )
 
-    data_dir = os.path.join( args.data_dir, args.target )
+    data_dirs = []
+    for target in args.targets:
+        data_dirs.append( os.path.join( args.data_dir, target ) )
+
+    log.debug( data_dirs )
 
     max_df = 0.5     # terms must occur in under X documents
     min_df = 2       # terms must occur in at least X documents
 
     # First we build the corpus of documents.
     files = [os.path.join(root, name)
+             for data_dir in data_dirs
              for root, dirs, files in os.walk( data_dir )
              for name in files
              if name.endswith(".txt")]
