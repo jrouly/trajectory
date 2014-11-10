@@ -61,8 +61,11 @@ def main():
     parser_scrape.add_argument("targets", choices=SCRAPE_TARGETS,
             nargs="+",
             help="target websites to scrape")
-    parser_scrape.add_argument("--download-only",
-            help="only download the data",
+    parser_scrape.add_argument("--download",
+            help="download the data",
+            action="store_true")
+    parser_scrape.add_argument("--clean",
+            help="clean the already downloaded data",
             action="store_true")
 
 
