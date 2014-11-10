@@ -15,19 +15,19 @@ def scrape(args):
     """
 
     import logging
-    log = logging.getLogger("root")
+    from importlib import import_module
 
+    log = logging.getLogger("root")
     log.info("Scraping targets: %s" % args.targets)
 
+
+    # Loop over the requested targets and call their scrape function.
     for target in args.targets:
         log.info("Targeting: %s" % target)
-        #packagename = "trajectory.scrapers.%s" % target
-        #scraper = __import__( packagename )
-        # TODO: Make this dynamic.
-        #import trajectory.scrapers.gmu.cs as scraper
-        #if not args.no_download:
-        #    scraper.scrape( args )
-        #if not args.no_clean:
-        #    scraper.clean( args )
 
+        target = ".%s" % target # prepend with a dot
+        scraper = import_module( target, "trajectory.scrape.engines" )
 
+        scraper.scrape( args )
+        if not args.download_only:
+            scraper.clean( args )
