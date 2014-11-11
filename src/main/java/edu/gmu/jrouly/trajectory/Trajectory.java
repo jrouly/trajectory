@@ -14,6 +14,7 @@ import org.apache.commons.cli.ParseException;
 import java.io.File;
 import java.io.Reader;
 import java.io.InputStreamReader;
+import java.io.IOException;
 import java.io.FileInputStream;
 import java.io.FileFilter;
 
@@ -33,6 +34,8 @@ import cc.mallet.pipe.TokenSequence2FeatureSequence;
 import cc.mallet.pipe.TokenSequenceLowercase;
 import cc.mallet.pipe.TokenSequenceRemoveStopwords;
 import cc.mallet.pipe.iterator.FileIterator;
+
+import cc.mallet.topics.ParallelTopicModel;
 
 import cc.mallet.types.InstanceList;
 
@@ -105,6 +108,8 @@ public class Trajectory {
 
     if( debug ) System.out.println( "dataDirPath: " + dataDirPath.toString() );
 
+
+
     // Generate data processing pipeline.
     pipe = buildPipe();
 
@@ -113,6 +118,27 @@ public class Trajectory {
 
     // Generate instances from the input data files.
     InstanceList instances = readDirectories( dataDirectories );
+
+    // Create the topic model.
+    int numTopics = 100;
+    ParallelTopicModel model = new ParallelTopicModel( numTopics, 1.0, 0.01 );
+    model.addInstances( instances );
+
+    // Use two parallel samplers, which each look at one half the corpus and combine
+    // statistics after every iteration.
+    model.setNumThreads(2);
+
+    // Run the model for 50 iterations and stop (this is for testing only, 
+    //  for real applications, use 1000 to 2000 iterations)
+    model.setNumIterations(50);
+    try {
+      model.estimate();
+    } catch( IOException exp ) {
+      // The model broke when reading in files.
+      System.err.println( "Error estimating topics when reading from data set." );
+      System.exit( 1 );
+    }
+
 
   }
 
@@ -163,6 +189,13 @@ public class Trajectory {
   }
 
 
+  /**
+   * Given a list of directories, read in their contents and generate an
+   * InstanceList.
+   *
+   * @param directories list of file pointers to data directories (per set)
+   * @return list of data instances
+   */
   private static InstanceList readDirectories( File[] directories ) {
 
     // Construct a file iterator recursing over the data directories that
@@ -184,9 +217,5 @@ public class Trajectory {
     return instances;
 
   }
-
-//    Reader fileReader = new InputStreamReader(new FileInputStream(new File(args[0])), "UTF-8");
-//    instances.addThruPipe(new CsvIterator (fileReader, Pattern.compile("^(\\S*)[\\s,]*(\\S*)[\\s,]*(.*)$"),
-//                                               3, 2, 1)); // data, label, name fields
 
 }
