@@ -25,12 +25,13 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
 
-import cc.mallet.pipe.CharSequenceLowercase;
 import cc.mallet.pipe.CharSequence2TokenSequence;
+import cc.mallet.pipe.Input2CharSequence;
 import cc.mallet.pipe.Pipe;
 import cc.mallet.pipe.SerialPipes;
-import cc.mallet.pipe.TokenSequenceRemoveStopwords;
 import cc.mallet.pipe.TokenSequence2FeatureSequence;
+import cc.mallet.pipe.TokenSequenceLowercase;
+import cc.mallet.pipe.TokenSequenceRemoveStopwords;
 import cc.mallet.pipe.iterator.FileIterator;
 
 import cc.mallet.types.InstanceList;
@@ -40,6 +41,8 @@ import cc.mallet.types.InstanceList;
  * modeling.
  */
 public class Trajectory {
+
+  static Pipe pipe;
 
   /**
    * Perform topic modeling on the data set as constrained by any command
@@ -102,7 +105,26 @@ public class Trajectory {
 
     if( debug ) System.out.println( "dataDirPath: " + dataDirPath.toString() );
 
+    // Generate data processing pipeline.
+    pipe = buildPipe();
 
+    // Generate list of data directories.
+    File[] dataDirectories = listDataDirectories( dataDirPath );
+
+    // Generate instances from the input data files.
+    InstanceList instances = readDirectories( dataDirectories );
+
+  }
+
+
+  /**
+   * Given a path to the root data directory, generate a list of its
+   * content directories.
+   *
+   * @param dataDirPath path to the root data directory
+   * @return list of file pointers to content directories
+   */
+  private static File[] listDataDirectories( Path dataDirPath ) {
 
     // Generate list of data directories in the data path.
     File dataDirFile = dataDirPath.toFile();
@@ -111,28 +133,42 @@ public class Trajectory {
       System.exit( 1 );
     }
     File[] dataDirContents = dataDirFile.listFiles();
+    return dataDirContents;
 
-    System.out.println( dataDirFile.getAbsolutePath() );
-    System.out.println( dataDirContents.length );
+  }
 
+
+  /**
+   * Build a workflow pipe that cleans and tokenizes the input data.
+   *
+   * @return cleaning pipe
+   */
+  private static Pipe buildPipe() {
 
     // Read in English stopwords.
     //InputStream stoplistIn = Trajectory.class.getResourcesAsStream("/stoplists/en.txt");
+
 
     // Begin by importing documents from text.
     ArrayList<Pipe> pipeList = new ArrayList<Pipe>();
 
     // Pipes: lowercase, tokenize, remove stopwords, map to features.
-    pipeList.add( new CharSequenceLowercase() );
+    pipeList.add( new Input2CharSequence("UTF-8") );
     pipeList.add( new CharSequence2TokenSequence(Pattern.compile("\\p{L}[\\p{L}\\p{P}]+\\p{L}")) );
+    pipeList.add( new TokenSequenceLowercase() );
     pipeList.add( new TokenSequenceRemoveStopwords(false, false) );
     pipeList.add( new TokenSequence2FeatureSequence() );
+    return new SerialPipes(pipeList);
 
+  }
+
+
+  private static InstanceList readDirectories( File[] directories ) {
 
     // Construct a file iterator recursing over the data directories that
     // only accepts files with the .txt extension.
     FileIterator iterator =
-      new FileIterator( dataDirContents,
+      new FileIterator( directories,
                         new FileFilter() {
                           @Override
                           public boolean accept(File file) {
@@ -142,14 +178,15 @@ public class Trajectory {
                         },
                         FileIterator.LAST_DIRECTORY );
 
-
-    InstanceList instances = new InstanceList( new SerialPipes(pipeList) );
+    InstanceList instances = new InstanceList( pipe );
     instances.addThruPipe( iterator );
+
+    return instances;
+
+  }
 
 //    Reader fileReader = new InputStreamReader(new FileInputStream(new File(args[0])), "UTF-8");
 //    instances.addThruPipe(new CsvIterator (fileReader, Pattern.compile("^(\\S*)[\\s,]*(\\S*)[\\s,]*(.*)$"),
 //                                               3, 2, 1)); // data, label, name fields
-
-  }
 
 }
