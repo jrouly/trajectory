@@ -4,7 +4,7 @@
   <groupId>trajectory</groupId>
   <artifactId>trajectory</artifactId>
   <packaging>jar</packaging>
-  <version>1.0-SNAPSHOT</version>
+  <version>1</version>
   <name>trajectory</name>
   <url>https://github.com/jrouly/trajectory</url>
   <dependencies>
