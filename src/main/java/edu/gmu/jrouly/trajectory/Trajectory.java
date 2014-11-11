@@ -9,11 +9,18 @@ import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
+// import java.io.InputStream;
+// import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.Reader;
+import java.io.InputStreamReader;
+import java.io.FileInputStream;
+import java.io.FileFilter;
+
 import java.nio.file.InvalidPathException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-
-import java.io.File;
 
 import java.util.ArrayList;
 import java.util.regex.Pattern;
@@ -21,8 +28,12 @@ import java.util.regex.Pattern;
 import cc.mallet.pipe.CharSequenceLowercase;
 import cc.mallet.pipe.CharSequence2TokenSequence;
 import cc.mallet.pipe.Pipe;
+import cc.mallet.pipe.SerialPipes;
 import cc.mallet.pipe.TokenSequenceRemoveStopwords;
 import cc.mallet.pipe.TokenSequence2FeatureSequence;
+import cc.mallet.pipe.iterator.FileIterator;
+
+import cc.mallet.types.InstanceList;
 
 /**
  * The main executable class of the trajectory project to perform topic
@@ -91,5 +102,54 @@ public class Trajectory {
 
     if( debug ) System.out.println( "dataDirPath: " + dataDirPath.toString() );
 
+
+
+    // Generate list of data directories in the data path.
+    File dataDirFile = dataDirPath.toFile();
+    if( ! dataDirFile.isDirectory() ) {
+      System.err.println( "Data directory is not a directory." );
+      System.exit( 1 );
+    }
+    File[] dataDirContents = dataDirFile.listFiles();
+
+    System.out.println( dataDirFile.getAbsolutePath() );
+    System.out.println( dataDirContents.length );
+
+
+    // Read in English stopwords.
+    //InputStream stoplistIn = Trajectory.class.getResourcesAsStream("/stoplists/en.txt");
+
+    // Begin by importing documents from text.
+    ArrayList<Pipe> pipeList = new ArrayList<Pipe>();
+
+    // Pipes: lowercase, tokenize, remove stopwords, map to features.
+    pipeList.add( new CharSequenceLowercase() );
+    pipeList.add( new CharSequence2TokenSequence(Pattern.compile("\\p{L}[\\p{L}\\p{P}]+\\p{L}")) );
+    pipeList.add( new TokenSequenceRemoveStopwords(false, false) );
+    pipeList.add( new TokenSequence2FeatureSequence() );
+
+
+    // Construct a file iterator recursing over the data directories that
+    // only accepts files with the .txt extension.
+    FileIterator iterator =
+      new FileIterator( dataDirContents,
+                        new FileFilter() {
+                          @Override
+                          public boolean accept(File file) {
+                            return file.toString().endsWith(".txt") &&
+                                   file.isFile();
+                          }
+                        },
+                        FileIterator.LAST_DIRECTORY );
+
+
+    InstanceList instances = new InstanceList( new SerialPipes(pipeList) );
+    instances.addThruPipe( iterator );
+
+//    Reader fileReader = new InputStreamReader(new FileInputStream(new File(args[0])), "UTF-8");
+//    instances.addThruPipe(new CsvIterator (fileReader, Pattern.compile("^(\\S*)[\\s,]*(\\S*)[\\s,]*(.*)$"),
+//                                               3, 2, 1)); // data, label, name fields
+
   }
+
 }
