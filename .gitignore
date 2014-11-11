@@ -2,6 +2,7 @@
 data/
 logs/
 env/
+lib/
 
 
 # Byte-compiled / optimized / DLL files
