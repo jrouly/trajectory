@@ -7,6 +7,9 @@
   <version>1</version>
   <name>trajectory</name>
   <url>https://github.com/jrouly/trajectory</url>
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
   <dependencies>
     <dependency>
       <groupId>cc.mallet</groupId>
