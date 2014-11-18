@@ -1,15 +1,21 @@
 #!/bin/bash
 
+
 # Halt on error.
 set -e
 
 
-# Make sure we're in the right folder.
-if ! [ -e bin/setup ] ; then
-    echo "Error: setup should be run from the project folder."
-    echo "Run as: bin/setup"
-    exit 1
+# Check if TRJ_HOME is not set.
+if [ -z $TRJ_HOME ]; then
+  # Notify user that TRJ_HOME is not set.
+  echo "Environment variable TRJ_HOME not found."
+  echo "Please configure the environment variable TRJ_HOME."
+  exit 1
 fi
+
+
+# Relocate into the TRJ_HOME just to be sure.
+cd $TRJ_HOME
 
 
 # Create basic project output directories.
@@ -41,13 +47,7 @@ fi
 
 
 # Compile java requirements.
-mvn compile
-
-
-# Set environment variable and notify user.
-export TRJ_HOME=$( pwd )
-echo "Place this in your ~/.bashrc file:"
-echo "export TRJ_HOME=$( pwd )"
+mvn clean compile package javadoc:javadoc
 
 
 exit 0
