@@ -113,14 +113,13 @@ def scrape( args, data_path ):
 
 
 
-def clean( args, data_path ):
+def clean( args, raw_path, clean_path ):
     """
     This function takes the gmu cs syllabi directory as input and removes
     all HTML entities and non-word elements from them.
     """
 
     log.info( "Cleaning scraped GMU CS data." )
-    return
 
 
     whitespace = re.compile("\\\\n|\\\\r|\\\\xa0|\d|\W")
@@ -129,33 +128,53 @@ def clean( args, data_path ):
 
     # Generate a list of all data files in the data path.
     files = [os.path.join(root, name)
-             for root, dirs, files in os.walk( data_path )
+             for root, dirs, files in os.walk( raw_path )
              for name in files
              if name.endswith(".raw")]
 
-    # Iterate over each datafile
-    for datafile in files:
+    # Iterate over each raw file
+    for raw_file in files:
 
-        log.debug("Datafile: %s" % datafile)
+        #log.debug("Raw file: %s" % raw_file)
 
         # Generate a soup object for each and strip it to its textual contents
         try:
-            with open(datafile, 'r') as socket:
+            with open(raw_file, 'r') as socket:
                 soup = BeautifulSoup( socket )         # generate soup
 
             strings = soup.body.stripped_strings
             contents = ' '.join( strings )
         except:
-            log.warning( "Error detected in %s" % datafile )
+            log.warning( "Error detected in %s" % raw_file )
             continue
 
+        # Perform regular expression substitutions.
         contents = re.sub(whitespace, ' ', contents) # remove non-letters
         contents = re.sub(singletons, ' ', contents) # remove 1-2 letter words
         contents = re.sub(long_whitespace, ' ', contents)   # remove spaces
         contents = contents.lower()     # make everything lowercase
 
-        # Write out to a new file
-        with open( datafile[:-3] + "txt", 'w' ) as out:
+        # Trim syllabi with fewer than 500 characters, as they likely were
+        # incorrectly cleaned.
+        if len( contents ) < 500:
+            log.debug("File contents too short, skipping.")
+            continue
+
+        # Create a new file path in the clean directory.
+        semester = os.path.split( os.path.dirname( raw_file ) )[-1]
+        output_filename = os.path.basename( raw_file )[:-3] + "txt"
+
+        clean_semester = os.path.join( clean_path, semester )
+        clean_file = os.path.join( clean_semester, output_filename )
+
+        # Ensure that the semester path exists in the clean directory.
+        if not os.path.exists( clean_semester ):
+            os.makedirs( clean_semester )
+
+        #log.debug( "clean_file: %s" % clean_file )
+
+        # Write out to a new file.
+        with open( clean_file, 'w' ) as out:
             out.write( contents )
 
     log.info( "Completed data processing." )
