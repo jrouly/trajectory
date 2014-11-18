@@ -27,6 +27,7 @@ import java.util.Iterator;
 import java.util.Locale;
 import java.util.TreeSet;
 import java.util.regex.Pattern;
+import java.io.PrintWriter;
 
 import cc.mallet.pipe.CharSequence2TokenSequence;
 import cc.mallet.pipe.Input2CharSequence;
@@ -118,6 +119,8 @@ public class Trajectory {
 
 
 
+
+
     // Generate data processing pipeline.
     pipe = buildPipe();
 
@@ -138,7 +141,7 @@ public class Trajectory {
 
     // Run the model for 50 iterations and stop (this is for testing only,
     //  for real applications, use 1000 to 2000 iterations)
-    model.setNumIterations(50);
+    model.setNumIterations(1500);
     try {
       model.estimate();
     } catch( IOException exp ) {
@@ -209,7 +212,8 @@ public class Trajectory {
 
 
 
-
+    System.out.println();
+    model.printDocumentTopics( new PrintWriter( System.out ), 0.0, 5 );
 
 
 
