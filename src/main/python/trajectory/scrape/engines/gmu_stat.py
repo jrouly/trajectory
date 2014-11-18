@@ -87,7 +87,7 @@ def scrape( args, data_path ):
 
 
 
-def clean( args, data_path ):
+def clean( args, raw_path, clean_path ):
     """
     This function takes the gmu cs syllabi directory as input and removes
     all HTML entities and non-word elements from them.
@@ -99,7 +99,7 @@ def clean( args, data_path ):
 
     # Generate a list of all pdf data files in the data path.
     pdfs = [os.path.join(root, name)
-             for root, dirs, files in os.walk( data_path )
+             for root, dirs, files in os.walk( raw_path )
              for name in files
              if name.endswith(".pdf")]
 
@@ -107,32 +107,39 @@ def clean( args, data_path ):
     log.info( "Convert PDFs to text." )
     from subprocess import call
     for pdf in pdfs:
-        call(["pdftotext", pdf])
+        filename = os.path.basename( pdf )[:-3] + "txt"
+        clean_file = os.path.join( clean_path, filename )
+        call(["pdftotext", pdf, clean_file])
 
 
     # Generate a list of all doc data files in the data path.
     docs = [os.path.join(root, name)
-             for root, dirs, files in os.walk( data_path )
+             for root, dirs, files in os.walk( raw_path )
              for name in files
              if name.endswith(".doc")]
 
-    # Convert PDFs to text.
+    # Convert DOCs to text.
     log.info( "Convert DOCs to text." )
     from subprocess import call
     for doc in docs:
-        with open("%s.txt"%doc,"w") as docout:
+        filename = os.path.basename( doc )[:-3] + "txt"
+        clean_file = os.path.join( clean_path, filename )
+        with open( clean_file, "w" ) as docout:
             call(["catdoc", doc], stdout=docout)
 
 
-    # Generate a list of the new text files.
+    # Generate a list of the newly generated text files.
     files = [os.path.join(root, name)
-             for root, dirs, files in os.walk( data_path )
+             for root, dirs, files in os.walk( clean_path )
              for name in files
              if name.endswith(".txt")]
 
+
+    # Define cleaning regular expressions.
     whitespace = re.compile("\\\\n|\\\\r|\\\\xa0|\d|\W")
     singletons = re.compile("\s+\w{1,3}(?=\s+)")
     long_whitespace = re.compile("\s+")
+
 
     # Iterate over each datafile
     log.info( "Clean up text files." )
@@ -141,17 +148,22 @@ def clean( args, data_path ):
         with open( datafile, "r" ) as content_file:
             contents = content_file.read()
 
-        if len( contents ) <= 10:
-            log.debug("File too short.")
-            os.remove( datafile )
-            continue
 
+        # Perform regular expression substitutions.
         contents = re.sub(whitespace, ' ', contents) # remove non-letters
         contents = re.sub(singletons, ' ', contents) # remove single letters
         contents = re.sub(long_whitespace, ' ', contents)   # remove spaces
         contents = contents.lower()     # make everything lowercase
 
-        # Write out to a new file
+
+        # Trim syllabi with fewer than 500 characters, as they likely were
+        # incorrectly cleaned.
+        if len( contents ) <= 500:
+            log.debug("File contents too short, skipping.")
+            os.remove( datafile )
+            continue
+
+        # Write out to the same file.
         with open( datafile, 'w' ) as out:
             out.write( contents )
 
