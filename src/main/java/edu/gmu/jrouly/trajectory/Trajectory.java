@@ -67,32 +67,42 @@ public class Trajectory {
 
     // Grab the value of the "data" argument, which is set as a required
     // command line parameter. If it's null, something went wrong.
-    String requestedDataDir = argmap.get( "data" );
-    Path dataDirPath = null;
+    String requestedDataPath = argmap.get( "data" );
+    File dataDirectory = null;
 
     try {
 
-      dataDirPath = Paths.get( requestedDataDir );
+      // Join the requested data path and its subdirectory "clean".
+      Path dataPath = Paths.get( requestedDataPath, "clean" );
+      dataDirectory = dataPath.toFile();
 
     } catch( InvalidPathException exp ) {
 
       // The user-suggested path was invalid.
-      System.err.println( "Unable to find the resolve data path." );
+      System.err.println( "Unable to resolve the data path." );
       System.exit( 1 );
 
     }
 
-    if( debug ) System.out.println( "dataDirPath: " + dataDirPath.toString() );
+    // Verify that the cleaned data directory can be located on the disk.
+    if( ! dataDirectory.isDirectory() ) {
+      System.err.println( "Unable to resolve the data path \""
+                          + dataDirectory.toString()
+                          + "\"" );
+    } else {
+      System.out.println( "Using cleaned data directory: "
+                          + dataDirectory.toString() );
+    }
 
+System.exit( 1 );
 
-
-
+/*
 
     // Generate data processing pipeline.
     pipe = buildPipe();
 
     // Generate list of data directories.
-    File[] dataDirectories = listDataDirectories( dataDirPath );
+    File[] dataDirectories = listDataDirectories( dataPath );
 
     // Generate instances from the input data files.
     InstanceList instances = readDirectories( dataDirectories );
@@ -183,7 +193,7 @@ public class Trajectory {
     model.printDocumentTopics( new PrintWriter( System.out ), 0.0, 5 );
 
 
-
+*/
 
   }
 
