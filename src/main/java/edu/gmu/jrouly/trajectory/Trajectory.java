@@ -14,6 +14,7 @@ import java.nio.file.Paths;
 
 import java.util.ArrayList;
 import java.util.Formatter;
+import java.util.Map;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.TreeSet;
@@ -39,14 +40,13 @@ import cc.mallet.types.LabelSequence;
 import cc.mallet.types.InstanceList;
 import cc.mallet.types.Instance;
 
+import edu.gmu.jrouly.trajectory.CLI;
+
 /**
  * The main executable class of the trajectory project to perform topic
  * modeling.
  */
 public class Trajectory {
-
-  private static final String DEFAULT_DATA_DIR = "data";
-  private static final boolean DEFAULT_DEBUG = false;
 
   static Pipe pipe;
 
@@ -58,33 +58,21 @@ public class Trajectory {
    */
   public static void main(String[] args) {
 
-    // Create an argument parser.
-    CommandLineParser parser = new BasicParser();
 
-    // Create argument value holders.
-    Path dataDirPath = Paths.get( DEFAULT_DATA_DIR );
-    boolean debug = DEFAULT_DEBUG;
+    // Parse the command line arguments.
+    Map<String, String> argmap = CLI.parse( args );
+
+    // If the "debug" argument is present, then its value is true.
+    boolean debug = argmap.containsKey( "debug" );
+
+    // Grab the value of the "data" argument, which is set as a required
+    // command line parameter. If it's null, something went wrong.
+    String requestedDataDir = argmap.get( "data" );
+    Path dataDirPath = null;
 
     try {
 
-      // Parse the command line arguments.
-      CommandLine line = parser.parse( options, args );
-
-      if( line.hasOption( "data" ) ) {
-        String requestedDataDir = line.getOptionValue( "data" );
-        dataDirPath = Paths.get( requestedDataDir );
-      }
-
-      debug = line.hasOption( "debug" );
-
-    } catch( ParseException exp ) {
-
-      // Something went wrong!
-      System.err.println( "Parsing failed. Reason: " + exp.getMessage() );
-      System.err.println();
-      HelpFormatter formatter = new HelpFormatter();
-      formatter.printHelp( "trajectory", options );
-      System.exit( 1 );
+      dataDirPath = Paths.get( requestedDataDir );
 
     } catch( InvalidPathException exp ) {
 
