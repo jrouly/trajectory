@@ -1,14 +1,11 @@
 package edu.gmu.jrouly.trajectory;
 
 import java.io.File;
-import java.io.Reader;
-import java.io.InputStreamReader;
 import java.io.IOException;
-import java.io.FileInputStream;
 import java.io.FileFilter;
+import java.io.PrintWriter;
 
 import java.nio.file.InvalidPathException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -19,7 +16,6 @@ import java.util.Iterator;
 import java.util.Locale;
 import java.util.TreeSet;
 import java.util.regex.Pattern;
-import java.io.PrintWriter;
 
 import cc.mallet.pipe.CharSequence2TokenSequence;
 import cc.mallet.pipe.Input2CharSequence;
