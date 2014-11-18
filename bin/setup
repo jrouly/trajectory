@@ -46,8 +46,4 @@ else
 fi
 
 
-# Compile java requirements.
-mvn clean compile package javadoc:javadoc
-
-
 exit 0
