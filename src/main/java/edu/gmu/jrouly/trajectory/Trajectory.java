@@ -48,30 +48,26 @@ import edu.gmu.jrouly.trajectory.CLI;
  */
 public class Trajectory {
 
-  // Data processing pipeline.
-  private Pipe pipe;
-
   // Debug flag status.
-  private boolean debug;
+  private static boolean debug;
 
   // Input data directory (cleaned data).
-  private File dataDirectory = null;
+  private static File dataDirectory = null;
 
 
   /**
-   * Initialize a new Trajectory executable given a set of command line
-   * arguments, specifically this will set whatever flags are passed to the
-   * command line.
+   * Parse and extract values from user input command line arguments.
    *
    * @param args command line arguments
+   * @see edu.gmu.jrouly.trajectory.CLI
    */
-  public Trajectory( String[] args ) {
+  private static void parseArgs( String[] args ) {
 
     // Parse the command line arguments.
     Map<String, String> argmap = CLI.parse( args );
 
     // If the "debug" argument is present, then its value is true.
-    this.debug = argmap.containsKey( "debug" );
+    debug = argmap.containsKey( "debug" );
 
     // Grab the value of the "data" argument, which is set as a required
     // command line parameter. If it's null, something went wrong.
@@ -81,7 +77,7 @@ public class Trajectory {
 
       // Join the requested data path and its subdirectory "clean".
       Path dataPath = Paths.get( requestedDataPath, "clean" );
-      this.dataDirectory = dataPath.toFile();
+      dataDirectory = dataPath.toFile();
 
     } catch( InvalidPathException exp ) {
 
@@ -106,22 +102,33 @@ public class Trajectory {
 
 
   /**
-   * Perform LDA topic modeling on the given dataset.
+   * Read input from the command line and execute an LDA topic model over a
+   * given set of data according to user defined constraints.
    */
-  public void execute() {
+  public static void main( String[] args ) { // {{{
+
+    // Set command line flags and values.
+    parseArgs( args );
 
     // Generate data processing pipeline.
-    this.pipe = buildPipe();
+    Pipe pipe = buildPipe();
 
-  }
+    // Get list of targets in data directory.
+    File[] targets = dataDirectory.listFiles();
 
-/*
+    // Get an iterator over data targets.
+    FileIterator iterator = getDataIterator( targets );
 
-    // Generate list of data directories.
-    File[] dataDirectories = listDataDirectories( dataPath );
+    // Build an instance set from data targets.
+    InstanceList instances = new InstanceList( pipe );
+    instances.addThruPipe( iterator );
 
-    // Generate instances from the input data files.
-    InstanceList instances = readDirectories( dataDirectories );
+    // Create an LDA Topic Model.
+
+
+  } // }}}
+
+/* stuff {{{
 
     // Create the topic model.
     int numTopics = 100;
@@ -211,28 +218,8 @@ public class Trajectory {
 
 
   }
-*/
+}}} */
 
-
-  /**
-   * Given a path to the root data directory, generate a list of its
-   * content directories.
-   *
-   * @param dataDirPath path to the root data directory
-   * @return list of file pointers to content directories
-   */
-  private static File[] listDataDirectories( Path dataDirPath ) {
-
-    // Generate list of data directories in the data path.
-    File dataDirFile = dataDirPath.toFile();
-    if( ! dataDirFile.isDirectory() ) {
-      System.err.println( "Data directory is not a directory." );
-      System.exit( 1 );
-    }
-    File[] dataDirContents = dataDirFile.listFiles();
-    return dataDirContents;
-
-  }
 
 
   /**
@@ -241,10 +228,6 @@ public class Trajectory {
    * @return data processing workflow pipeline
    */
   private static Pipe buildPipe() {
-
-    // Read in English stopwords.
-    //InputStream stoplistIn = Trajectory.class.getResourcesAsStream("/stoplists/en.txt");
-
 
     // Begin by importing documents from text.
     ArrayList<Pipe> pipeList = new ArrayList<Pipe>();
@@ -261,13 +244,13 @@ public class Trajectory {
 
 
   /**
-   * Given a list of directories, read in their contents and generate an
-   * InstanceList.
+   * Given a list of directories, read in their contents and generate a
+   * FileIterator over them (recurses into child directories).
    *
    * @param directories list of file pointers to data directories (per set)
-   * @return list of data instances
+   * @return iterator over data files
    */
-  private InstanceList readDirectories( File[] directories ) {
+  private static FileIterator getDataIterator( File[] directories ) {
 
     // Construct a file iterator recursing over the data directories that
     // only accepts files with the .txt extension.
@@ -282,27 +265,7 @@ public class Trajectory {
                         },
                         FileIterator.LAST_DIRECTORY );
 
-    InstanceList instances = new InstanceList( pipe );
-    instances.addThruPipe( iterator );
-
-    return instances;
-
-  }
-
-
-  /**
-   * Perform topic modeling on the data set as constrained by any command
-   * line arguments.
-   *
-   * @param args command line specifications
-   */
-  public static void main(String[] args) {
-
-    // Initialize a new Trajectory from command line params.
-    Trajectory trj = new Trajectory( args );
-
-    // Execute the trj.
-    trj.execute();
+    return iterator;
 
   }
 
