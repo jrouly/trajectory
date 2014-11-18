@@ -27,7 +27,20 @@ public class CLI {
   private static Options getOptions() {
 
     // Allow debugging output to show.
-    Option debugOption = new Option( "debug", "print debug messages" );
+    Option debugOption   = new Option( "debug", "print debug messages" );
+
+    // Specify the number of parallel LDA threads to use in the parallle
+    // Mallet model.
+    Option threadsOption = OptionBuilder.withArgName("num threads")
+                                  .hasArg()
+                                  .withDescription( "number of parallel LDA threads" )
+                                  .create("threads");
+
+    // Number of iterations when training the LDA model.
+    Option iterOption    = OptionBuilder.withArgName("num iterations")
+                                  .hasArg()
+                                  .withDescription( "number of iterations" )
+                                  .create("iterations");
 
     // Specify the data directory to read from.
     Option dataDirOption = OptionBuilder.withArgName("path")
@@ -38,7 +51,9 @@ public class CLI {
 
     // Add options to the options dictionary.
     Options options = new Options();
-    options.addOption( debugOption );
+    options.addOption( debugOption   );
+    options.addOption( threadsOption );
+    options.addOption( iterOption    );
     options.addOption( dataDirOption );
 
     return options;
