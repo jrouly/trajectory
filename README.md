@@ -1,7 +1,9 @@
-Author: Jean Michel Rouly
-Date:   2014-10-05
+# Trajectory
 
-# Setup
+Trajectory is a working title for my CS 390 undergraduate research project.
+I am taking university syllabus data and applying LDA topic modeling.
+
+## Setup
 
 Note that this project contains an unholy combination of Bash scripts,
 Python tools, and Java code. Proceed with setup carefully.
@@ -19,14 +21,29 @@ You will also need to build any compiled code.
 
     $ bin/build
 
-# Use
+## Use
 
 To scrape and process downloaded syllabus data, use the `trj-scrape`
 script.
 
     $ bin/trj-scrape [-h] [--version] [--debug] {scrape,clean} {targets}
 
-To run LDA topic modelling, use the `trj-learn` script.
+### To download syllabi from a prebuilt target
+
+#### Download
+
+    $ bin/trj-scrape scrape [target] --download
+
+#### Clean
+
+Cleaning processes the raw syllabus data, removing meta data, and resulting
+in single-line bags of words.
+
+    $ bin/trj-scrape scrape [target] --clean
+
+### LDA Topic Modeling
+
+To run LDA topic modeling, use the `trj-learn` script.
 
     $ bin/trj-learn -data <path> [-debug] [-iterations <num>] [-threads <num>]
 
