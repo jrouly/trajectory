@@ -15,10 +15,18 @@ install Python requirements.
 
     $ bin/setup
 
+You will also need to build any compiled code.
+
+    $ bin/build
+
 # Use
 
 To scrape and process downloaded syllabus data, use the `trj-scrape`
 script.
 
     $ bin/trj-scrape [-h] [--version] [--debug] {scrape,clean} {targets}
+
+To run LDA topic modelling, use the `trj-learn` script.
+
+    $ bin/trj-learn -data <path> [-debug] [-iterations <num>] [-threads <num>]
 
