@@ -56,6 +56,57 @@ public class Trajectory {
 
 
   /**
+   * Read input from the command line and execute an LDA topic model over a
+   * given set of data according to user defined constraints.
+   */
+  public static void main( String[] args ) {
+
+    // Set command line flags and values.
+    System.out.println( "> Parsing command line arguments." );
+    parseArgs( args );
+
+    // Generate data processing pipeline.
+    System.out.println( "> Building data processing pipeline." );
+    Pipe pipe = buildPipe();
+
+    // Get list of targets in data directory.
+    System.out.println( "> Establishing data targets." );
+    File[] targets = dataDirectory.listFiles();
+
+    // Get an iterator over data targets.
+    System.out.println( "> Creating data iterator." );
+    FileIterator iterator = getDataIterator( targets );
+
+    // Build an instance set from data targets.
+    System.out.println( "> Creating data instances." );
+    InstanceList instances = new InstanceList( pipe );
+    instances.addThruPipe( iterator );
+
+    // Create an LDA Topic Model.
+    System.out.println( "> Initializing LDA Topic Model." );
+    ParallelTopicModel model = buildModel( instances );
+
+    // Train the Topic Model.
+    System.out.println( "> Training LDA Topic Model." );
+
+    try {
+      model.estimate();
+    } catch( IOException exp ) {
+      // The model broke when reading in files.
+      System.err.println( "> Error estimating topics when reading from data set." );
+      System.exit( 1 );
+    }
+
+
+    // Exit.
+    System.out.println( "> Exit." );
+    System.exit( 0 );
+    return;
+
+  }
+
+
+  /**
    * Parse and extract values from user input command line arguments.
    *
    * @param args command line arguments
@@ -102,49 +153,49 @@ public class Trajectory {
 
 
   /**
-   * Read input from the command line and execute an LDA topic model over a
-   * given set of data according to user defined constraints.
+   * Build a workflow pipe that cleans and tokenizes the input data.
+   *
+   * @return data processing workflow pipeline
    */
-  public static void main( String[] args ) {
+  private static Pipe buildPipe() {
 
-    // Set command line flags and values.
-    System.out.println( "> Parsing command line arguments." );
-    parseArgs( args );
+    // Begin by importing documents from text.
+    ArrayList<Pipe> pipeList = new ArrayList<Pipe>();
 
-    // Generate data processing pipeline.
-    System.out.println( "> Building data processing pipeline." );
-    Pipe pipe = buildPipe();
+    // Pipes: lowercase, tokenize, remove stopwords, map to features.
+    pipeList.add( new Input2CharSequence("UTF-8") );
+    pipeList.add( new CharSequence2TokenSequence(Pattern.compile("\\p{L}[\\p{L}\\p{P}]+\\p{L}")) );
+    pipeList.add( new TokenSequenceLowercase() );
+    pipeList.add( new TokenSequenceRemoveStopwords(false, false) );
+    pipeList.add( new TokenSequence2FeatureSequence() );
+    return new SerialPipes(pipeList);
 
-    // Get list of targets in data directory.
-    System.out.println( "> Establishing data targets." );
-    File[] targets = dataDirectory.listFiles();
-
-    // Get an iterator over data targets.
-    System.out.println( "> Creating data iterator." );
-    FileIterator iterator = getDataIterator( targets );
-
-    // Build an instance set from data targets.
-    System.out.println( "> Creating data instances." );
-    InstanceList instances = new InstanceList( pipe );
-    instances.addThruPipe( iterator );
-
-    // Create an LDA Topic Model.
-    System.out.println( "> Initializing LDA Topic Model." );
-    ParallelTopicModel model = buildModel( instances );
-
-    // Train the Topic Model.
-    System.out.println( "> Training LDA Topic Model." );
-
-    try {
-      model.estimate();
-    } catch( IOException exp ) {
-      // The model broke when reading in files.
-      System.err.println( "> Error estimating topics when reading from data set." );
-      System.exit( 1 );
-    }
+  }
 
 
+  /**
+   * Given a list of directories, read in their contents and generate a
+   * FileIterator over them (recurses into child directories).
+   *
+   * @param directories list of file pointers to data directories (per set)
+   * @return iterator over data files
+   */
+  private static FileIterator getDataIterator( File[] directories ) {
 
+    // Construct a file iterator recursing over the data directories that
+    // only accepts files with the .txt extension.
+    FileIterator iterator =
+      new FileIterator( directories,
+                        new FileFilter() {
+                          @Override
+                          public boolean accept(File file) {
+                            return file.toString().endsWith(".txt") &&
+                                   file.isFile();
+                          }
+                        },
+                        FileIterator.LAST_DIRECTORY );
+
+    return iterator;
 
   }
 
@@ -179,6 +230,8 @@ public class Trajectory {
     return model;
 
   }
+
+
 
 /* stuff {{{
 
@@ -249,55 +302,6 @@ public class Trajectory {
 
   }
 }}} */
-
-
-
-  /**
-   * Build a workflow pipe that cleans and tokenizes the input data.
-   *
-   * @return data processing workflow pipeline
-   */
-  private static Pipe buildPipe() {
-
-    // Begin by importing documents from text.
-    ArrayList<Pipe> pipeList = new ArrayList<Pipe>();
-
-    // Pipes: lowercase, tokenize, remove stopwords, map to features.
-    pipeList.add( new Input2CharSequence("UTF-8") );
-    pipeList.add( new CharSequence2TokenSequence(Pattern.compile("\\p{L}[\\p{L}\\p{P}]+\\p{L}")) );
-    pipeList.add( new TokenSequenceLowercase() );
-    pipeList.add( new TokenSequenceRemoveStopwords(false, false) );
-    pipeList.add( new TokenSequence2FeatureSequence() );
-    return new SerialPipes(pipeList);
-
-  }
-
-
-  /**
-   * Given a list of directories, read in their contents and generate a
-   * FileIterator over them (recurses into child directories).
-   *
-   * @param directories list of file pointers to data directories (per set)
-   * @return iterator over data files
-   */
-  private static FileIterator getDataIterator( File[] directories ) {
-
-    // Construct a file iterator recursing over the data directories that
-    // only accepts files with the .txt extension.
-    FileIterator iterator =
-      new FileIterator( directories,
-                        new FileFilter() {
-                          @Override
-                          public boolean accept(File file) {
-                            return file.toString().endsWith(".txt") &&
-                                   file.isFile();
-                          }
-                        },
-                        FileIterator.LAST_DIRECTORY );
-
-    return iterator;
-
-  }
 
 
 }
