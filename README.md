@@ -6,13 +6,19 @@ Date:   2014-10-05
 Note that this project contains an unholy combination of Bash scripts,
 Python tools, and Java code. Proceed with setup carefully.
 
+Begin by exporting the `$TRJ_HOME` path variable.
+
+    $ export TRJ_HOME=$(pwd)
+
+Running the setup script will create and activate a virtual environment and
+install Python requirements.
+
     $ bin/setup
-
-This script should create and activate a virtual environment, install
-Python requirements, and compile and package the Java.
-
 
 # Use
 
-    $ python usage: Trajectory [-h] [--version] [--debug] {scrape,clean} ...
+To scrape and process downloaded syllabus data, use the `trj-scrape`
+script.
+
+    $ bin/trj-scrape [-h] [--version] [--debug] {scrape,clean} {targets}
 
