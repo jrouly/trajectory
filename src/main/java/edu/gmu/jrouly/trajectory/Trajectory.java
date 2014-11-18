@@ -82,19 +82,19 @@ public class Trajectory {
     } catch( InvalidPathException exp ) {
 
       // The user-suggested path was invalid.
-      System.err.println( "Unable to resolve the data path." );
+      System.err.println( "> Unable to resolve the data path." );
       System.exit( 1 );
 
     }
 
     // Verify that the cleaned data directory can be located on the disk.
     if( ! dataDirectory.isDirectory() ) {
-      System.err.println( "Unable to resolve the data path \""
+      System.err.println( "> Unable to resolve the data path \""
                           + dataDirectory.toString()
                           + "\"" );
       System.exit( 1 );
     } else {
-      System.out.println( "Using cleaned data directory: "
+      System.out.println( "> Using cleaned data directory: "
                           + dataDirectory.toString() );
     }
 
@@ -105,52 +105,82 @@ public class Trajectory {
    * Read input from the command line and execute an LDA topic model over a
    * given set of data according to user defined constraints.
    */
-  public static void main( String[] args ) { // {{{
+  public static void main( String[] args ) {
 
     // Set command line flags and values.
+    System.out.println( "> Parsing command line arguments." );
     parseArgs( args );
 
     // Generate data processing pipeline.
+    System.out.println( "> Building data processing pipeline." );
     Pipe pipe = buildPipe();
 
     // Get list of targets in data directory.
+    System.out.println( "> Establishing data targets." );
     File[] targets = dataDirectory.listFiles();
 
     // Get an iterator over data targets.
+    System.out.println( "> Creating data iterator." );
     FileIterator iterator = getDataIterator( targets );
 
     // Build an instance set from data targets.
+    System.out.println( "> Creating data instances." );
     InstanceList instances = new InstanceList( pipe );
     instances.addThruPipe( iterator );
 
     // Create an LDA Topic Model.
+    System.out.println( "> Initializing LDA Topic Model." );
+    ParallelTopicModel model = buildModel( instances );
 
+    // Train the Topic Model.
+    System.out.println( "> Training LDA Topic Model." );
 
-  } // }}}
-
-/* stuff {{{
-
-    // Create the topic model.
-    int numTopics = 100;
-    ParallelTopicModel model = new ParallelTopicModel( numTopics, 1.0, 0.01 );
-    model.addInstances( instances );
-
-    // Use two parallel samplers, which each look at one half the corpus and combine
-    // statistics after every iteration.
-    model.setNumThreads(2);
-
-    // Run the model for 50 iterations and stop (this is for testing only,
-    //  for real applications, use 1000 to 2000 iterations)
-    model.setNumIterations(1500);
     try {
       model.estimate();
     } catch( IOException exp ) {
       // The model broke when reading in files.
-      System.err.println( "Error estimating topics when reading from data set." );
+      System.err.println( "> Error estimating topics when reading from data set." );
       System.exit( 1 );
     }
 
 
+
+
+  }
+
+
+  /**
+   * Create an untrained LDA Topic Model with the instance data.
+   *
+   * @param instances set of data instances
+   * @return untrained LDA topic model
+   */
+  private static ParallelTopicModel buildModel( InstanceList instances ) {
+
+    // TODO: Find a good value for this. (maybe CLI parameter)
+    int numTopics = 100;
+
+    // Create the topic model.
+    ParallelTopicModel model = new ParallelTopicModel( numTopics, 1.0, 0.01 );
+
+    // Set data instances.
+    model.addInstances( instances );
+
+    // Use two parallel samplers, which each look at one half the corpus and combine
+    // statistics after every iteration.
+    // TODO: Make this a CLI parameter.
+    model.setNumThreads(2);
+
+    // Run the model for 50 iterations and stop (this is for testing only,
+    // for real applications, use 1000 to 2000 iterations)
+    // TODO: Make this a CLI parameter.
+    model.setNumIterations(50);
+
+    return model;
+
+  }
+
+/* stuff {{{
 
     // Show the words and topics in the first instance
 
