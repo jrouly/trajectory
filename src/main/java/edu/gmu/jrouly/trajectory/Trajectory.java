@@ -45,6 +45,9 @@ import cc.mallet.types.Instance;
  */
 public class Trajectory {
 
+  private static final String DEFAULT_DATA_DIR = "data";
+  private static final boolean DEFAULT_DEBUG = false;
+
   static Pipe pipe;
 
   /**
@@ -74,8 +77,8 @@ public class Trajectory {
     CommandLineParser parser = new BasicParser();
 
     // Create argument value holders.
-    Path dataDirPath = Paths.get( "data" );
-    boolean debug = false;
+    Path dataDirPath = Paths.get( DEFAULT_DATA_DIR );
+    boolean debug = DEFAULT_DEBUG;
 
     try {
 
