@@ -45,7 +45,7 @@ public class CLI {
     // Specify the data directory to read from.
     Option dataDirOption = OptionBuilder.withArgName("path")
                                   .hasArg()
-                                  .withDescription( "path to the data directory" )
+                                  .withDescription( "path to the data directory (required)" )
                                   .create("data");
     dataDirOption.setRequired( true );
 
