@@ -101,3 +101,7 @@ def scrape(args):
                 log.warn( "Target %s has not been defined. Skipping." %
                         target )
 
+
+        # If neither clean nor download were flagged, notify the user.
+        if not args.clean and not args.download:
+            log.warn("Heads up, no action performed.")
