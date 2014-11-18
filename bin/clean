@@ -15,21 +15,24 @@ cd $TRJ_HOME
 
 
 # Clean compiled java code.
+echo "Cleaning compiled Java code."
 mvn clean
 
 
 # Clean compiled Python code.
-rm -r src/main/python/trajectory/__pycache__
-rm src/main/python/trajectory/*.pyc
+echo "Cleaning compiled Python code."
 
-rm -r src/main/python/trajectory/*/__pycache__
-rm src/main/python/trajectory/*/*.pyc
+rm -r src/main/python/trajectory/__pycache__ &> /dev/null
+rm src/main/python/trajectory/*.pyc &> /dev/null
 
-rm -r src/main/python/trajectory/scrape/__pycache__
-rm src/main/python/trajectory/scrape/*.pyc
+rm -r src/main/python/trajectory/*/__pycache__ &> /dev/null
+rm src/main/python/trajectory/*/*.pyc &> /dev/null
 
-rm -r src/main/python/trajectory/scrape/*/__pycache__
-rm src/main/python/trajectory/scrape/*/*.pyc
+rm -r src/main/python/trajectory/scrape/__pycache__ &> /dev/null
+rm src/main/python/trajectory/scrape/*.pyc &> /dev/null
 
-rm -r src/main/python/trajectory/scrape/*/*/__pycache__
-rm src/main/python/trajectory/scrape/*/*/*.pyc
+rm -r src/main/python/trajectory/scrape/*/__pycache__ &> /dev/null
+rm src/main/python/trajectory/scrape/*/*.pyc &> /dev/null
+
+rm -r src/main/python/trajectory/scrape/*/*/__pycache__ &> /dev/null
+rm src/main/python/trajectory/scrape/*/*/*.pyc &> /dev/null
