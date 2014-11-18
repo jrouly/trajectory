@@ -1,10 +1,6 @@
 #!/bin/bash
 
 
-# Halt on error.
-set -e
-
-
 # Check if TRJ_HOME is not set.
 if [ -z $TRJ_HOME ]; then
   # Notify user that TRJ_HOME is not set.
@@ -16,6 +12,10 @@ fi
 
 # Relocate into the TRJ_HOME just to be sure.
 cd $TRJ_HOME
+
+
+# Halt on error.
+set -e
 
 
 # Create basic project output directories.
