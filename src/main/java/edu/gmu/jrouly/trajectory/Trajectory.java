@@ -54,6 +54,14 @@ public class Trajectory {
   // Input data directory (cleaned data).
   private static File dataDirectory = null;
 
+  // Number of threads to use for the parallel model.
+  private static final int DEFAULT_NUM_THREADS = 2;
+  private static int numThreads = DEFAULT_NUM_THREADS;
+
+  // Number of iterations to use when training the model.
+  private static final int DEFAULT_NUM_ITERATIONS = 50;
+  private static int numIterations = DEFAULT_NUM_ITERATIONS;
+
 
   /**
    * Read input from the command line and execute an LDA topic model over a
@@ -124,6 +132,18 @@ public class Trajectory {
     // command line parameter. If it's null, something went wrong.
     String requestedDataPath = argmap.get( "data" );
 
+    // If the numThreads argument is present, grab its value.
+    if( argmap.containsKey( "threads" ) ) {
+      String numThreadsString = argmap.get( "threads" );
+      numThreads = Integer.parseInt( numThreadsString );
+    }
+
+    // If the numIter argument is present, grab its value.
+    if( argmap.containsKey( "iterations" ) ) {
+      String numIterationsString = argmap.get( "iterations" );
+      numIterations = Integer.parseInt( numIterationsString );
+    }
+
     try {
 
       // Join the requested data path and its subdirectory "clean".
@@ -164,7 +184,8 @@ public class Trajectory {
 
     // Pipes: lowercase, tokenize, remove stopwords, map to features.
     pipeList.add( new Input2CharSequence("UTF-8") );
-    pipeList.add( new CharSequence2TokenSequence(Pattern.compile("\\p{L}[\\p{L}\\p{P}]+\\p{L}")) );
+    pipeList.add( new CharSequence2TokenSequence(
+                          Pattern.compile("\\p{L}[\\p{L}\\p{P}]+\\p{L}")) );
     pipeList.add( new TokenSequenceLowercase() );
     pipeList.add( new TokenSequenceRemoveStopwords(false, false) );
     pipeList.add( new TokenSequence2FeatureSequence() );
@@ -212,20 +233,22 @@ public class Trajectory {
     int numTopics = 100;
 
     // Create the topic model.
-    ParallelTopicModel model = new ParallelTopicModel( numTopics, 1.0, 0.01 );
+    // 1st paremeter: number of topics
+    // 2nd parameter: alpha sum, defaults to number of topics
+    // 3rd parameter: beta, defaults to 0.01
+    ParallelTopicModel model = new ParallelTopicModel( numTopics );
 
     // Set data instances.
     model.addInstances( instances );
 
     // Use two parallel samplers, which each look at one half the corpus and combine
     // statistics after every iteration.
-    // TODO: Make this a CLI parameter.
-    model.setNumThreads(2);
+    model.setNumThreads( numThreads );
 
-    // Run the model for 50 iterations and stop (this is for testing only,
-    // for real applications, use 1000 to 2000 iterations)
-    // TODO: Make this a CLI parameter.
-    model.setNumIterations(50);
+    // Run the model for n iterations and stop.
+    // For debugging, n=50 is a good number.
+    // For real applications, use n=1000 to n=2000 iterations.
+    model.setNumIterations( numIterations );
 
     return model;
 
