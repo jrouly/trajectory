@@ -58,21 +58,6 @@ public class Trajectory {
    */
   public static void main(String[] args) {
 
-    // Allow debugging output to show.
-    Option debugOption = new Option( "debug", "print debug messages" );
-
-    // Specify the data directory to read from.
-    Option dataDirOption = OptionBuilder.withArgName("path")
-                                  .hasArg()
-                                  .withDescription( "path to the data directory" )
-                                  .create("data");
-    dataDirOption.setRequired( true );
-
-    // Add options to the options dictionary.
-    Options options = new Options();
-    options.addOption( debugOption );
-    options.addOption( dataDirOption );
-
     // Create an argument parser.
     CommandLineParser parser = new BasicParser();
 
