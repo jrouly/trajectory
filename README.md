@@ -30,16 +30,23 @@ script.
 
 ### To download syllabi from a prebuilt target
 
-#### Download
+#### Scrape: Download
 
     $ bin/trj-scrape scrape [target] --download
 
-#### Clean
+#### Scrape: Clean
 
 Cleaning processes the raw syllabus data, removing meta data, and resulting
 in single-line bags of words.
 
     $ bin/trj-scrape scrape [target] --clean
+
+#### Data: Clean
+
+Cleaning the data directory refers to deleting the downloaded and processed
+syllabus data.
+
+    $ bin/trj-scrape clean {data,logs,all}
 
 ### LDA Topic Modeling
 
