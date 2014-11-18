@@ -48,33 +48,40 @@ import edu.gmu.jrouly.trajectory.CLI;
  */
 public class Trajectory {
 
-  static Pipe pipe;
+  // Data processing pipeline.
+  private Pipe pipe;
+
+  // Debug flag status.
+  private boolean debug;
+
+  // Input data directory (cleaned data).
+  private File dataDirectory = null;
+
 
   /**
-   * Perform topic modeling on the data set as constrained by any command
-   * line arguments.
+   * Initialize a new Trajectory executable given a set of command line
+   * arguments, specifically this will set whatever flags are passed to the
+   * command line.
    *
-   * @param args command line specifications
+   * @param args command line arguments
    */
-  public static void main(String[] args) {
-
+  public Trajectory( String[] args ) {
 
     // Parse the command line arguments.
     Map<String, String> argmap = CLI.parse( args );
 
     // If the "debug" argument is present, then its value is true.
-    boolean debug = argmap.containsKey( "debug" );
+    this.debug = argmap.containsKey( "debug" );
 
     // Grab the value of the "data" argument, which is set as a required
     // command line parameter. If it's null, something went wrong.
     String requestedDataPath = argmap.get( "data" );
-    File dataDirectory = null;
 
     try {
 
       // Join the requested data path and its subdirectory "clean".
       Path dataPath = Paths.get( requestedDataPath, "clean" );
-      dataDirectory = dataPath.toFile();
+      this.dataDirectory = dataPath.toFile();
 
     } catch( InvalidPathException exp ) {
 
@@ -89,17 +96,26 @@ public class Trajectory {
       System.err.println( "Unable to resolve the data path \""
                           + dataDirectory.toString()
                           + "\"" );
+      System.exit( 1 );
     } else {
       System.out.println( "Using cleaned data directory: "
                           + dataDirectory.toString() );
     }
 
-System.exit( 1 );
+  }
 
-/*
+
+  /**
+   * Perform LDA topic modeling on the given dataset.
+   */
+  public void execute() {
 
     // Generate data processing pipeline.
-    pipe = buildPipe();
+    this.pipe = buildPipe();
+
+  }
+
+/*
 
     // Generate list of data directories.
     File[] dataDirectories = listDataDirectories( dataPath );
@@ -193,9 +209,9 @@ System.exit( 1 );
     model.printDocumentTopics( new PrintWriter( System.out ), 0.0, 5 );
 
 
-*/
 
   }
+*/
 
 
   /**
@@ -222,7 +238,7 @@ System.exit( 1 );
   /**
    * Build a workflow pipe that cleans and tokenizes the input data.
    *
-   * @return cleaning pipe
+   * @return data processing workflow pipeline
    */
   private static Pipe buildPipe() {
 
@@ -251,7 +267,7 @@ System.exit( 1 );
    * @param directories list of file pointers to data directories (per set)
    * @return list of data instances
    */
-  private static InstanceList readDirectories( File[] directories ) {
+  private InstanceList readDirectories( File[] directories ) {
 
     // Construct a file iterator recursing over the data directories that
     // only accepts files with the .txt extension.
@@ -272,5 +288,23 @@ System.exit( 1 );
     return instances;
 
   }
+
+
+  /**
+   * Perform topic modeling on the data set as constrained by any command
+   * line arguments.
+   *
+   * @param args command line specifications
+   */
+  public static void main(String[] args) {
+
+    // Initialize a new Trajectory from command line params.
+    Trajectory trj = new Trajectory( args );
+
+    // Execute the trj.
+    trj.execute();
+
+  }
+
 
 }
