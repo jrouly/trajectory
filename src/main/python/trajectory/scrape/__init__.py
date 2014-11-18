@@ -50,19 +50,27 @@ def scrape(args):
     # Loop over the requested targets and call their scrape function.
     for target in args.targets:
 
+
         log.info("Targeting: %s" % target)
+
 
         # Prepend the target name with a dot for importing.
         target_module = ".%s" % target
         scraper = import_module( target_module, "trajectory.scrape.engines" )
 
+
+        # Define the raw and clean paths specific to this target engine.
+        target_raw_path = os.path.join( raw_path, target )
+        target_clean_path = os.path.join( clean_path, target )
+
+
         # If downloading is flagged, run it.
         if args.download:
             try:
 
+
                 # If the target raw path does not exist, create it.
                 # If it does exist, then warn the user.
-                target_raw_path = os.path.join( raw_path, target )
                 if not os.path.exists( target_raw_path ):
                     log.info("\"%s\" does not exist. Creating..." %
                             target_raw_path )
@@ -70,23 +78,27 @@ def scrape(args):
                 else:
                     log.info("\"%s\" already exists." % target_raw_path )
 
+
                 # Run the engine's scraper method.
                 scraper.scrape( args, target_raw_path )
 
+
             except NotImplementedError as e:
+
 
                 # If the scraper function isn't defined, throw up
                 # gracefully and continue.
                 log.warn( "Target %s has not been defined. Skipping." %
                         target )
 
+
         # If cleaning is flagged, run it.
         if args.clean:
             try:
 
+
                 # If the target clean path does not exist, create it.
                 # If it does exist, then warn the user.
-                target_clean_path = os.path.join( clean_path, target )
                 if not os.path.exists( target_clean_path ):
                     log.info("\"%s\" does not exist. Creating..." %
                             target_clean_path )
@@ -94,10 +106,16 @@ def scrape(args):
                 else:
                     log.info("\"%s\" already exists." % target_clean_path )
 
+
                 # Run the engine's clean method.
-                scraper.clean( args, target_clean_path )
+                scraper.clean( args, target_raw_path, target_clean_path )
+
 
             except NotImplementedError as e:
+
+
+                # If the clean function isn't defined, throw up gracefully
+                # and continue.
                 log.warn( "Target %s has not been defined. Skipping." %
                         target )
 
