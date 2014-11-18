@@ -11,11 +11,8 @@ fi
 
 
 # Relocate into the TRJ_HOME just to be sure.
-cd $TRJ_HOME
-
-
-# Halt on error.
 set -e
+cd $TRJ_HOME
 
 
 # Create basic project output directories.

@@ -11,7 +11,12 @@ fi
 
 
 # Relocate into the TRJ_HOME just to be sure.
+set -e
 cd $TRJ_HOME
+
+
+# Ignore errors.
+set +e
 
 
 # Clean compiled java code.
