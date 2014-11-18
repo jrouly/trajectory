@@ -119,6 +119,7 @@ def clean( args, raw_path, clean_path ):
     all HTML entities and non-word elements from them.
     """
 
+
     log.info( "Cleaning scraped GMU CS data." )
 
 
