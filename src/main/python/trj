@@ -52,9 +52,10 @@ def main():
 
     # Specify subcommands using a subparser.
     subparsers = parser.add_subparsers(title="subcommands",
-            dest="subparser_name",
+            dest="subcommand",
             description="valid subcommands to run",
             help="indicate which subcommand to run")
+    subparsers.required = True
 
 
     # Create parser for "scrape" command.
@@ -101,13 +102,13 @@ def main():
 
 
     # Execute subcommand logic.
-    if args.subparser_name == "scrape":
+    if args.subcommand == "scrape":
         from trajectory.scrape import scrape
         scrape( args )
-    elif args.subparser_name == "clean":
+    elif args.subcommand == "clean":
         from trajectory import clean
         clean( args )
-    elif args.subparser_name == "cluster":
+    elif args.subcommand == "cluster":
         from trajectory import cluster
         # TODO: Fix this up to use your stackmining infrastructure.
         cluster( args )
