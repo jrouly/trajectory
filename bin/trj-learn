@@ -1,0 +1,23 @@
+#!/bin/bash
+
+
+# Check if TRJ_HOME is not set.
+if [ -z $TRJ_HOME ]; then
+  # Notify user that TRJ_HOME is not set.
+  echo "Environment variable TRJ_HOME not found."
+  echo "Please configure the environment variable TRJ_HOME."
+  exit 1
+fi
+
+
+# Relocate into the TRJ_HOME just to be sure.
+set -e
+cd $TRJ_HOME
+
+
+# Ignore errors.
+set +e
+
+
+# Pass all arguments to the java command.
+java -cp lib/*:target/trajectory-1.jar edu.gmu.jrouly.trajectory.Trajectory "$@"
