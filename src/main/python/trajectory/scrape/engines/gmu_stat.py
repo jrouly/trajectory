@@ -28,23 +28,15 @@ syllabus_url_regex = re.compile("^syllabi/.*$")
 data_id = "gmu_stat"
 
 
-def scrape( args ):
+def scrape( args, data_path ):
     """
     Scrape the available syllabi from the GMU STAT page into a local
     directory.
     """
 
+
     log.info( "Scraping GMU STAT data." )
-
-    data_dir = os.path.join( args.data_dir, data_id )
-
-    # Create data directory, if it doesn't already exist.
-    if not os.path.exists( data_dir ):
-        log.info("\"%s\" does not exist. Creating." % data_dir)
-        os.makedirs( data_dir )
-    else:
-        log.warn("\"%s\" exists already. Skipping." % data_dir)
-        return
+    return
 
 
     # Request index page and generate soup.
@@ -84,7 +76,7 @@ def scrape( args ):
 
         # Write syllabus to disk.
         syllabus_path = syllabus_tag.text
-        syllabus_path = os.path.join( data_dir, syllabus_path )
+        syllabus_path = os.path.join( data_path, syllabus_path )
         with open( syllabus_path, 'wb' ) as handle:
             for block in syllabus.iter_content(1024):
                 if not block:
@@ -96,25 +88,19 @@ def scrape( args ):
 
 
 
-def clean( args ):
+def clean( args, data_path ):
     """
     This function takes the gmu cs syllabi directory as input and removes
     all HTML entities and non-word elements from them.
     """
 
+
     log.info( "Beginning." )
 
 
-    data_dir = os.path.join( args.data_dir, data_id )
-
-    # If there's no data directory, we can't proceed.
-    if not os.path.exists( data_dir ):
-        log.warn("No data directory found. Skipping.")
-        return
-
     # Generate a list of all pdf data files in the data path.
     pdfs = [os.path.join(root, name)
-             for root, dirs, files in os.walk( data_dir )
+             for root, dirs, files in os.walk( data_path )
              for name in files
              if name.endswith(".pdf")]
 
@@ -127,7 +113,7 @@ def clean( args ):
 
     # Generate a list of all doc data files in the data path.
     docs = [os.path.join(root, name)
-             for root, dirs, files in os.walk( data_dir )
+             for root, dirs, files in os.walk( data_path )
              for name in files
              if name.endswith(".doc")]
 
@@ -141,7 +127,7 @@ def clean( args ):
 
     # Generate a list of the new text files.
     files = [os.path.join(root, name)
-             for root, dirs, files in os.walk( data_dir )
+             for root, dirs, files in os.walk( data_path )
              for name in files
              if name.endswith(".txt")]
 

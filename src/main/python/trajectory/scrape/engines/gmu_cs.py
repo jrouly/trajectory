@@ -28,23 +28,14 @@ syllabus_url_regex = re.compile("^/syllabus/.*$")
 data_id = "gmu_cs"
 
 
-def scrape( args ):
+def scrape( args, data_path ):
     """
     Scrape the available syllabi from the GMU CS page into a local
     directory.
     """
 
+
     log.info( "Scraping GMU CS data." )
-
-    data_dir = os.path.join( args.data_dir, data_id )
-
-    # Create data directory, if it doesn't already exist.
-    if not os.path.exists( data_dir ):
-        log.info("\"%s\" does not exist. Creating..." % data_dir)
-        os.makedirs( data_dir )
-    else:
-        log.warn("\"%s\" exists already. Skipping." % data_dir)
-        return
 
 
     # Request index page and generate soup.
@@ -75,7 +66,7 @@ def scrape( args ):
 
         # Store semesters in a directory.
         semester_path = re.sub(r'\s+', ' ', semester_tag.text)
-        semester_path = os.path.join( data_dir, semester_path )
+        semester_path = os.path.join( data_path, semester_path )
         if not os.path.exists( semester_tag.text ):
             os.makedirs( semester_path )
 
@@ -122,21 +113,14 @@ def scrape( args ):
 
 
 
-def clean( args ):
+def clean( args, data_path ):
     """
     This function takes the gmu cs syllabi directory as input and removes
     all HTML entities and non-word elements from them.
     """
 
-    log.info( "Beginning." )
-
-
-    data_dir = os.path.join( args.data_dir, data_id )
-
-    # If there's no data directory, we can't proceed.
-    if not os.path.exists( data_dir ):
-        log.warn("No data directory found. Skipping.")
-        return
+    log.info( "Cleaning scraped GMU CS data." )
+    return
 
 
     whitespace = re.compile("\\\\n|\\\\r|\\\\xa0|\d|\W")
@@ -145,7 +129,7 @@ def clean( args ):
 
     # Generate a list of all data files in the data path.
     files = [os.path.join(root, name)
-             for root, dirs, files in os.walk( data_dir )
+             for root, dirs, files in os.walk( data_path )
              for name in files
              if name.endswith(".raw")]
 
