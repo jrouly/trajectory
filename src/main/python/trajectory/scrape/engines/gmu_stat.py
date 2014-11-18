@@ -36,7 +36,6 @@ def scrape( args, data_path ):
 
 
     log.info( "Scraping GMU STAT data." )
-    return
 
 
     # Request index page and generate soup.
@@ -95,7 +94,7 @@ def clean( args, data_path ):
     """
 
 
-    log.info( "Beginning." )
+    log.info( "Cleaning GMU STAT data." )
 
 
     # Generate a list of all pdf data files in the data path.

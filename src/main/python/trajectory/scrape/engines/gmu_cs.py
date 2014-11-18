@@ -109,7 +109,7 @@ def scrape( args, data_path ):
             with open( syllabus_path, 'w' ) as syllabus:
                 syllabus.write( syllabus_page.text )
 
-    log.info( "Completed scraping per semester." )
+    log.info( "Completed scraping." )
 
 
 
