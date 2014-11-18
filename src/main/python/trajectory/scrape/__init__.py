@@ -14,17 +14,36 @@ def scrape(args):
     Routes scraping to the appropriate scraper module.
     """
 
+
     import logging
     import os
     from importlib import import_module
 
+
     log = logging.getLogger("root")
     log.info("Scraping targets: %s" % args.targets)
 
+
+
+
     # Create data directory, if it doesn't already exist.
+    # Also make sure that the raw/clean subdirectories exist within it.
     if not os.path.exists( args.data_dir ):
         log.info("\"%s\" does not exist. Creating..." % args.data_dir)
         os.makedirs( args.data_dir )
+
+    # Ensure raw path exists.
+    raw_path = os.path.join( args.data_dir, "raw" )
+    if not os.path.exists( raw_path ):
+        log.info("\"%s\" does not exist. Creating..." % raw_path )
+        os.makedirs( raw_path )
+
+    # Ensure clean path exists.
+    clean_path = os.path.join( args.data_dir, "clean" )
+    if not os.path.exists( clean_path ):
+        log.info("\"%s\" does not exist. Creating..." % clean_path )
+        os.makedirs( clean_path )
+
 
 
 
