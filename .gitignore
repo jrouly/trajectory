@@ -2,7 +2,6 @@
 data/
 logs/
 env/
-lib/
 
 
 # Byte-compiled / optimized / DLL files
@@ -18,8 +17,6 @@ develop-eggs/
 dist/
 downloads/
 eggs/
-lib/
-lib64/
 parts/
 sdist/
 var/
@@ -42,7 +39,7 @@ release.properties
 
 
 # Java Package Files #
-*.jar
+#*.jar
 *.war
 *.ear
 
