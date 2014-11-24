@@ -1,3 +1,10 @@
+##
+## WARNING: THIS FILE IS DEPRECATED.
+## IT LIKELY WILL NOT WORK.
+##
+
+
+
 """
 cluster.py
 Author: Michel Rouly
@@ -18,6 +25,9 @@ import os
 
 import logging
 log = logging.getLogger("root")
+
+
+log.warn("Importing deprecated module Cluster.py")
 
 
 def cluster( args ):
