@@ -67,7 +67,7 @@ def scrape( args, data_path ):
         # Store semesters in a directory.
         semester_path = re.sub(r'\s+', ' ', semester_tag.text)
         semester_path = os.path.join( data_path, semester_path )
-        if not os.path.exists( semester_tag.text ):
+        if not os.path.exists( semester_path ):
             os.makedirs( semester_path )
 
         # Request semester index page and generate soup.
