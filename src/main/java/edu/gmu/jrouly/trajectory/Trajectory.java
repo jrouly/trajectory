@@ -58,6 +58,11 @@ public class Trajectory {
   private static final int DEFAULT_NUM_ITERATIONS = 50;
   private static int numIterations = DEFAULT_NUM_ITERATIONS;
 
+  // Number of expected topics to use when modeling.
+  // TODO: Find a better way to auto initialize this variable.
+  private static final int DEFAULT_NUM_TOPICS = 50;
+  private static int numTopics = DEFAULT_NUM_TOPICS;
+
 
   /**
    * Read input from the command line and execute an LDA topic model over a
@@ -101,6 +106,26 @@ public class Trajectory {
       System.exit( 1 );
     }
 
+    // Print some sample results.
+    System.out.println( "> Printing document topic composition." );
+    model.printDocumentTopics( new PrintWriter( System.out ), 0.0, 5 );
+    System.out.println();
+
+    System.out.println( "> Printing topic key." );
+    // Get top 10 words for each topic.
+    Object[][] topics = model.getTopWords( 10 );
+    for( int i = 0; i < topics.length; i++ ) {
+      Object[] topic = topics[i]; // Get topic's word list.
+      System.out.printf( "%d ", i );
+      for( int j = 0; j < topic.length; j++ ) {
+        String word = topic[j].toString();
+        System.out.printf( "%s", word );
+        if( j < topic.length - 1 ) System.out.print(", ");
+      }
+      System.out.println();
+    }
+
+
 
     // Exit.
     System.out.println( "> Exit." );
@@ -138,6 +163,12 @@ public class Trajectory {
     if( argmap.containsKey( "iterations" ) ) {
       String numIterationsString = argmap.get( "iterations" );
       numIterations = Integer.parseInt( numIterationsString );
+    }
+
+    // If the numTopics argument is present, grab its value.
+    if( argmap.containsKey( "topics" ) ) {
+      String numTopicsString = argmap.get( "topics" );
+      numTopics = Integer.parseInt( numTopicsString );
     }
 
     try {
@@ -224,9 +255,6 @@ public class Trajectory {
    * @return untrained LDA topic model
    */
   private static ParallelTopicModel buildModel( InstanceList instances ) {
-
-    // TODO: Find a good value for this. (maybe CLI parameter)
-    int numTopics = 100;
 
     // Create the topic model.
     // 1st paremeter: number of topics
