@@ -1,8 +1,8 @@
 """
-trajectory/scrape/engines/gmu_cs.py
+trajectory/scrape/engines/pdx_chem.py
 Author: Jean Michel Rouly
 
-This file is the scraping engine tooled to PDX's CS department.
+This file is the scraping engine tooled to PDX's Chemistry department.
 """
 
 
@@ -22,24 +22,23 @@ log = logging.getLogger("root")
 # Constant values.
 
 # PDX CS syllabi repository
-url = "http://www.pdx.edu/computer-science/"
+url = "http://www.pdx.edu/chem/syllabi-archives"
 courses_url = "courses"
 
 
 def scrape( args, data_path ):
     """
-    Scrape the available syllabi from the PDX CS page into a local
+    Scrape the available syllabi from the PDX Chemistry page into a local
     directory.
     """
 
 
-    log.info( "Scraping PDX CS data." )
+    log.info( "Scraping PDX Chemistry data." )
 
 
     # Request index page and generate soup.
     try:
-        index_link = urljoin( url, courses_url )
-        index_link = url_fix( index_link )
+        index_link = url_fix( url )
         log.debug( "Getting index: " + index_link )
         index_page = get( index_link )
         index_soup = BeautifulSoup( index_page.text )
@@ -54,71 +53,31 @@ def scrape( args, data_path ):
     log.debug( "Generated index soup." )
 
 
-    # Identify the <UL> containing the course list by the H3 heading
-    # "Course List" then find its first <UL> sibling.
-    course_list_heading = index_soup.body.find("h3", text="Course List")
-    course_list = course_list_heading.find_next_sibling("ul").findAll("a")
+    # Identify the list of <a> tags containing download links.
+    course_list = index_soup.findAll("a", text="Download")
 
 
-    # Loop over the list of courses in the <UL> we just found, access the
-    # page they link to, and pull in their description and goals.
+    # Loop over the list of courses and download the PDF they link to.
     log.debug( "Looping over course list." )
     for course in course_list:
 
-        log.debug( "Course: " + course.text )
+        syllabus_link = url_fix( course.get("href") )
+        log.debug( "Course URL: " + course.get("href") )
+        syllabus = get( syllabus_link, stream=True )
 
-        # Identify the link to the course page and generate a BeautifulSoup
-        # for the page contents.
-        try:
-            course_link = course.get("href")
-            log.debug( "Getting: " + course_link )
-            course_page = get( course_link )
-            course_soup = BeautifulSoup( course_page.text )
-            log.debug( "Soup generated." )
+        if not syllabus.ok:
+            # Something went wrong
+            continue
 
-        except Exception as e:
-            log.warning( "Error getting course page." )
-            log.debug( course_link )
-            log.debug( str(e) )
-            exit( 3 )
+        # Write syllabus to disk.
+        syllabus_path = syllabus_link.split('/')[-1]
+        syllabus_path = os.path.join( data_path, syllabus_path )
 
-        # Pull in course title as the name of this file.
-        course_title = course_soup.find(id="page-title").text
-        course_title = re.sub("/", "", course_title)
-        log.debug( "Course title: " + course_title )
-
-        # Identify the course table.
-        course_table = course_soup.find("table")
-        course_table_rows = course_table.findAll("tr")
-
-        course_content = []
-
-        # Iterate over course table rows.
-        for row in course_table_rows:
-
-            columns = row.findAll("td")
-
-            # Skip any row without a key and value.
-            if not len( columns ) == 2:
-                continue
-
-            # key is the first column, val is the second
-            key = columns[0].text
-            val = columns[1].text
-
-            # Append value to the course_content list
-            course_content.append( val )
-
-
-        # Join together all the scraped text.
-        course_content = ' '.join( course_content )
-
-        # Output content to a .raw file.
-        filename = course_title + ".raw"
-        output_file = os.path.join( data_path, filename )
-        with open( output_file, "w" ) as output:
-            output.write( course_content )
-
+        with open( syllabus_path, 'wb' ) as handle:
+            for block in syllabus.iter_content(1024):
+                if not block:
+                    break
+                handle.write( block )
 
     log.info( "Completed scraping." )
 
