@@ -26,25 +26,25 @@ def scrape(args):
 
 
     log = logging.getLogger("root")
-    log.info("Scraping targets: %s" % args.targets)
+    log.info("Selected scraping targets: %s." % args.targets)
 
 
     # Create data directory, if it doesn't already exist.
     # Also make sure that the raw/clean subdirectories exist within it.
     if not os.path.exists( args.data_dir ):
-        log.info("\"%s\" does not exist. Creating..." % args.data_dir)
+        log.info("Data directory \"%s\" does not exist. Creating." % args.data_dir)
         os.makedirs( args.data_dir )
 
     # Ensure raw path exists.
     raw_path = os.path.join( args.data_dir, "raw" )
     if not os.path.exists( raw_path ):
-        log.info("\"%s\" does not exist. Creating..." % raw_path )
+        log.info("Raw data directory \"%s\" does not exist. Creating." % raw_path )
         os.makedirs( raw_path )
 
     # Ensure clean path exists.
     clean_path = os.path.join( args.data_dir, "clean" )
     if not os.path.exists( clean_path ):
-        log.info("\"%s\" does not exist. Creating..." % clean_path )
+        log.info("Clean data directory \"%s\" does not exist. Creating." % clean_path )
         os.makedirs( clean_path )
 
 
@@ -57,7 +57,7 @@ def scrape(args):
 
         # Prepend the target name with a dot for importing.
         target_module = ".%s" % target
-        scraper = import_module( target_module, "trajectory.scrape.engines" )
+        scraper = import_module( target_module, "trajectory.engines" )
 
 
         # Define the raw and clean paths specific to this target engine.
@@ -122,7 +122,7 @@ def scrape(args):
 
 
         # If neither clean nor download were flagged, notify the user.
-        if not args.clean and not args.download:
+        if not args.digest and not args.download:
             log.warn("Heads up, no action performed.")
 
 
