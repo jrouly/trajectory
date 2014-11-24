@@ -42,6 +42,12 @@ public class CLI {
                                   .withDescription( "number of iterations" )
                                   .create("iterations");
 
+    // Number of expected topics.
+    Option topicOption   = OptionBuilder.withArgName("num topics")
+                                  .hasArg()
+                                  .withDescription( "number of expected topics" )
+                                  .create("topics");
+
     // Specify the data directory to read from.
     Option dataDirOption = OptionBuilder.withArgName("path")
                                   .hasArg()
@@ -54,6 +60,7 @@ public class CLI {
     options.addOption( debugOption   );
     options.addOption( threadsOption );
     options.addOption( iterOption    );
+    options.addOption( topicOption   );
     options.addOption( dataDirOption );
 
     return options;
