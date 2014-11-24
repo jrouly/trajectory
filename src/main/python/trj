@@ -9,7 +9,7 @@ application structure.
 """
 
 
-from trajectory.scrape import engines, scrape
+from trajectory import engines, scrape
 from argparse import ArgumentParser
 import trajectory.log
 import sys
