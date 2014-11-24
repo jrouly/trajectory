@@ -106,10 +106,14 @@ def clean( args, raw_path, clean_path ):
     # Convert PDFs to text.
     log.info( "Convert PDFs to text." )
     from subprocess import call
-    for pdf in pdfs:
-        filename = os.path.basename( pdf )[:-3] + "txt"
-        clean_file = os.path.join( clean_path, filename )
-        call(["pdftotext", pdf, clean_file])
+    try:
+        for pdf in pdfs:
+            filename = os.path.basename( pdf )[:-3] + "txt"
+            clean_file = os.path.join( clean_path, filename )
+            call(["pdftotext", pdf, clean_file])
+    except Exception as e:
+        log.error( "Unable to call system 'pdftotext' command." )
+        log.error( str(e) )
 
 
     # Generate a list of all doc data files in the data path.
@@ -121,11 +125,15 @@ def clean( args, raw_path, clean_path ):
     # Convert DOCs to text.
     log.info( "Convert DOCs to text." )
     from subprocess import call
-    for doc in docs:
-        filename = os.path.basename( doc )[:-3] + "txt"
-        clean_file = os.path.join( clean_path, filename )
-        with open( clean_file, "w" ) as docout:
-            call(["catdoc", doc], stdout=docout)
+    try:
+        for doc in docs:
+            filename = os.path.basename( doc )[:-3] + "txt"
+            clean_file = os.path.join( clean_path, filename )
+            with open( clean_file, "w" ) as docout:
+                call(["catdoc", doc], stdout=docout)
+    except Exception as e:
+        log.error( "Unable to call system 'catdoc' command." )
+        log.error( str(e) )
 
 
     # Generate a list of the newly generated text files.

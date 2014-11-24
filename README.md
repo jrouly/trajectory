@@ -3,6 +3,14 @@
 Trajectory is a working title for my CS 390 undergraduate research project.
 I am taking university syllabus data and applying LDA topic modeling.
 
+## Requirements
+
+The basic requirements are Java JDK 7 or higher, Python 3.0 or higher.
+Optionally, the system dependencies `catdoc` and `pdftotext` are
+recommended for converting DOC and PDF syllabus datasets to standard
+textual formats.
+
+
 ## Setup
 
 Note that this project contains an unholy combination of Bash scripts,
