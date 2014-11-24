@@ -65,6 +65,25 @@ def scrape(args):
         target_clean_path = os.path.join( clean_path, target )
 
 
+        # If the purge argument is flagged, run it.
+        if args.purge:
+            import shutil
+            try:
+
+                # Remove the entire tree struct for raw and clean data.
+                if os.path.exists( target_raw_path ):
+                    shutil.rmtree( target_raw_path )
+                if os.path.exists( target_clean_path ):
+                    shutil.rmtree( target_clean_path )
+
+            except Exception as e:
+                log.warn("Error occurred when purging target data.")
+                log.debug( e )
+
+        else:
+            log.info("No data to remove.")
+
+
         # If downloading is flagged, run it.
         if args.download:
             try:
@@ -122,7 +141,7 @@ def scrape(args):
 
 
         # If neither clean nor download were flagged, notify the user.
-        if not args.digest and not args.download:
+        if not (args.digest or args.download or args.purge):
             log.warn("Heads up, no action performed.")
 
 
