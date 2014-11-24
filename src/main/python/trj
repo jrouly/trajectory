@@ -9,15 +9,11 @@ application structure.
 """
 
 
-from trajectory.clean import TARGETS as CLEAN_TARGETS
-from trajectory.scrape import engines
-
+from trajectory.scrape import engines, scrape
 from argparse import ArgumentParser
 import trajectory.log
 import sys
 import os
-
-SCRAPE_TARGETS = engines.list()
 
 # Constant values.
 # TODO: These should be read from a configuration at some point.
@@ -43,50 +39,26 @@ def main():
     # Create top-level command line argument parser.
     parser = ArgumentParser(description=PROG_DESC, prog=PROG_NAME)
     parser.add_argument("--version", action="version", version=PROG_VERSION)
-    parser.add_argument("--debug",action="store_true")
-    parser.add_argument("--logging-dir", help="log storage directory",
+    parser.add_argument("--debug", action="store_true")
+    parser.add_argument("--logging-dir", help="Logging directory.",
             default=os.path.join(HOME, "logs"))
-    parser.add_argument("--data-dir", help="data storage directory",
+    parser.add_argument("--data-dir", help="Data directory.",
             default=os.path.join(HOME, "data"))
 
 
-    # Specify subcommands using a subparser.
-    subparsers = parser.add_subparsers(title="subcommands",
-            dest="subcommand",
-            description="valid subcommands to run",
-            help="indicate which subcommand to run")
-    subparsers.required = True
-
-
-    # Create parser for "scrape" command.
-    parser_scrape = subparsers.add_parser("scrape", help="scrape syllabi")
-    parser_scrape.add_argument("targets", choices=SCRAPE_TARGETS,
+    # Create arguments for scraping.
+    parser.add_argument("targets", choices=engines.list(),
             nargs="+",
-            help="target websites to scrape")
-    parser_scrape.add_argument("--download",
-            help="download the data",
+            help="Scraping engines.")
+    parser.add_argument("--download",
+            help="Download data from the Web.",
             action="store_true")
-    parser_scrape.add_argument("--clean",
-            help="clean the already downloaded data",
+    parser.add_argument("--digest",
+            help="Digest and clean local data.",
             action="store_true")
-
-
-    # Create parser for "cluster" command.
-    parser_cluster = subparsers.add_parser("cluster", help="cluster syllabi")
-    parser_cluster.add_argument("targets", choices=SCRAPE_TARGETS,
-            nargs="+",
-            help="target syllabus pool to cluster")
-
-
-    # Create parser for "clean" command.
-    parser_clean = subparsers.add_parser("clean",
-            description="The clean subcommand is used to clean up generated content.",
-            help="clean data folders")
-    parser_clean.add_argument("targets",
-            choices=CLEAN_TARGETS,
-            default=CLEAN_TARGETS[0],
-            nargs="*",
-            help="what to clean")
+    parser.add_argument("--purge",
+            help="Remove local data.",
+            action="store_true")
 
 
     # Parse command line arguments.
@@ -98,22 +70,12 @@ def main():
 
 
     # Start up program.
-    log.info("Beginning.")
+    log.info("Beginning trj-scrape.")
 
 
     # Execute subcommand logic.
-    if args.subcommand == "scrape":
-        from trajectory.scrape import scrape
-        scrape( args )
-    elif args.subcommand == "clean":
-        from trajectory import clean
-        clean( args )
-    elif args.subcommand == "cluster":
-        from trajectory import cluster
-        # TODO: Fix this up to use your stackmining infrastructure.
-        cluster( args )
-    else:
-        log.warn("You did not provide a command.")
+    scrape( args )
+
 
     # Exit the program.
     log.info("Exiting.")
