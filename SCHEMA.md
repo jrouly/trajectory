@@ -2,7 +2,7 @@
 Full data about any particular school, including its web address, name, and
 any common abbreviation.
 
-####Relations
+#####Relations
 none
 
     |-------------------------------------------------|
@@ -16,7 +16,7 @@ none
 ###Departments
 Full data about any department at a specific school
 
-####Relations
+#####Relations
 * SchoolID -> Schools.ID
 
     |-------------------------------------------------------------------|
@@ -32,7 +32,7 @@ Full data about any department at a specific school
 A program of study (eg. the requirements of a degree offered by a
 department).
 
-####Relations
+#####Relations
 * SchoolID -> Schools.ID
 
     |---------------------------------------------|
@@ -46,7 +46,7 @@ department).
 ###Courses
 A course offering. Belongs to a department at a school.
 
-####Relations
+#####Relations
 * DepartmentID -> Departments.ID
 
     |-----------------------------------------------------------------------|
@@ -61,7 +61,7 @@ A course offering. Belongs to a department at a school.
 ###Program Requirements
 A course requirement for a particular program of study.
 
-####Relations
+#####Relations
 * Program -> Programs.ID
 * Course -> Courses.ID
 
@@ -77,7 +77,7 @@ A course requirement for a particular program of study.
 ###Prerequisites
 This table maps courses to their prerequisites.
 
-####Relations
+#####Relations
 * Course -> Courses.ID
 * Prerequisite -> Courses.ID
 
