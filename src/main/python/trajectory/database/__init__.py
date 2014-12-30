@@ -25,21 +25,3 @@ def initialize( args ):
         c = args.db.cursor()
         c.executescript( sql )
         args.db.commit()
-
-    pass
-
-
-def populate( args ):
-    """
-    Populate all known values in the database.
-    """
-
-    import logging, os, sqlite3
-
-
-    log = logging.getLogger("root")
-    log.info("Populating database with known data.")
-
-
-    pass
-
