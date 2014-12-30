@@ -5,6 +5,7 @@ any common abbreviation.
 #####Relations
 none
 
+
     |-------------------------------------------------|
     | ID | School Name  | School Abbrev | Web Address |
     |-------------------------------------------------|
@@ -18,6 +19,7 @@ Full data about any department at a specific school
 
 #####Relations
 * SchoolID -> Schools.ID
+
 
     |-------------------------------------------------------------------|
     | ID | SchoolID | Department Name | Department Abbrev | Web Address |
@@ -35,6 +37,7 @@ department).
 #####Relations
 * SchoolID -> Schools.ID
 
+
     |---------------------------------------------|
     | ID | SchoolID | Program Name | Abbreviation |
     |---------------------------------------------|
@@ -48,6 +51,7 @@ A course offering. Belongs to a department at a school.
 
 #####Relations
 * DepartmentID -> Departments.ID
+
 
     |-----------------------------------------------------------------------|
     | ID | DepartmentID | Course Number | Course Title | Course Description |
@@ -65,6 +69,7 @@ A course requirement for a particular program of study.
 * Program -> Programs.ID
 * Course -> Courses.ID
 
+
     |------------------|
     | Program | Course |
     |------------------|
@@ -80,6 +85,7 @@ This table maps courses to their prerequisites.
 #####Relations
 * Course -> Courses.ID
 * Prerequisite -> Courses.ID
+
 
     |-----------------------|
     | Course | Prerequisite |
