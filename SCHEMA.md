@@ -18,7 +18,7 @@ none
 Full data about any department at a specific school
 
 #####Relations
-* SchoolID -> Schools.ID
+SchoolID -> Schools.ID  
 
 
     |-------------------------------------------------------------------|
@@ -35,7 +35,7 @@ A program of study (eg. the requirements of a degree offered by a
 department).
 
 #####Relations
-* SchoolID -> Schools.ID
+SchoolID -> Schools.ID  
 
 
     |---------------------------------------------|
@@ -50,7 +50,7 @@ department).
 A course offering. Belongs to a department at a school.
 
 #####Relations
-* DepartmentID -> Departments.ID
+DepartmentID -> Departments.ID  
 
 
     |-----------------------------------------------------------------------|
@@ -66,8 +66,8 @@ A course offering. Belongs to a department at a school.
 A course requirement for a particular program of study.
 
 #####Relations
-* Program -> Programs.ID
-* Course -> Courses.ID
+Program -> Programs.ID  
+Course -> Courses.ID  
 
 
     |------------------|
@@ -83,8 +83,8 @@ A course requirement for a particular program of study.
 This table maps courses to their prerequisites.
 
 #####Relations
-* Course -> Courses.ID
-* Prerequisite -> Courses.ID
+Course -> Courses.ID  
+Prerequisite -> Courses.ID  
 
 
     |-----------------------|
