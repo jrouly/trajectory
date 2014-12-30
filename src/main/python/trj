@@ -40,8 +40,8 @@ def main():
     parser.add_argument("--debug", action="store_true")
     parser.add_argument("--logging-dir", help="Logging directory.",
             default=os.path.join(HOME, "logs"))
-    parser.add_argument("--data-dir", help="Data directory.",
-            default=os.path.join(HOME, "data"))
+    parser.add_argument("--sqlite-file", help="SQLite data store location.",
+            default=os.path.join(HOME, "data.db"))
 
 
     # Create arguments for scraping.
@@ -69,9 +69,6 @@ def main():
 
     # Start up program.
     log.info("Beginning trj-scrape.")
-
-
-    # Execute subcommand logic.
     scrape( args )
 
 
