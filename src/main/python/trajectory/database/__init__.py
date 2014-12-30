@@ -12,13 +12,19 @@ def initialize( args ):
     If it doesn't exist, create the database. Initialize all tables.
     """
 
-
     import logging, os, sqlite3
 
-
     log = logging.getLogger("root")
-    log.info("Initializing SQLite database.")
+    log.info("Initializing database schema.")
 
+    sql_directory = os.path.join("trajectory", "database", "sql")
+    creation_script = os.path.join(sql_directory, "create_tables.sql")
+
+    with open(creation_script, "r") as create_tables:
+        sql = create_tables.read()
+        c = args.db.cursor()
+        c.executescript( sql )
+        args.db.commit()
 
     pass
 
@@ -32,7 +38,7 @@ def populate( args ):
 
 
     log = logging.getLogger("root")
-    log.info("Initializing SQLite database.")
+    log.info("Populating database with known data.")
 
 
     pass
