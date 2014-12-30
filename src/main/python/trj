@@ -55,9 +55,6 @@ def main():
     parser.add_argument("--digest",
             help="Digest and clean local data.",
             action="store_true")
-    parser.add_argument("--purge",
-            help="Remove local data.",
-            action="store_true")
 
 
     # Parse command line arguments.
