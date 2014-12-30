@@ -7,9 +7,10 @@ application structure.
 """
 
 
-from trajectory import engines, scrape
+from trajectory import engines, scrape, database
 from argparse import ArgumentParser
 import trajectory.log
+import sqlite3
 import sys
 import os
 
@@ -69,11 +70,22 @@ def main():
 
     # Start up program.
     log.info("Beginning trj-scrape.")
-    scrape( args )
+
+
+    # Initialize database connection.
+    log.info("Initializing database connection.")
+    db = sqlite3.connect( args.sqlite_file )
+    args.db = db
+    database.initialize( args )
+
+
+    # Hand off control flow to scraper module.
+    #scrape( args )
 
 
     # Exit the program.
     log.info("Exiting.")
+    db.close()
     sys.exit( 0 )
 
 
