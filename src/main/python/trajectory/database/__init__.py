@@ -17,7 +17,8 @@ def initialize( args ):
     log = logging.getLogger("root")
     log.info("Initializing database schema.")
 
-    sql_directory = os.path.join("trajectory", "database", "sql")
+    trj_home = os.environ.get("TRJ_HOME")
+    sql_directory = os.path.join(trj_home, "src", "main", "resources", "sql")
     creation_script = os.path.join(sql_directory, "create_tables.sql")
 
     with open(creation_script, "r") as create_tables:
