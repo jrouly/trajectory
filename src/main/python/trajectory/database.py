@@ -1,5 +1,5 @@
 """
-database/__init__.py
+database.py
 Author: Jean Michel Rouly
 
 This module defines a number of database maintenance and creation
