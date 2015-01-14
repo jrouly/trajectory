@@ -15,10 +15,6 @@ set -e
 cd $TRJ_HOME
 
 
-# Create basic project output directories.
-mkdir -p data logs
-
-
 # Install python requirements.
 pyreq () {
   if [ -f "requirements.txt" ] ; then
