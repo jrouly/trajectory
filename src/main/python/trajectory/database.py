@@ -39,21 +39,21 @@ def register( args, metadata ):
     log = logging.getLogger("root")
 
     # Define SQL headers.
-    school_sql = (
+    school_sql = [
         "INSERT INTO 'Schools' ",
-        "('Name', 'Abbreviation', 'Web')",
+        "('Name', 'Abbreviation', 'Web') ",
         "VALUES ",
-    )
-    department_sql = (
+    ]
+    department_sql = [
         "INSERT INTO 'Departments' ",
-        "('SchoolID', 'Name', 'Abbreviation', 'Web')",
+        "('SchoolID', 'Name', 'Abbreviation', 'Web') ",
         "VALUES ",
-    )
-    program_sql = (
+    ]
+    program_sql = [
         "INSERT INTO 'Programs' ",
-        "('SchoolID', 'Name', 'Abbreviation')""",
-        """VALUES """,
-    )
+        "('SchoolID', 'Name', 'Abbreviation') ",
+        "VALUES ",
+    ]
 
     # Grab data from metadata object.
     schools = metadata.get("schools")
@@ -62,9 +62,11 @@ def register( args, metadata ):
 
     # Loop through data structure, registering entries.
     for school in schools:
-        log.debug( school )
-    for department in departments:
-        log.debug( department )
-    for program in programs:
-        log.debug( program )
+        value = "('%(name)s', '%(abbrev)s', '%(web)s')"
+        school_sql.append(value % school)
+    school_sql.append(";")
+    school_sql = ''.join(school_sql)
 
+    c = args.db.cursor()
+    c.executescript( school_sql )
+    args.db.commit()
