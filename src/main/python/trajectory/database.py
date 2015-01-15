@@ -26,3 +26,31 @@ def initialize( args ):
         c = args.db.cursor()
         c.executescript( sql )
         args.db.commit()
+
+
+def register( args, metadata ):
+    """
+    Register a scrape target's metadata with the database. If an entry
+    already exists for this target's defined data, update it.
+    """
+
+    import logging, os, sqlite3
+
+    log = logging.getLogger("root")
+
+    # Define SQL headers.
+    school_sql = (
+        "INSERT INTO 'Schools' ",
+        "('Name', 'Abbreviation', 'Web')",
+        "VALUES ",
+    )
+    department_sql = (
+        "INSERT INTO 'Departments' ",
+        "('SchoolID', 'Name', 'Abbreviation', 'Web')",
+        "VALUES ",
+    )
+    program_sql = (
+        "INSERT INTO 'Programs' ",
+        "('SchoolID', 'Name', 'Abbreviation')""",
+        """VALUES """,
+    )
