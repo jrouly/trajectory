@@ -1,5 +1,5 @@
 """
-trajectory/scrape/engines/gmu_cs.py
+trajectory/engines/gmu_cs.py
 Author: Jean Michel Rouly
 
 This file is the scraping engine tooled to GMU's CS department.
