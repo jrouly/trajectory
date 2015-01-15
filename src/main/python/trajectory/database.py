@@ -99,5 +99,5 @@ def register( args, metadata ):
     program_sql = ''.join(program_sql)
 
     c = args.db.cursor()
-    c.executescript( department_sql )
+    c.executescript( program_sql )
     args.db.commit()
