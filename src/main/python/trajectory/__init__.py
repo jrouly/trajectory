@@ -49,6 +49,7 @@ def scrape(args):
         except AttributeError as e:
             log.warn( "Target %s metadata not defined." % target )
             log.debug( e )
+            return
 
 
         if args.download:
