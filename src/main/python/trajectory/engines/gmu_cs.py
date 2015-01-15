@@ -24,19 +24,21 @@ META = {
             'web': "gmu.edu",
         },
     ],
-    'programs': [
-        {
-            'name': "GMU CS",
-            'abbrev': "gmu_cs",
-        },
-    ],
     'departments': [
         {
+            'school': "George Mason University",
             'name': "Computer Science",
             'abbrev': "CS",
             'web': "cs.gmu.edu",
         },
-    ]
+    ],
+    'programs': [
+        {
+            'school': "George Mason University",
+            'name': "GMU CS",
+            'abbrev': "gmu_cs",
+        },
+    ],
 }
 
 
