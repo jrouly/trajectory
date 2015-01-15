@@ -15,10 +15,6 @@ import re
 import os
 
 
-import logging
-log = logging.getLogger("root")
-
-
 # Constant values.
 META = {
     'schools': [
@@ -44,13 +40,6 @@ META = {
 }
 
 
-# GMU CS syllabi repository
-url = "http://cs.gmu.edu"
-courses_url = "/courses/"
-syllabus_url_regex = re.compile("^/syllabus/.*$")
-data_id = "gmu_cs"
-
-
 def scrape( args, data_path ):
     """
     Scrape the available syllabi from the GMU CS page into a local
@@ -58,7 +47,16 @@ def scrape( args, data_path ):
     """
 
 
+    import logging
+    log = logging.getLogger("root")
     log.info( "Scraping GMU CS data." )
+
+
+    # GMU CS syllabi repository
+    url = "http://cs.gmu.edu"
+    courses_url = "/courses/"
+    syllabus_url_regex = re.compile("^/syllabus/.*$")
+    data_id = "gmu_cs"
 
 
     # Request index page and generate soup.
@@ -143,6 +141,8 @@ def clean( args, raw_path, clean_path ):
     """
 
 
+    import logging
+    log = logging.getLogger("root")
     log.info( "Cleaning scraped GMU CS data." )
 
 
