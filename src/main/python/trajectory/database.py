@@ -57,16 +57,34 @@ def register( args, metadata ):
 
     # Grab data from metadata object.
     schools = metadata.get("schools")
-    programs = metadata.get("programs")
     departments = metadata.get("departments")
+    programs = metadata.get("programs")
 
-    # Loop through data structure, registering entries.
+    # Loop through schools, registering entries.
     for school in schools:
-        value = "('%(name)s', '%(abbrev)s', '%(web)s')"
+        value = "('%(name)s', '%(abbrev)s', '%(web)s'), "
         school_sql.append(value % school)
+    school_sql[-1] = school_sql[-1][:-2] # remove trailing comma
     school_sql.append(";")
     school_sql = ''.join(school_sql)
 
     c = args.db.cursor()
     c.executescript( school_sql )
+    args.db.commit()
+
+    # Loop through departments, registering entries.
+    for department in departments:
+        schoolname = department.get("school")
+        c.execute("SELECT S.ID from Schools S where S.Name='%s';" % schoolname)
+        department["schoolid"] = c.fetchone()[0]
+        value = "('%(schoolid)s', '%(name)s', '%(abbrev)s', '%(web)s'), "
+        department_sql.append(value % department)
+    department_sql[-1] = department_sql[-1][:-2] # remove trailing comma
+    department_sql.append(";")
+    department_sql = ''.join(department_sql)
+
+    log.debug( department_sql )
+
+    c = args.db.cursor()
+    c.executescript( department_sql )
     args.db.commit()
