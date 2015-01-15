@@ -28,7 +28,7 @@ def initialize( args ):
         args.db.commit()
 
 
-def register( args, metadata ):
+def register_target( args, metadata ):
     """
     Register a scrape target's metadata with the database. If an entry
     already exists for this target's defined data, update it.

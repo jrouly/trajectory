@@ -45,7 +45,7 @@ def scrape(args):
         # Register the target with the database, if not already present.
         log.info("Registering target with database.")
         try:
-            database.register( args, scraper.META )
+            database.register_target( args, scraper.META )
         except AttributeError as e:
             log.warn( "Target %s metadata not defined." % target )
             log.debug( e )
