@@ -20,6 +20,29 @@ log = logging.getLogger("root")
 
 
 # Constant values.
+META = {
+    'schools': [
+        {
+            'name': "George Mason University",
+            'abbrev': "GMU",
+            'web': "gmu.edu",
+        },
+    ],
+    'programs': [
+        {
+            'name': "GMU CS",
+            'abbrev': "gmu_cs",
+        },
+    ],
+    'departments': [
+        {
+            'name': "Computer Science",
+            'abbrev': "CS",
+            'web': "cs.gmu.edu",
+        },
+    ]
+}
+
 
 # GMU CS syllabi repository
 url = "http://cs.gmu.edu"
