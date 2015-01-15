@@ -15,15 +15,31 @@ import re
 import os
 
 
-import logging
-log = logging.getLogger("root")
-
-
 # Constant values.
-
-# PDX CS syllabi repository
-url = "http://www.pdx.edu/computer-science/"
-courses_url = "courses"
+META = {
+    'schools': [
+        {
+            'name': "Portland State University",
+            'abbrev': "PDX",
+            'web': "pdx.edu",
+        },
+    ],
+    'departments': [
+        {
+            'school': "Portland State University",
+            'name': "Computer Science",
+            'abbrev': "CS",
+            'web': "pdx.edu/computer-science",
+        },
+    ],
+    'programs': [
+        {
+            'school': "Portland State University",
+            'name': "PDX CS",
+            'abbrev': "pdx_cs",
+        },
+    ],
+}
 
 
 def scrape( args, data_path ):
@@ -33,7 +49,14 @@ def scrape( args, data_path ):
     """
 
 
+    import logging
+    log = logging.getLogger("root")
     log.info( "Scraping PDX CS data." )
+
+
+    # PDX CS syllabi repository
+    url = "http://www.pdx.edu/computer-science/"
+    courses_url = "courses"
 
 
     # Request index page and generate soup.
@@ -131,6 +154,8 @@ def clean( args, raw_path, clean_path ):
     """
 
 
+    import logging
+    log = logging.getLogger("root")
     log.info( "Cleaning scraped PDX CS data." )
 
 
