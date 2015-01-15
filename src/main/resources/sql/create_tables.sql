@@ -1,9 +1,13 @@
+-- Enforce foreign keys.
+PRAGMA foreign_keys=ON;
+
 -- Create Schools table.
 CREATE TABLE IF NOT EXISTS Schools
  (ID INTEGER PRIMARY KEY AUTOINCREMENT,
-  Name TEXT NOT NULL UNIQUE,
-  Abbreviation TEXT NOT NULL UNIQUE,
-  Web TEXT);
+  Name TEXT NOT NULL,
+  Abbreviation TEXT NOT NULL,
+  Web TEXT,
+  UNIQUE (Name, Abbreviation) ON CONFLICT REPLACE);
 
 
 -- Create Departments table.
@@ -13,7 +17,8 @@ CREATE TABLE IF NOT EXISTS Departments
   Name TEXT NOT NULL,
   Abbreviation TEXT NOT NULL,
   Web TEXT,
-  FOREIGN KEY(SchoolID) REFERENCES Schools(ID));
+  UNIQUE (SchoolID, Name) ON CONFLICT REPLACE,
+  FOREIGN KEY (SchoolID) REFERENCES Schools(ID) ON UPDATE CASCADE ON DELETE CASCADE);
 
 
 -- Create Programs table.
@@ -22,7 +27,8 @@ CREATE TABLE IF NOT EXISTS Programs
   SchoolID INTEGER NOT NULL,
   Name TEXT NOT NULL,
   Abbreviation TEXT NOT NULL,
-  FOREIGN KEY(SchoolID) REFERENCES Schools(ID));
+  UNIQUE (SchoolID, Name) ON CONFLICT REPLACE,
+  FOREIGN KEY(SchoolID) REFERENCES Schools(ID) ON UPDATE CASCADE ON DELETE CASCADE);
 
 
 -- Create Courses table.
@@ -32,7 +38,8 @@ CREATE TABLE IF NOT EXISTS Courses
   Num TEXT NOT NULL,
   Title TEXT NOT NULL,
   Description TEXT NOT NULL,
-  FOREIGN KEY(DepartmentID) REFERENCES Departments(ID));
+  UNIQUE (DepartmentID, Num) ON CONFLICT REPLACE,
+  FOREIGN KEY(DepartmentID) REFERENCES Departments(ID) ON UPDATE CASCADE ON DELETE CASCADE);
 
 
 -- Create ProgramRequirements table.
@@ -40,8 +47,8 @@ CREATE TABLE IF NOT EXISTS ProgramRequirements
  (Program INTEGER NOT NULL,
   Course INTEGER NOT NULL,
   PRIMARY KEY(Program, Course),
-  FOREIGN KEY(Program) REFERENCES Programs(ID),
-  FOREIGN KEY(Course) REFERENCES Courses(ID));
+  FOREIGN KEY(Program) REFERENCES Programs(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  FOREIGN KEY(Course) REFERENCES Courses(ID) ON UPDATE CASCADE ON DELETE CASCADE);
 
 
 --- Create Prerequisites table.
@@ -49,6 +56,6 @@ CREATE TABLE IF NOT EXISTS Prerequisites
  (Course INTEGER NOT NULL,
   Prerequisite INTEGER NOT NULL,
   PRIMARY KEY(Course, Prerequisite),
-  FOREIGN KEY(Course) REFERENCES Courses(ID)
-  FOREIGN KEY(Prerequisite) REFERENCES Courses(ID));
+  FOREIGN KEY(Course) REFERENCES Courses(ID) ON UPDATE CASCADE ON DELETE CASCADE,
+  FOREIGN KEY(Prerequisite) REFERENCES Courses(ID) ON UPDATE CASCADE ON DELETE CASCADE);
 
