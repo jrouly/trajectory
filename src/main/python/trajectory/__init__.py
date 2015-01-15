@@ -45,10 +45,10 @@ def scrape(args):
         # Register the target with the database, if not already present.
         log.info("Registering target with database.")
         try:
-            pass
-            #database.register( args, scraper.META )
-        except AttributeError:
-            log.warn( "Target %s metadata malformed." % target )
+            database.register( args, scraper.META )
+        except AttributeError as e:
+            log.warn( "Target %s metadata not defined." % target )
+            log.debug( e )
 
 
         if args.download:
