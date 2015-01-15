@@ -24,5 +24,4 @@ set +e
 
 
 # Pass arguments to python trj interface.
-cd src/main/python
-python trj "$@"
+python src/main/python/trj "$@"
