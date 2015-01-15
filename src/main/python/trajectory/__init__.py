@@ -53,7 +53,9 @@ def scrape(args):
 
         if args.download:
             try:
-                scraper.scrape( args, target_raw_path )
+                data_dir = os.path.join( args.tmp_dir, "%s-data" % target )
+                os.mkdir( data_dir )
+                scraper.scrape( args, data_dir )
             except NotImplementedError as e:
                 log.warn( "Target %s has not been defined. Skipping." %
                         target )
