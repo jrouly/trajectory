@@ -20,6 +20,7 @@ def scrape(args):
     """
 
 
+    from trajectory import database
     import logging
     import os
     from importlib import import_module
@@ -39,6 +40,15 @@ def scrape(args):
         # Prepend the target name with a dot for importing.
         target_module = ".%s" % target
         scraper = import_module( target_module, "trajectory.engines" )
+
+
+        # Register the target with the database, if not already present.
+        log.info("Registering target with database.")
+        try:
+            pass
+            #database.register( args, scraper.META )
+        except AttributeError:
+            log.warn( "Target %s metadata malformed." % target )
 
 
         if args.download:
