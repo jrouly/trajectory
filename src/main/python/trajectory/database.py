@@ -54,3 +54,17 @@ def register( args, metadata ):
         "('SchoolID', 'Name', 'Abbreviation')""",
         """VALUES """,
     )
+
+    # Grab data from metadata object.
+    schools = metadata.get("schools")
+    programs = metadata.get("programs")
+    departments = metadata.get("departments")
+
+    # Loop through data structure, registering entries.
+    for school in schools:
+        log.debug( school )
+    for department in departments:
+        log.debug( department )
+    for program in programs:
+        log.debug( program )
+
