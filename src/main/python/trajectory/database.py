@@ -83,7 +83,20 @@ def register( args, metadata ):
     department_sql.append(";")
     department_sql = ''.join(department_sql)
 
-    log.debug( department_sql )
+    c = args.db.cursor()
+    c.executescript( department_sql )
+    args.db.commit()
+
+    # Loop through programs, registering entries.
+    for program in programs:
+        schoolname = program.get("school")
+        c.execute("SELECT S.ID from Schools S where S.Name='%s';" % schoolname)
+        program["schoolid"] = c.fetchone()[0]
+        value = "('%(schoolid)s', '%(name)s', '%(abbrev)s'), "
+        program_sql.append(value % program)
+    program_sql[-1] = program_sql[-1][:-2] # remove trailing comma
+    program_sql.append(";")
+    program_sql = ''.join(program_sql)
 
     c = args.db.cursor()
     c.executescript( department_sql )
