@@ -62,9 +62,9 @@ into a temporary holding directory.
 
 The clean function expects the header
 
-    def clean( args, raw_path, clean_path ):
+    def clean( args, data_path ):
         pass
 
-`args` is the Trj configuration object. `raw_path` is the temporary
-directory holding the downloaded raw data from `scrape`. `clean_path` is
-the output directory for all cleaned (digested) course descriptions.
+`args` is the Trj configuration object. This will hold important data such
+as a reference to the output database. `data_path` is the temporary
+directory holding the downloaded raw data from `scrape`.
