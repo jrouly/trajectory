@@ -6,11 +6,12 @@ This file is the scraping engine tooled to GMU's CS department.
 """
 
 
+from trajectory import database
 from bs4 import BeautifulSoup
 from werkzeug import url_fix
 from urllib.parse import urljoin
-from requests import get
 from requests.exceptions import HTTPError
+import requests
 import re
 import os
 
@@ -54,89 +55,80 @@ def scrape( args, data_path ):
     log.info( "Scraping GMU CS data." )
 
 
-    # GMU CS syllabi repository
-    url = "http://cs.gmu.edu"
-    courses_url = "/courses/"
-    syllabus_url_regex = re.compile("^/syllabus/.*$")
-    data_id = "gmu_cs"
+    # Generate a BeautifulSoup object.
+    catalog_index_url = "http://catalog.gmu.edu/preview_course_incoming.php?cattype=combined&prefix=cs"
+    catalog_index = requests.get( catalog_index_url )
+    soup = BeautifulSoup( catalog_index.text )
 
+    # Identify the list of courses.
+    course_list = soup.find_all(
+            name="a",
+            onclick=re.compile("showCourse.*"))
 
-    # Request index page and generate soup.
-    try:
-        index_link = urljoin( url, courses_url )
-        index_link = url_fix( index_link )
-        log.debug( index_link )
-        index_page = get( index_link )
-        index_soup = BeautifulSoup( index_page.text )
+    # Select only the catid and coid.
+    catid_re = re.compile("(^[^']*)|(, this.*$)|(')")
 
-    except Exception as e:
-        log.warning( "Error." )
-        log.debug( index_link )
-        log.debug( str(e) )
-        exit( 2 )
+    # Piecewise course page url.
+    course_url = "http://catalog.gmu.edu/preview_course.php?catoid=%s&coid=%s"
 
-    log.debug( "Generated index soup." )
+    # Pregenerate SQL data.
+    sql = ["INSERT INTO Courses (DepartmentID, Num, Title, Description) ",
+            "VALUES "]
+    course_sql = "('%(departmentID)s', '%(num)s', '%(title)s', '%(desc)s'), "
+    departmentID = database.get_departmentID(args,
+            school_name=META.get("departments")[0].get("school"),
+            department_name=META.get("departments")[0].get("name"))
 
-    # Find the semester links.
-    semester_tags = index_soup.find_all("a", href=syllabus_url_regex)
-    log.debug( "Grabbed semester list." )
+    # Identify relevant information for each course.
+    for course in course_list:
 
-    # Iterate over each semester.
-    log.debug( "Begin scraping per semester." )
-    for semester_tag in semester_tags:
+        # Generate metadata
+        log.debug(course.text)
+        full_title = re.compile("\s+").split(course.text)
+        prefix = full_title[0]
+        cnum = full_title[1]
+        title = ' '.join(full_title[3:])
 
-        log.debug("Semester: %s" % semester_tag.text)
+        # Identify coid to get description.
+        onclick = course['onclick']
+        (catid, coid) = re.sub( catid_re, "", onclick ).split(", ")
 
-        # Store semesters in a directory.
-        semester_path = re.sub(r'\s+', ' ', semester_tag.text)
-        semester_path = os.path.join( data_path, semester_path )
-        if not os.path.exists( semester_path ):
-            os.makedirs( semester_path )
+        # Generate a BeautifulSoup object of the course description.
+        course_page = requests.get( course_url % (catid, coid) )
+        course_soup = BeautifulSoup( course_page.text )
+        content = course_soup.find(class_="block_content_popup").hr.text
 
-        # Request semester index page and generate soup.
+        # Clean up the description.
+        description = str.replace(content, "'", "") # strip quotes
         try:
-            semester_link = urljoin( url, semester_tag['href'] )
-            semester_link = url_fix( semester_link )
-            semester_page = get( semester_link )
-            semester_soup = BeautifulSoup( semester_page.text )
-        except Exception:
-            log.warning( "Error." )
-            log.debug( semester_link )
-            log.debug( semester_tag.text )
-            log.debug( str(e) )
-            continue
+            description = description[:description.index("Hours of Lecture")]
+        except:
+            pass
 
-        # Find the syllabus links.
-        syllabus_tags = semester_soup.find_all("a", text=re.compile("^\D{2,5}\s*\d{3}"))
+        # Identify prerequisites
+        # TODO strip out prerequisite courses here
 
-        # Iterate over each syllabus.
-        for syllabus_tag in syllabus_tags:
+        # Interpolate the SQL query.
+        sql.append( course_sql % {"departmentID": departmentID,
+                                  "num": cnum,
+                                  "title": title,
+                                  "desc": description} )
 
-            log.debug("Syllabus link: %s" % syllabus_tag['href'])
+    # Generate the sql string.
+    sql[-1] = sql[-1][:-2] # remove trailing comma
+    sql.append(";")
+    sql = "".join(sql)
 
-            # Request syllabus page.
-            try:
-                syllabus_link = urljoin( semester_link, syllabus_tag['href'] )
-                syllabus_link = url_fix( syllabus_link )
-                syllabus_page = get( syllabus_link )
-            except Exception as e:
-                log.warning( "Error." )
-                log.debug( syllabus_link )
-                log.debug( syllabus_tag.text )
-                log.debug( str(e) )
-                continue
-
-            # Write syllabus to disk.
-            syllabus_path = re.sub(r'\s+', ' ', syllabus_tag.text) + ".raw"
-            syllabus_path = os.path.join( semester_path, syllabus_path )
-            with open( syllabus_path, 'w' ) as syllabus:
-                syllabus.write( syllabus_page.text )
+    # Commit the sql query.
+    c = args.db.cursor()
+    c.executescript( sql )
+    args.db.commit()
 
     log.info( "Completed scraping." )
 
 
 
-def clean( args, raw_path, clean_path ):
+def clean( args, data_path ):
     """
     This function takes the gmu cs syllabi directory as input and removes
     all HTML entities and non-word elements from them.
@@ -148,13 +140,27 @@ def clean( args, raw_path, clean_path ):
     log.info( "Cleaning scraped GMU CS data." )
 
 
+    # Look up database IDs for this target's schools & departments.
+    schoolIDs = []
+    for school in META.get("schools"):
+        schoolname = school.get("name")
+        schoolIDs.append( database.get_schoolID( args, schoolname ) )
+
+    departmentIDs = []
+    for department in META.get("departments"):
+        departmentname = department.get("name")
+        schoolname = department.get("school")
+        departmentIDs.append(
+            database.get_departmentID( args, schoolname, departmentname ) )
+
+
     whitespace = re.compile("\\\\n|\\\\r|\\\\xa0|\d|\W")
     singletons = re.compile("\s+\w{1,3}(?=\s+)")
     long_whitespace = re.compile("\s+")
 
     # Generate a list of all data files in the data path.
     files = [os.path.join(root, name)
-             for root, dirs, files in os.walk( raw_path )
+             for root, dirs, files in os.walk( data_path )
              for name in files
              if name.endswith(".raw")]
 
