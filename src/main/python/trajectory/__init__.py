@@ -6,12 +6,10 @@ Define the trajectory package.
 """
 
 
-from trajectory import engines
-from trajectory import log
+from trajectory import log, engines
 
 
 __all__ = ["log", "engines"]
-
 
 
 def scrape(args):
@@ -68,7 +66,7 @@ def scrape(args):
         log.info("Disengaging scraper engine.")
 
 
-def clean(string):
+def clean(args, string):
     """
     Perform a standard cleaning procedure on a course description. Includes
     stop word removal, non-English character removal, digit removal, etc.
@@ -78,22 +76,30 @@ def clean(string):
     log = logging.getLogger("root")
 
 
-    # Standardized character cleaning regular expressions.
-    whitespace = re.compile("\\\\n|\\\\r|\\\\xa0|\d|\W")
-    singletons = re.compile("\s+\w{1,3}(?=\s+)")
+    # Remove non alphanumerics.
+    string = string.lower()
+    string = ''.join(c if c.isalnum() else ' ' for c in string)
+    nonalnum = re.compile("\\\\n|\\\\r|\\\\xa0|\d|\W|\s")
+    string = re.sub(nonalnum, ' ', string)
+
+    # Remove strings of whitespace characters.
     long_whitespace = re.compile("\s+")
+    string = re.sub(long_whitespace, ' ', string)
 
 
-    # Perform character substitution.
-    string = re.sub(whitespace, ' ', string) # remove non-letters
-    string = re.sub(singletons, ' ', string) # remove 1-2 letter words
-    string = re.sub(long_whitespace, ' ', string)   # remove spaces
-    string = string.lower()     # make everything lowercase
+    # Perform stopword removal using a cached stopword object.
+    string = ' '.join([word for word in string.split()
+                       if word not in args.stoplist])
 
 
-    # Remove strings with fewer than 50 characters, since they were likely
+    # Remove singletons or pairs of letters.
+    singletons = re.compile("(?<!\w)\w{1,2}(\s|$)")
+    string = re.sub(singletons, "", string)
+
+
+    # Remove strings with fewer than 5 words, since they were likely
     # cleaned incorrectly.
-    if len(string) < 50:
+    if len(string.split(" ")) < 5:
         log.warn("String too short, marked for deletion.")
         string = None
 
