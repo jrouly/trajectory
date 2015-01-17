@@ -1,0 +1,42 @@
+#!/bin/bash
+
+
+# Check if TRJ_HOME is not set.
+if [ -z $TRJ_HOME ]; then
+  # Notify user that TRJ_HOME is not set.
+  echo "Environment variable TRJ_HOME not found."
+  echo "Please configure the environment variable TRJ_HOME."
+  exit 1
+fi
+
+
+# Relocate into the TRJ_HOME just to be sure.
+set -e
+cd $TRJ_HOME
+
+
+# Install python requirements.
+pyreq () {
+  if [ -f "requirements.txt" ] ; then
+    pip install -r requirements.txt
+  else
+    echo "Python requirements file not found."
+    exit 1
+  fi
+}
+
+
+# Attempt to create virtual environment & install requirements.
+if [ ! -d "env" ] ; then
+  virtualenv env
+  source env/bin/activate
+  pyreq
+else
+  echo "Python environment directory already exists."
+  echo "Attempting to install requirements anyway."
+  source env/bin/activate
+  pyreq
+fi
+
+
+exit 0

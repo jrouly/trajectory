@@ -1,0 +1,43 @@
+#!/bin/bash
+
+
+# Check if TRJ_HOME is not set.
+if [ -z $TRJ_HOME ]; then
+  # Notify user that TRJ_HOME is not set.
+  echo "Environment variable TRJ_HOME not found."
+  echo "Please configure the environment variable TRJ_HOME."
+  exit 1
+fi
+
+
+# Relocate into the TRJ_HOME just to be sure.
+set -e
+cd $TRJ_HOME
+
+
+# Ignore errors.
+set +e
+
+
+# Clean compiled java code.
+echo "Cleaning compiled Java code."
+mvn clean
+
+
+# Clean compiled Python code.
+echo "Cleaning compiled Python code."
+
+rm -r src/main/python/trajectory/__pycache__ &> /dev/null
+rm src/main/python/trajectory/*.pyc &> /dev/null
+
+rm -r src/main/python/trajectory/*/__pycache__ &> /dev/null
+rm src/main/python/trajectory/*/*.pyc &> /dev/null
+
+rm -r src/main/python/trajectory/scrape/__pycache__ &> /dev/null
+rm src/main/python/trajectory/scrape/*.pyc &> /dev/null
+
+rm -r src/main/python/trajectory/scrape/*/__pycache__ &> /dev/null
+rm src/main/python/trajectory/scrape/*/*.pyc &> /dev/null
+
+rm -r src/main/python/trajectory/scrape/*/*/__pycache__ &> /dev/null
+rm src/main/python/trajectory/scrape/*/*/*.pyc &> /dev/null
