@@ -1,6 +1,6 @@
 # Project specific
-env/ # python virtual environment
-*.db # ignore sqlite3 database files
+env/
+*.db
 
 
 # Byte-compiled / optimized / DLL files
