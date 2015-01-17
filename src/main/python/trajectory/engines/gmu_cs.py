@@ -107,6 +107,9 @@ def scrape( args, data_path ):
 
         # Identify prerequisites
         # TODO strip out prerequisite courses here
+        prereq_index = description.find("Prerequisite(s)")
+        if prereq_index > -1:
+            pass
 
         # Interpolate the SQL query.
         sql.append( course_sql % {"departmentID": departmentID,
