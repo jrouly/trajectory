@@ -58,7 +58,7 @@ def scrape(args):
         log.info("Disengaging scraper engine.")
 
 
-def clean(string):
+def clean(args, string):
     """
     Perform a standard cleaning procedure on a course description. Includes
     stop word removal, non-English character removal, digit removal, etc.
