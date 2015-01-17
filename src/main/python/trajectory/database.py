@@ -55,6 +55,9 @@ def register_target( args, metadata ):
         "VALUES ",
     ]
 
+    # Get a database cursor.
+    c = args.db.cursor()
+
     # Grab data from metadata object.
     schools = metadata.get("schools")
     departments = metadata.get("departments")
@@ -68,7 +71,6 @@ def register_target( args, metadata ):
     school_sql.append(";")
     school_sql = ''.join(school_sql)
 
-    c = args.db.cursor()
     c.executescript( school_sql )
     args.db.commit()
 
@@ -83,7 +85,6 @@ def register_target( args, metadata ):
     department_sql.append(";")
     department_sql = ''.join(department_sql)
 
-    c = args.db.cursor()
     c.executescript( department_sql )
     args.db.commit()
 
@@ -98,6 +99,38 @@ def register_target( args, metadata ):
     program_sql.append(";")
     program_sql = ''.join(program_sql)
 
-    c = args.db.cursor()
     c.executescript( program_sql )
     args.db.commit()
+
+
+def get_schoolID( args, name ):
+    """
+    Lookup the ID of a School by its name.
+    """
+
+    c = args.cursor()
+    c.execute("SELECT S.ID FROM Schools S WHERE S.Name='%s';" % name)
+
+    try:
+        return c.fetchone()[0]
+    except:
+        return None
+
+
+def get_departmentID( args, school_name, department_name ):
+    """
+    Lookup the ID of a Department by its name and the name of its
+    associated school.
+    """
+
+    c = args.cursor()
+    c.execute("""SELECT D.ID
+                 FROM Schools S, Departments D
+                 WHERE S.Name='%s'
+                   AND D.Name='%s'
+                   AND D.SchoolID=S.ID;""" % (school_name, department_name) )
+
+    try:
+        return c.fetchone()[0]
+    except:
+        return None
