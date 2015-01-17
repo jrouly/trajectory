@@ -77,8 +77,7 @@ def register_target( args, metadata ):
     # Loop through departments, registering entries.
     for department in departments:
         schoolname = department.get("school")
-        c.execute("SELECT S.ID from Schools S where S.Name='%s';" % schoolname)
-        department["schoolid"] = c.fetchone()[0]
+        department["schoolid"] = get_schoolID(args, schoolname)
         value = "('%(schoolid)s', '%(name)s', '%(abbrev)s', '%(web)s'), "
         department_sql.append(value % department)
     department_sql[-1] = department_sql[-1][:-2] # remove trailing comma
@@ -91,8 +90,7 @@ def register_target( args, metadata ):
     # Loop through programs, registering entries.
     for program in programs:
         schoolname = program.get("school")
-        c.execute("SELECT S.ID from Schools S where S.Name='%s';" % schoolname)
-        program["schoolid"] = c.fetchone()[0]
+        program["schoolid"] = get_schoolID(args, schoolname)
         value = "('%(schoolid)s', '%(name)s', '%(abbrev)s'), "
         program_sql.append(value % program)
     program_sql[-1] = program_sql[-1][:-2] # remove trailing comma
@@ -108,7 +106,7 @@ def get_schoolID( args, name ):
     Lookup the ID of a School by its name.
     """
 
-    c = args.cursor()
+    c = args.db.cursor()
     c.execute("SELECT S.ID FROM Schools S WHERE S.Name='%s';" % name)
 
     try:
@@ -123,7 +121,7 @@ def get_departmentID( args, school_name, department_name ):
     associated school.
     """
 
-    c = args.cursor()
+    c = args.db.cursor()
     c.execute("""SELECT D.ID
                  FROM Schools S, Departments D
                  WHERE S.Name='%s'
