@@ -73,10 +73,6 @@ def clean(args, string):
     nonalnum = re.compile("\\\\n|\\\\r|\\\\xa0|\d|\W|\s")
     string = re.sub(nonalnum, ' ', string)
 
-    # Remove strings of whitespace characters.
-    long_whitespace = re.compile("\s+")
-    string = re.sub(long_whitespace, ' ', string)
-
     # Perform stopword removal using a cached stopword object.
     string = ' '.join([word for word in string.split()
                        if word not in args.stoplist])
@@ -84,6 +80,10 @@ def clean(args, string):
     # Remove singletons or pairs of letters.
     singletons = re.compile("(?<!\w)\w{1,2}(\s|$)")
     string = re.sub(singletons, "", string)
+
+    # Remove strings of whitespace characters.
+    long_whitespace = re.compile("\s+")
+    string = re.sub(long_whitespace, ' ', string)
 
     # Remove strings with fewer than 5 words, since they were likely
     # cleaned incorrectly.
