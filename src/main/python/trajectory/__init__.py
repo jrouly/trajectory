@@ -66,3 +66,38 @@ def scrape(args):
 
 
         log.info("Disengaging scraper engine.")
+
+
+def clean(args, string):
+    """
+    Perform a standard cleaning procedure on a course description. Includes
+    stop word removal, non-English character removal, digit removal, etc.
+    """
+
+    import logging, re
+    log = logging.getLogger("root")
+
+
+    # Standardized character cleaning regular expressions.
+    whitespace = re.compile("\\\\n|\\\\r|\\\\xa0|\d|\W")
+    singletons = re.compile("\s+\w{1,3}(?=\s+)")
+    long_whitespace = re.compile("\s+")
+
+
+    # Perform character substitution.
+    string = re.sub(whitespace, ' ', string) # remove non-letters
+    string = re.sub(singletons, ' ', string) # remove 1-2 letter words
+    string = re.sub(long_whitespace, ' ', string)   # remove spaces
+    string = string.lower()     # make everything lowercase
+
+
+    # Remove strings with fewer than 50 characters, since they were likely
+    # cleaned incorrectly.
+    if len(string) < 50:
+        log.warn("String too short, marked for deletion.")
+        string = None
+
+
+    # Return cleaned string.
+    return string
+
