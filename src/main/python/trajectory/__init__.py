@@ -52,6 +52,7 @@ def scrape(args):
             return
 
 
+        # Download data into the temporary directory under "data".
         if args.download:
             try:
                 data_dir = os.path.join( args.tmp_dir, "%s-data" % target )
@@ -62,6 +63,7 @@ def scrape(args):
                         target )
 
 
+        # Digest the data from the temporary directory.
         if args.digest:
             try:
                 scraper.clean( args, target_raw_path, target_clean_path )
