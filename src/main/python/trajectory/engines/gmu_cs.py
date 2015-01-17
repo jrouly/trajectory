@@ -6,7 +6,7 @@ This file is the scraping engine tooled to GMU's CS department.
 """
 
 
-from trajectory import database
+from trajectory import database, clean
 from bs4 import BeautifulSoup
 from werkzeug import url_fix
 from urllib.parse import urljoin
@@ -106,10 +106,16 @@ def scrape(args):
             pass
 
         # Identify prerequisites
-        # TODO strip out prerequisite courses here
         prereq_index = description.find("Prerequisite(s)")
         if prereq_index > -1:
-            pass
+            prereq_string = description[prereq_index:]
+            description = description[:prereq_index]
+            log.debug(prereq_string)
+
+        # Clean the description string
+        description = clean(args, description)
+        if description is None:
+            continue
 
         # Interpolate the SQL query.
         sql.append( course_sql % {"departmentID": departmentID,
@@ -129,87 +135,3 @@ def scrape(args):
 
     log.info( "Completed scraping." )
 
-
-
-def clean( args, data_path ):
-    """
-    This function takes the gmu cs syllabi directory as input and removes
-    all HTML entities and non-word elements from them.
-    """
-
-
-    import logging
-    log = logging.getLogger("root")
-    log.info( "Cleaning scraped GMU CS data." )
-
-
-    # Look up database IDs for this target's schools & departments.
-    schoolIDs = []
-    for school in META.get("schools"):
-        schoolname = school.get("name")
-        schoolIDs.append( database.get_schoolID( args, schoolname ) )
-
-    departmentIDs = []
-    for department in META.get("departments"):
-        departmentname = department.get("name")
-        schoolname = department.get("school")
-        departmentIDs.append(
-            database.get_departmentID( args, schoolname, departmentname ) )
-
-
-    whitespace = re.compile("\\\\n|\\\\r|\\\\xa0|\d|\W")
-    singletons = re.compile("\s+\w{1,3}(?=\s+)")
-    long_whitespace = re.compile("\s+")
-
-    # Generate a list of all data files in the data path.
-    files = [os.path.join(root, name)
-             for root, dirs, files in os.walk( data_path )
-             for name in files
-             if name.endswith(".raw")]
-
-    # Iterate over each raw file
-    for raw_file in files:
-
-        #log.debug("Raw file: %s" % raw_file)
-
-        # Generate a soup object for each and strip it to its textual contents
-        try:
-            with open(raw_file, 'r') as socket:
-                soup = BeautifulSoup( socket )         # generate soup
-
-            strings = soup.body.stripped_strings
-            contents = ' '.join( strings )
-        except:
-            log.warning( "Error detected in %s" % raw_file )
-            continue
-
-        # Perform regular expression substitutions.
-        contents = re.sub(whitespace, ' ', contents) # remove non-letters
-        contents = re.sub(singletons, ' ', contents) # remove 1-2 letter words
-        contents = re.sub(long_whitespace, ' ', contents)   # remove spaces
-        contents = contents.lower()     # make everything lowercase
-
-        # Trim syllabi with fewer than 500 characters, as they likely were
-        # incorrectly cleaned.
-        if len( contents ) < 500:
-            log.debug("File contents too short, skipping.")
-            continue
-
-        # Create a new file path in the clean directory.
-        semester = os.path.split( os.path.dirname( raw_file ) )[-1]
-        output_filename = os.path.basename( raw_file )[:-3] + "txt"
-
-        clean_semester = os.path.join( clean_path, semester )
-        clean_file = os.path.join( clean_semester, output_filename )
-
-        # Ensure that the semester path exists in the clean directory.
-        if not os.path.exists( clean_semester ):
-            os.makedirs( clean_semester )
-
-        #log.debug( "clean_file: %s" % clean_file )
-
-        # Write out to a new file.
-        with open( clean_file, 'w' ) as out:
-            out.write( contents )
-
-    log.info( "Completed data processing." )
