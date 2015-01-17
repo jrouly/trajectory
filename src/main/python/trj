@@ -74,6 +74,12 @@ def main():
     database.initialize( args )
 
 
+    # Cache stopwords object.
+    args.resources = os.path.join(HOME, "src", "main", "resources")
+    stoplist_path = os.path.join(args.resources, "stoplists", "en.txt")
+    args.stoplist = set(open(stoplist_path, "r").read().splitlines())
+
+
     # Create temporary directory.
     import tempfile
     args.home = HOME
