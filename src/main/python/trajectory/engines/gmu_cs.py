@@ -43,7 +43,7 @@ META = {
 }
 
 
-def scrape( args, data_path ):
+def scrape(args):
     """
     Scrape the available syllabi from the GMU CS page into a local
     directory.
