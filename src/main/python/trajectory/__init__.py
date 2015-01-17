@@ -45,34 +45,23 @@ def scrape(args):
         # Register the target with the database, if not already present.
         log.info("Registering target with database.")
         try:
-            database.register_target( args, scraper.META )
+            database.register_target(args, scraper.META)
         except AttributeError as e:
-            log.warn( "Target %s metadata not defined." % target )
-            log.debug( e )
+            log.warn("Target %s metadata not defined." % target)
+            log.warn("Terminating engine.")
+            log.debug(e)
             return
 
 
         # Download data into the temporary directory under "data".
-        if args.download:
+        if (not args.debug) or (args.debug and args.download):
             try:
-                data_dir = os.path.join( args.tmp_dir, "%s-data" % target )
-                os.mkdir( data_dir )
-                scraper.scrape( args, data_dir )
+                scraper.scrape(args)
             except NotImplementedError as e:
                 log.warn( "Target %s has not been defined. Skipping." %
                         target )
 
-
-        # Digest the data from the temporary directory.
-        if args.digest:
-            try:
-                scraper.clean( args, target_raw_path, target_clean_path )
-            except NotImplementedError as e:
-                log.warn( "Target %s has not been defined. Skipping." %
-                        target )
-
-
-        if not (args.digest or args.download):
+        else:
             log.warn("No action performed.")
 
 
