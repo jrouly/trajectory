@@ -32,6 +32,12 @@ META = {
             'abbrev': "CS",
             'web': "cs.gmu.edu",
         },
+        {
+            'school': "George Mason University",
+            'name': "Electrical and Computer Engineering",
+            'abbrev': "ECE",
+            'web': "ece.gmu.edu",
+        },
     ],
     'programs': [
         {
@@ -77,9 +83,14 @@ def scrape(args):
     course_sql = "('%(departmentID)s', '%(num)s', '%(title)s', '%(desc)s'), "
     departmentID = database.get_departmentID(args,
             school_name=META.get("departments")[0].get("school"),
-            department_name=META.get("departments")[0].get("name"))
+            department_abbrev=META.get("departments")[0].get("abbrev"))
+
+    if departmentID is None:
+        log.warn("No valid Department ID found, ensure target is registered.")
+        return
 
     # Identify relevant information for each course.
+    prereqs = {}
     for course in course_list:
 
         # Generate metadata
@@ -99,18 +110,23 @@ def scrape(args):
         content = course_soup.find(class_="block_content_popup").hr.text
 
         # Clean up the description.
-        description = str.replace(content, "'", "") # strip quotes
+        description = content
         try:
             description = description[:description.index("Hours of Lecture")]
         except:
             pass
 
         # Identify prerequisites
+        # TODO: Match these up with their database entries.
         prereq_index = description.find("Prerequisite(s)")
         if prereq_index > -1:
             prereq_string = description[prereq_index:]
             description = description[:prereq_index]
-            log.debug(prereq_string)
+
+            prereq_re = re.compile("\w{2,4}\s\d{3}")
+            matches = re.findall(prereq_re, prereq_string)
+            if len(matches) > 0:
+                prereqs["%s %s" % (prefix, cnum)] = matches
 
         # Clean the description string
         description = clean(args, description)
