@@ -115,9 +115,9 @@ def get_schoolID( args, name ):
         return None
 
 
-def get_departmentID( args, school_name, department_name ):
+def get_departmentID( args, school_name, department_abbrev ):
     """
-    Lookup the ID of a Department by its name and the name of its
+    Lookup the ID of a Department by its abbreviation and the name of its
     associated school.
     """
 
@@ -125,8 +125,8 @@ def get_departmentID( args, school_name, department_name ):
     c.execute("""SELECT D.ID
                  FROM Schools S, Departments D
                  WHERE S.Name='%s'
-                   AND D.Name='%s'
-                   AND D.SchoolID=S.ID;""" % (school_name, department_name) )
+                   AND D.Abbreviation='%s'
+                   AND D.SchoolID=S.ID;""" % (school_name, department_abbrev))
 
     try:
         return c.fetchone()[0]
