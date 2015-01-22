@@ -8,9 +8,6 @@ This file is the scraping engine tooled to GMU's CS department.
 
 from trajectory import database, clean
 from bs4 import BeautifulSoup
-from werkzeug import url_fix
-from urllib.parse import urljoin
-from requests.exceptions import HTTPError
 import requests
 import re
 import os
