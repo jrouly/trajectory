@@ -6,11 +6,9 @@ This file is the scraping engine tooled to PDX's CS department.
 """
 
 
+from trajectory import database, clean
 from bs4 import BeautifulSoup
-from werkzeug import url_fix
-from urllib.parse import urljoin
-from requests import get
-from requests.exceptions import HTTPError
+import requests
 import re
 import os
 
@@ -31,6 +29,18 @@ META = {
             'abbrev': "CS",
             'web': "pdx.edu/computer-science",
         },
+        {
+            'school': "Portland State University",
+            'name': "Systems Science",
+            'abbrev': "SYSC",
+            'web': "pdx.edu/sysc",
+        },
+        {
+            'school': "Portland State University",
+            'name': "Electrical and Computer Engineering",
+            'abbrev': "ECE",
+            'web': "pdx.edu/ece",
+        },
     ],
     'programs': [
         {
@@ -42,7 +52,7 @@ META = {
 }
 
 
-def scrape( args, data_path ):
+def scrape(args):
     """
     Scrape the available syllabi from the PDX CS page into a local
     directory.
@@ -54,28 +64,75 @@ def scrape( args, data_path ):
     log.info( "Scraping PDX CS data." )
 
 
-    # PDX CS syllabi repository
-    url = "http://www.pdx.edu/computer-science/"
-    courses_url = "courses"
+    # Construct a soup of the index.
+    course_index_url = "http://www.pdx.edu/computer-science/courses"
+    course_index = requests.get(course_index_url)
+    soup = BeautifulSoup(course_index.text)
+
+    # Identify the list of courses.
+    course_list = soup.find("h3", text="Course List")\
+                      .find_next_sibling("ul")\
+                      .find_all("a")
+
+    # Pregenerate SQL data.
+    sql = ["INSERT INTO Courses (DepartmentID, Num, Title, Description) ",
+            "VALUES "]
+    course_sql = "('%(departmentID)s', '%(num)s', '%(title)s', '%(desc)s'), "
+    departmentID_cs   = database.get_departmentID(args,
+            school_name=META.get("departments")[0].get("school"),
+            department_abbrev=META.get("departments")[0].get("abbrev"))
+    departmentID_sysc = database.get_departmentID(args,
+            school_name=META.get("departments")[1].get("school"),
+            department_abbrev=META.get("departments")[1].get("abbrev"))
+    departmentID_ece  = database.get_departmentID(args,
+            school_name=META.get("departments")[2].get("school"),
+            department_abbrev=META.get("departments")[2].get("abbrev"))
 
 
-    # Request index page and generate soup.
-    try:
-        index_link = urljoin( url, courses_url )
-        index_link = url_fix( index_link )
-        log.debug( "Getting index: " + index_link )
-        index_page = get( index_link )
-        index_soup = BeautifulSoup( index_page.text )
+    for course in course_list:
+        log.debug(course.text)
+        full_title = re.compile("\s+").split(course.text)
+        prefix = full_title[0]
+        cnum = full_title[1]
+        title = ' '.join(full_title[2:])
 
-    except Exception as e:
-        log.warning( "Error." )
-        log.debug( index_link )
-        log.debug( str(e) )
-        exit( 2 )
+        description = ""
+
+        # Select appropriate departmental ID
+        if prefix == "CS":
+            departmentID = departmentID_cs
+        elif prefix == "ECE":
+            departmentID = departmentID_ece
+        elif prefix == "SYSC":
+            departmentID = departmentID_sysc
+        else:
+            log.warn("Uknown course prefix " + prefix)
+            continue
+
+        # Interpolate the SQL query.
+        sql.append(course_sql % {"departmentID": departmentID,
+                                 "num": cnum,
+                                 "title": title,
+                                 "desc": description})
+
+    # Generate the sql string.
+    sql[-1] = sql[-1][:-2] # remove trailing comma
+    sql.append(";")
+    sql = "".join(sql)
+
+    log.debug(sql)
+
+    # Commit the sql query.
+    c = args.db.cursor()
+    c.executescript( sql )
+    args.db.commit()
+
+    log.info( "Completed scraping." )
 
 
-    log.debug( "Generated index soup." )
 
+
+    return
 
     # Identify the <UL> containing the course list by the H3 heading
     # "Course List" then find its first <UL> sibling.
@@ -145,53 +202,3 @@ def scrape( args, data_path ):
 
     log.info( "Completed scraping." )
 
-
-
-def clean( args, raw_path, clean_path ):
-    """
-    This function takes the pdx cs syllabi directory as input and removes
-    all non-word elements from them.
-    """
-
-
-    import logging
-    log = logging.getLogger("root")
-    log.info( "Cleaning scraped PDX CS data." )
-
-
-    whitespace = re.compile("\\\\n|\\\\r|\\\\xa0|\d|\W")
-    singletons = re.compile("\s+\w{1,3}(?=\s+)")
-    long_whitespace = re.compile("\s+")
-
-    # Generate a list of all data files in the data path.
-    files = [os.path.join(root, name)
-             for root, dirs, files in os.walk( raw_path )
-             for name in files
-             if name.endswith(".raw")]
-
-    # Iterate over each raw file
-    for raw_file in files:
-
-        with open(raw_file, 'r') as socket:
-            contents = socket.read()
-
-        # Perform regular expression substitutions.
-        contents = re.sub(whitespace, ' ', contents) # remove non-letters
-        contents = re.sub(singletons, ' ', contents) # remove 1-2 letter words
-        contents = re.sub(long_whitespace, ' ', contents)   # remove spaces
-        contents = contents.lower()     # make everything lowercase
-
-        # Trim syllabi with fewer than 500 characters, as they likely were
-        # incorrectly cleaned.
-        if len( contents ) < 500:
-            log.debug("File contents too short, skipping.")
-            continue
-
-        filename = os.path.basename( raw_file )[:-3] + "txt"
-        clean_file = os.path.join( clean_path, filename )
-
-        # Write out to a new file.
-        with open( clean_file, 'w' ) as out:
-            out.write( contents )
-
-    log.info( "Completed data processing." )
