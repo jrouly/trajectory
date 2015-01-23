@@ -106,7 +106,7 @@ def scrape(args):
         elif prefix == "SYSC":
             departmentID = departmentID_sysc
         else:
-            log.warn("Uknown course prefix " + prefix)
+            log.warn("Uknown course prefix " + full_title)
             continue
 
         # Interpolate the SQL query.
