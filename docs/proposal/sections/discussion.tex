@@ -1,0 +1,37 @@
+The primary results of this initial study have been positive. Exploratory
+K-Means clustering immediately resulted in clusters with a high level of
+completeness. Even superficial manual analysis of clusters indicated that
+the collected data were being appropriately grouped. Similar findings were
+encountered after the application of LDA topic modeling. Formal evaluation
+is still missing, although possible techniques have been discussed.
+
+Many components of this study are still missing and will need to be
+implemented in the future. First, there is no metadata processing. The
+immediate result of this is that documents cannot be labeled or grouped
+based on their section number, meaning the dataset is simply a set of
+anonymous documents. This is less than satisfactory, given that the purpose
+of applying topic modeling was the extraction of meaningful data. Another
+direct consequence of metadata-blindness is the inability to construct
+prerequisite chains. If documents are not identified by their section
+number, it will be impossible to list prerequisites, let alone correlate
+the intersection of topics between prerequisites and sequels. This is a
+core issue that needs to be addressed in a future version of the work.
+
+A possible solution would include further development of the database
+schema system introduced for visualization. Perhaps heavier use of a
+structured relational database would naturally allow for the collection of
+metadata in a structured manner. One approach to this solution would be the
+creation of an intermediary database layer between the scraping and
+learning libraries instead of writing directly to disk. Drawbacks to this
+solution include the need to refactor large portions of the scraping
+library as well as the need to develop a software or network interface
+between the database layer and the MALLET library.
+
+Another major missing component is the rich visualization library. With the
+creation of the structured database, visualizations were made possible.
+However, no significant work has been performed to create a usable
+visualization tool. In the same vein, much of the interface in general is
+lacking in usability and would greatly benefit from a design overhaul.
+
+The final missing component is the evaluation suite. This will only be
+possible once the previously mentioned metadata-awareness is implemented.
