@@ -30,6 +30,7 @@
 *.synctex.gz
 *.synctex.gz(busy)
 *.pdfsync
+Makefile
 
 ## Auxiliary and intermediate files from other packages:
 
