@@ -96,7 +96,44 @@ def scrape(args):
         cnum = full_title[1]
         title = ' '.join(full_title[2:])
 
-        description = ""
+        try:
+            course_url = course['href']
+            course_soup = BeautifulSoup(requests.get(course_url).text)
+        except:
+            log.warn("Unable to parse course page.")
+            log.warn(course_url)
+            continue
+
+        # Find the course description based on its neighbour
+        cdesc_re = re.compile(".*Course Description.*")
+        cdesc = course_soup.find("table").find(text=cdesc_re)
+        if not cdesc.next_sibling:
+            cdesc = cdesc.find_parent("td")
+
+        # If there's no course description found, well, forget it
+        try:
+            description = cdesc.find_next_sibling("td").text
+        except:
+            log.warn("No course description available.")
+            log.warn(course_url)
+            continue
+
+        # Clean the description string.
+        description = clean(args, description)
+        if description is None:
+            continue
+
+        # Find the course prerequisite list based on its neighbour
+        prereq_re = re.compile(".*Prerequi?sites.*")
+        prereq = course_soup.find("table").find(text=prereq_re)
+        if not prereq.next_sibling:
+            prereq = prereq.find_parent("td")
+
+        # If there's no prereq list found, leave it as None
+        try:
+            prereq = prereq.find_next_sibling("td").text
+        except:
+            prereq = None
 
         # Select appropriate departmental ID
         if prefix == "CS":
@@ -126,79 +163,6 @@ def scrape(args):
     c = args.db.cursor()
     c.executescript( sql )
     args.db.commit()
-
-    log.info( "Completed scraping." )
-
-
-
-
-    return
-
-    # Identify the <UL> containing the course list by the H3 heading
-    # "Course List" then find its first <UL> sibling.
-    course_list_heading = index_soup.body.find("h3", text="Course List")
-    course_list = course_list_heading.find_next_sibling("ul").findAll("a")
-
-
-    # Loop over the list of courses in the <UL> we just found, access the
-    # page they link to, and pull in their description and goals.
-    log.debug( "Looping over course list." )
-    for course in course_list:
-
-        log.debug( "Course: " + course.text )
-
-        # Identify the link to the course page and generate a BeautifulSoup
-        # for the page contents.
-        try:
-            course_link = course.get("href")
-            log.debug( "Getting: " + course_link )
-            course_page = get( course_link )
-            course_soup = BeautifulSoup( course_page.text )
-            log.debug( "Soup generated." )
-
-        except Exception as e:
-            log.warning( "Error getting course page." )
-            log.debug( course_link )
-            log.debug( str(e) )
-            exit( 3 )
-
-        # Pull in course title as the name of this file.
-        course_title = course_soup.find(id="page-title").text
-        course_title = re.sub("/", "", course_title)
-        log.debug( "Course title: " + course_title )
-
-        # Identify the course table.
-        course_table = course_soup.find("table")
-        course_table_rows = course_table.findAll("tr")
-
-        course_content = []
-
-        # Iterate over course table rows.
-        for row in course_table_rows:
-
-            columns = row.findAll("td")
-
-            # Skip any row without a key and value.
-            if not len( columns ) == 2:
-                continue
-
-            # key is the first column, val is the second
-            key = columns[0].text
-            val = columns[1].text
-
-            # Append value to the course_content list
-            course_content.append( val )
-
-
-        # Join together all the scraped text.
-        course_content = ' '.join( course_content )
-
-        # Output content to a .raw file.
-        filename = course_title + ".raw"
-        output_file = os.path.join( data_path, filename )
-        with open( output_file, "w" ) as output:
-            output.write( course_content )
-
 
     log.info( "Completed scraping." )
 
