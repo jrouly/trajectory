@@ -157,8 +157,6 @@ def scrape(args):
     sql.append(";")
     sql = "".join(sql)
 
-    log.debug(sql)
-
     # Commit the sql query.
     c = args.db.cursor()
     c.executescript( sql )
