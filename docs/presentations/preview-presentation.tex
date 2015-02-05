@@ -1,0 +1,263 @@
+\documentclass{beamer}
+
+\usepackage{booktabs}
+\usepackage{color}
+\usepackage{graphicx}
+\usepackage[backend=bibtex]{biblatex}
+
+\title[Curricula and LDA]{Unsupervised academic curricula evaluation
+  through Latent Dirichlet allocation}
+\author{Jean Michel Rouly \and Huzefa Rangwala}
+\date{Updated \today}
+
+\usetheme{Boadilla}
+\usecolortheme{rose}
+
+\bibliography{../bibliography/bibliography.bib}
+
+\begin{document}
+
+  \frame{\titlepage}
+
+  \begin{frame}{Research goal}
+
+    \vfill
+
+    Through the application of probabilistic machine learning methods,
+    specifically LDA topic modeling, a corpus of unstructured course
+    descriptions can be digested and mined for topics. In this scenario, each
+    topic represents a core concept covered by the courses.
+
+    \vfill
+
+    A research framework will be constructed to read data from the
+    Internet, digest into a common internal format, pipeline into an LDA
+    topic model, and ultimately visualize in an interactive manner.
+
+    \vfill
+
+    Ultimately the automatically discovered topics can be used in
+    university accreditation and evaluation processes.
+
+    \vfill
+
+  \end{frame}
+
+  \begin{frame}{Background information}
+
+    \onslide<+->
+    \begin{block}{Program of study}
+      A defined, ordered set of courses at a university with the goal of
+      achieving a degree, certification, etc.
+    \end{block}
+
+    \onslide<+->
+    \begin{block}{Course}
+      A set of learning outcomes and techniques to achieve them, defined by
+      a syllabus.
+    \end{block}
+
+    \onslide<+->
+    \begin{block}{Syllabus}
+      Unstructured collection of keywords and phrases that describes the
+      core concepts and outcomes of a specific course.
+    \end{block}
+
+  \end{frame}
+
+  \begin{frame}{Background information}
+
+    \onslide<+->
+    \begin{block}{Machine Learning}
+      Interdisciplinary field combining
+      elements of Artificial Intelligence and Statistics that allows
+      programs to approximate unknown functions based on complex datasets.
+    \end{block}
+
+    \onslide<+->
+    \begin{block}{Latent Variable Modeling}
+      Subfield of Machine Learning that focuses on reconstructing
+      ``hidden'' or unobservable variables that influence the structure of
+      a dataset.
+    \end{block}
+
+    \onslide<+->
+    \begin{block}{Topic Modeling}
+      Example of latent variable modeling that discovers \alert{topics}
+      that occur in a dataset.
+    \end{block}
+
+    \onslide<+->
+    \begin{block}{Latent Dirichlet allocation}
+      Generative approach to topic modeling, starts with unknown variables
+      and \emph{generates} documents.
+    \end{block}
+  \end{frame}
+
+  \begin{frame}{Latent Dirichlet allocation}
+
+    \only<1>{
+      \begin{figure}
+        \includegraphics[width=0.8\framewidth]{figs/blei-lda.png}
+        \caption{The LDA generative model.\footfullcite{Blei2012}}
+      \end{figure}
+    }
+
+    \only<2>{
+      \begin{align*}
+        p(\beta_{1:K}, \theta_{1:D},z_{1:D} | w_{1:D}) = \frac{\beta_{1:K},
+        \theta_{1:D},z_{1:D}, w_{1:D}}{w_{1:D}}
+      \end{align*}
+
+      \vfill
+
+      Gibbs sampling is used to approximate the probability of the
+      denominator (evidence)\footfullcite{Blei2012}.
+
+      \vfill
+
+      \begin{itemize}
+        \item $\beta_{1:k} := \text{ topic } k$
+        \item $\theta_{d,k} := \text{ topic proportion for topic } k \text{
+        in document } d$
+        \item $z_{d,n} := \text{ topic assignment for word } n \text{ in
+        document } d$
+        \item $w_{d,n} := \text{ the } n^{th} \text{ word in document } d$
+      \end{itemize}
+    }
+
+  \end{frame}
+
+  \begin{frame}{Project outline}
+    \begin{itemize}
+      \item {\color<2>{green}Complete CS 390.}
+      \item {\color<2>{red}Continue building university dataset.}
+      \item Improve text cleaning methodology.
+      \item Test out topic modeling on prerequisite chains and model
+        concept overlap.
+      \item Build visualization tool that hooks into database.
+    \end{itemize}
+  \end{frame}
+
+  \begin{frame}{Resources}
+
+    \only<1>{
+      \framesubtitle{Software Toolkits}
+
+      \begin{block}{\texttt{scikit-learn}}
+        Simple and efficient tools for data mining and data analysis. Built
+        on NumPy, SciPy, and matplotlib. \\ \url{http://scikit-learn.org}
+      \end{block}
+
+      \begin{block}{MALLET}
+      ``MALLET is a Java-based package for statistical natural language
+      processing, document classification, clustering, topic modeling,
+      information extraction, and other machine learning applications to
+      text.'' \\ \url{http://mallet.cs.umass.edu}
+      \end{block}
+
+      \begin{block}{\texttt{BeautifulSoup}}
+        Efficient and easy to use Web scraping and HTML manipulation
+        library. \\
+        \url{http://www.crummy.com/software/BeautifulSoup}
+      \end{block}
+    }
+
+    \only<2>{
+      \framesubtitle{Syllabus Data}
+
+      Data collected from Computer Science departments at various
+      universities.
+
+      \vfill
+
+      Current institutions represented:
+
+      \begin{itemize}
+        \item George Mason University
+        \item Louisiana State University
+        \item Portland State University
+        \item Rensselaer Polytechnic Institute
+        \item Stanford University
+      \end{itemize}
+
+      (primarily because they offer easily-accessed public course catalogs).
+
+      \vfill
+
+      Additionally, the Open Syllabus Project may prove a useful resource
+      or collaborator in the future.
+
+    }
+
+  \end{frame}
+
+
+  \begin{frame}{Framework}
+
+    \begin{block}{Scrape}
+      Modular Python command line application that supports custom input
+      data sources (syllabus archives) \& multiple clustering tools.
+      Pluggable backend scraping engines contribute to flexibility.
+    \end{block}
+
+    \vfill
+
+    \begin{block}{Learn}
+      Java program that adaptively ingests data generated by the scrape
+      module. Makes heavy use of MALLET to perform LDA.
+    \end{block}
+
+    \vfill
+
+    Open source and available at:\\
+    \url{https://github.com/jrouly/trajectory}\\
+    \url{http://leo.cs.gmu.edu/svn/users/jrouly/trajectory}
+
+  \end{frame}
+
+  \begin{frame}{Preliminary visualization tool}
+
+    \only<1>{
+      Simple combinatorially generated, cross-referenced HTML documents that
+      display per-document topic breakdown (top n topics) as well as a
+      definition of topics by frequent words (top n most frequent words).
+    }
+
+    \only<2>{
+      \begin{figure}
+        \includegraphics[width=0.8\framewidth]{figs/vis-docs.png}
+        \caption{Per-document topic breakdown}
+      \end{figure}
+    }
+
+    \only<3>{
+      \begin{figure}
+        \includegraphics[width=0.8\framewidth]{figs/vis-topics.png}
+        \caption{Topic-word definitions}
+      \end{figure}
+    }
+
+
+  \end{frame}
+
+  \begin{frame}{Continued development goals}
+
+    Ultimately: visualization \& comparison of university programs of study
+    given unknown dataset of course descriptions.
+
+    \begin{description}
+      \item[Metadata awareness] Track information like course number,
+      semester, institutional information, etc.
+      \item[Prerequisite chains] Use metadata to track lists of
+      prerequisite courses.
+      \item[Rich visualizations] Investigate use of
+      D3.js\footnote{\url{http://d3js.org}} to develop rich, visually
+      pleasing, interactive tools.
+      \item[Evaluation suite] Correlate results against existing third
+      party evaluations, manual inspection, other instutitions.
+    \end{description}
+
+  \end{frame}
+
+\end{document}
