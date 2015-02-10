@@ -50,21 +50,10 @@ though.
 
 The scrape function expects a simple header
 
-    def scrape( args, data_path ):
+    def scrape(args):
         pass
 
-`args` is the Trj configuration object. `data_path` is the temporary
-directory intended to house raw download data. The purpose of this function
+`args` is the Trj configuration object. The purpose of this function
 is to download all available content from a course description repository
-into a temporary holding directory.
-
-#### Clean Function
-
-The clean function expects the header
-
-    def clean( args, data_path ):
-        pass
-
-`args` is the Trj configuration object. This will hold important data such
-as a reference to the output database. `data_path` is the temporary
-directory holding the downloaded raw data from `scrape`.
+into a temporary holding directory (if necessary), clean the textual data,
+and insert it in the correct location in the database layer.
