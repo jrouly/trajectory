@@ -1,22 +1,39 @@
 \subsection{Data Acquisition}
 
-The primary data manipulated in this study are university course syllabi.
-Currently the experimental data include documents obtained from the George
-Mason University departments of Computer Science and Statistics as well as
-the Portland State University department of Computer Science. Simple web
-scrapers were written using Python and BeautifulSoup to download publicly
-available syllabi from departmental web pages. Syllabi occurred in a number
-of different formats, most commonly HTML, Portable Document Format,
-Microsoft Word Documents, and Rich Text Format. A parser was written for
-each of these formats to acquire the contained, unstructured text, which
+The primary data manipulated in this study are university catalog course
+descriptions. The current experimental data sources are described in
+\tref{table:data-sources}. Simple web scrapers were written using Python
+and BeautifulSoup to download publicly available descriptions from
+university catalogs. Descriptions and catalog webpages appear in a vast
+variety of different formats, structures, and HTML correctness, so a parser
+was written for each university to acquire the unstructured text. This text
 was then passed through a cleaning procedure to remove abbreviations and
-non-English characters.
+non-English characters, as well as common English stop words. Finally the
+text was passed through a stemmer to strip morphology from the words and
+eliminate duplicate terms.
 
 The Python scraping framework employed is structured to allow pluggable web
 scrapers tooled to specific syllabus repositories. A major future goal is
 to expand the breadth of data collection across different institutions.
 Development is in progress for new scraping engines tooled to new
 repositories.
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{lll}
+\toprule
+University & Department & Address \\
+\midrule
+George Mason University & Computer Science & \url{catalog.gmu.edu} \\
+Portland State University & Computer Science & \url{pdx.edu/computer-science} \\
+Kansas State University & Computer Science & \url{catalog.k-state.edu} \\
+Louisiana State University & Computer Science & \url{catalog.lsu.edu} \\
+Rensselaer Polytechnic Institute & Computer Science & \url{catalog.rpi.edu} \\
+Stanford University & Computer Science & \url{explorecourses.stanford.edu} \\
+\bottomrule
+\end{tabular}
+\caption{Current data input sources\label{table:data-sources}}
+\end{table}
 
 %------------------------------------------------
 
@@ -89,8 +106,8 @@ After the exploratory clustering process, we passed cleaned data into a
 topic modeling framework. The Java MALLET library is used to perform
 \acf{lda} on the combined syllabus data set. A data pipeline is
 constructed using the MALLET API that reads input data, tokenizes it,
-strips stop words, and trains an \ac{lda} topic model. Initial topic
-modeling results are later piped into a simple, interactive user interface.
+and trains an \ac{lda} topic model. Initial topic modeling results are
+later piped into a simple, interactive user interface.
 
 Sample preliminary results are illustrated in \tref{table:ldadocs}, showing
 the breakdown of documents into component topics, and
@@ -169,7 +186,7 @@ topics and a set of known-good, reliable benchmark topics. The benchmark
 topics can be classified ``known-good'' if they encode domain expertise, a
 characteristic which is fundamentally lacking from the unsupervised topic
 modeling process. Once a set of proposed topics is obtained from the
-syllabus data set, the known-good categorization of concepts with labels
+description data set, the known-good categorization of concepts with labels
 will be used to propose a second set of topics.  Overlap between these two
 groups of topics will be used to share labels from the known-good set to
 the experimentally proposed group with some value of confidence. Those
@@ -194,28 +211,16 @@ Python web scraping library
 BeautifulSoup\footnote{\url{http://www.crummy.com/software/BeautifulSoup/}}.
 Other libraries may be incorporated as needed.
 
-Syllabus data has been collected from the George Mason University
-departments of Computer Science\footnote{\url{http://cs.gmu.edu/courses/}}
-and Statistics\footnote{\url{http://statistics.gmu.edu/courses/}} along
-with the Portland State University department of computer
-Science\footnote{\url{http://www.pdx.edu/computer-science/courses}}.
-Additional institutions targeted for future scraping include Colorado,
-Rice, UNCG, and Chaminade. All of the listed schools host publicly
-available syllabus archives, at least for some departments. It may become
-necessary to contact other universities directly to acquire their syllabus
-data. Additionally, the Open Syllabus
-Project\footnote{\url{http://opensyllabusproject.org}} may prove a useful
-resource or collaborator in the future.
-
 %------------------------------------------------
 
 \subsection{Timeline}
 
 \begin{itemize}
   \item {\color{green}Complete CS 390}
-  \item Continue building university dataset (long term)
-  \item Collect all of GMU's courses in addition to CS (soon)
-  \item Add stemming to the text cleaning process (very soon)
+  \item {\color{yellow}Collect 20 university databases (3/1)}
+  \item Collect all of GMU's courses in addition to CS (3/5)
+  \item {\color{green}Add stemming to the text cleaning process (done)}
+  \item Include parsing prerequisite metadata (3/30)
   \item Test out topic modeling on prereq chain (long term)
   \item Build visualization tool (long term)
 \end{itemize}
