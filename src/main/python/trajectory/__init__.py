@@ -67,6 +67,9 @@ def clean(args, string):
     import logging, re
     log = logging.getLogger("root")
 
+    from porterstemmer import Stemmer
+    stem_word = Stemmer()
+
     # Remove non alphanumerics.
     string = string.lower()
     string = ''.join(c if c.isalnum() else ' ' for c in string)
@@ -74,8 +77,9 @@ def clean(args, string):
     string = re.sub(nonalnum, ' ', string)
 
     # Perform stopword removal using a cached stopword object.
-    string = ' '.join([word for word in string.split()
-                       if word not in args.stoplist])
+    # Additionally, perform stemming on each word.
+    string = ' '.join(set([stem_word(word) for word in string.split()
+                            if word not in args.stoplist]))
 
     # Remove singletons or pairs of letters.
     singletons = re.compile("(?<!\w)\w{1,2}(\s|$)")
