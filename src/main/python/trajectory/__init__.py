@@ -17,7 +17,7 @@ def scrape(args):
     Routes scraping to the appropriate scraper module.
     """
 
-    from trajectory.models import University, Department
+    from trajectory.models import University, Department, Course
 
     import logging
     import os
@@ -36,32 +36,55 @@ def scrape(args):
         scraper = import_module( target_module, "trajectory.engines" )
 
         # Register the target with the database, if not already present.
-        log.info("Registering target with database.")
         try:
             metadata = scraper.META
+
             university = metadata.get("school")
+            university_query = args.session.query(University)\
+                    .filter(University.name==university.get("name"))
 
-            # Verify that this university hasn't already been registered.
-            if(args.session.query(University)\
-                   .filter(University.name==university.get("name"))\
-                   .count() == 0):
+            # If the university has already been registered, alert the user
+            # but grab a reference to it for the Departments.
+            if(university_query.count() > 0):
+                university = university_query.first()
+                log.warn("University '%s' already registered." % \
+                        university.name)
 
+            # If the university has not been registered, register a new
+            # one.
+            else:
+                log.info("Registering university '%s' with database." % \
+                        university.get("name"))
                 university = University(
                         name=university.get("name"),
                         abbreviation=university.get("abbreviation"),
                         url=university.get("url"))
-                departments = metadata.get("departments")
-                for department in departments:
+
+                # Add the university to the session.
+                args.session.add(university)
+
+            # Loop over the departments defined in the metadata.
+            departments = metadata.get("departments")
+            for department in departments:
+                department_query = args.session.query(Department)\
+                        .join(University)\
+                        .filter(Department.name==department.get("name"))\
+                        .filter(Department.university_id==university.id)
+
+                # If the department has been registered, alert the user.
+                if department_query.count() > 0:
+                    log.warn("Department '%s' already registered." % \
+                            department.get("name"))
+                    continue
+
+                # Otherwise register a new one.
+                else:
                     university.departments.append(Department(
                             name=department.get("name"),
                             abbreviation=department.get("abbreviation"),
                             url=department.get("url")))
-
-                # Add these objects to the session.
-                args.session.add(university)
-
-            else:
-                log.info("Target metadata already loaded in database.")
+                    log.info("Registering department '%s' with database." % \
+                            department.get("name"))
 
         except AttributeError as e:
             log.warn("Target %s metadata not defined." % target)
@@ -69,12 +92,27 @@ def scrape(args):
             log.debug(e)
             continue
 
-        # Download data into the temporary directory under "data".
+        # Begin downloading course data.
         if (not args.debug) or (args.debug and args.download):
             try:
-                scraper.scrape(args)
+
+                # Check if there are already courses defined for any
+                # departments within this university. If there are, skip
+                # this target.
+                if args.session.query(Course).join(Department) \
+                        .filter(Course.department_id==Department.id)\
+                        .filter(Department.university==university)\
+                        .count() > 0:
+                    log.warn("Target %s already has courses defined." % \
+                            target)
+
+                # Otherwise, go ahead and scrape the course data for this
+                # target.
+                else:
+                    scraper.scrape(args)
+
             except NotImplementedError as e:
-                log.warn( "Target %s has not been defined. Skipping." % \
+                log.warn("Target %s has not been defined. Skipping." % \
                         target )
 
         else:
