@@ -6,7 +6,8 @@ This file is the scraping engine tooled to PDX's CS department.
 """
 
 
-from trajectory import database, clean
+from trajectory.models import University, Course, Department
+from trajectory import clean
 from bs4 import BeautifulSoup
 import requests
 import re
@@ -62,20 +63,15 @@ def scrape(args):
                       .find_next_sibling("ul")\
                       .find_all("a")
 
-    # Pregenerate SQL data.
-    sql = ["INSERT INTO Courses (DepartmentID, Num, Title, Description) ",
-            "VALUES "]
-    course_sql = "('%(departmentID)s', '%(num)s', '%(title)s', '%(desc)s'), "
-    departmentID_cs   = database.get_departmentID(args,
-            school_name=META.get("departments")[0].get("school"),
-            department_abbrev=META.get("departments")[0].get("abbrev"))
-    departmentID_sysc = database.get_departmentID(args,
-            school_name=META.get("departments")[1].get("school"),
-            department_abbrev=META.get("departments")[1].get("abbrev"))
-    departmentID_ece  = database.get_departmentID(args,
-            school_name=META.get("departments")[2].get("school"),
-            department_abbrev=META.get("departments")[2].get("abbrev"))
-
+    # Fetch existing metadata objects from database.
+    university = META.get("school").get("name")
+    university = args.session.query(University)\
+            .filter(University.name==university)\
+            .first()
+    departments = {department.abbreviation.lower() : department
+                    for department in args.session.query(Department)\
+                        .filter(Department.university==university)\
+                        .all()}
 
     for course in course_list:
         log.debug(course.text)
@@ -123,32 +119,11 @@ def scrape(args):
         except:
             prereq = None
 
-        # Select appropriate departmental ID
-        if prefix == "CS":
-            departmentID = departmentID_cs
-        elif prefix == "ECE":
-            departmentID = departmentID_ece
-        elif prefix == "SYSC":
-            departmentID = departmentID_sysc
-        else:
-            log.warn("Uknown course prefix " + full_title)
-            continue
-
-        # Interpolate the SQL query.
-        sql.append(course_sql % {"departmentID": departmentID,
-                                 "num": cnum,
-                                 "title": title,
-                                 "desc": description})
-
-    # Generate the sql string.
-    sql[-1] = sql[-1][:-2] # remove trailing comma
-    sql.append(";")
-    sql = "".join(sql)
-
-    # Commit the sql query.
-    c = args.db.cursor()
-    c.executescript( sql )
-    args.db.commit()
+        # Generate the appropriate course object.
+        departments[prefix.lower()].courses.append(Course(
+            number=cnum,
+            title=title,
+            description=description))
 
     log.info( "Completed scraping." )
 
