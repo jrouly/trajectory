@@ -14,6 +14,11 @@ functions. The schema is laid out in these functions.
 """
 
 
+import logging, os, sqlite3
+log = logging.getLogger("root")
+log.warn("Database imported. Obsolete code in use.")
+
+
 def initialize( args ):
     """
     If it doesn't exist, create the database. Initialize all tables.
