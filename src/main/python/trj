@@ -8,7 +8,6 @@ application structure.
 
 
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy import create_engine
 
 from argparse import ArgumentParser
 import trajectory.log
@@ -17,6 +16,7 @@ import os
 
 from trajectory import engines, scrape, database
 from trajectory import constants as TRJ
+from trajectory.models import Engine, Base
 
 def main():
     """
@@ -56,8 +56,7 @@ def main():
 
     # Initialize database connection.
     log.info("Initializing database connection.")
-    engine = create_engine(TRJ.DATABASE_URI)
-    Session = sessionmaker(bind=engine)
+    Session = sessionmaker(bind=Engine)
     args.db = session()
 
 
