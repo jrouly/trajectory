@@ -7,7 +7,6 @@ Define the trajectory package.
 
 
 from trajectory import log, engines
-from trajectory import constants as TRJ
 
 
 __all__ = ["log", "engines"]
@@ -18,7 +17,8 @@ def scrape(args):
     Routes scraping to the appropriate scraper module.
     """
 
-    from trajectory import database
+    from trajectory.models import University, Department
+
     import logging
     import os
     from importlib import import_module
@@ -38,12 +38,36 @@ def scrape(args):
         # Register the target with the database, if not already present.
         log.info("Registering target with database.")
         try:
-            database.register_target(args, scraper.META)
+            metadata = scraper.META
+            university = metadata.get("school")
+
+            # Verify that this university hasn't already been registered.
+            if(args.session.query(University)\
+                   .filter(University.name==university.get("name"))\
+                   .count() == 0):
+
+                university = University(
+                        name=university.get("name"),
+                        abbreviation=university.get("abbreviation"),
+                        url=university.get("url"))
+                departments = metadata.get("departments")
+                for department in departments:
+                    university.departments.append(Department(
+                            name=department.get("name"),
+                            abbreviation=department.get("abbreviation"),
+                            url=department.get("url")))
+
+                # Add these objects to the session.
+                args.session.add(university)
+
+            else:
+                log.info("Target metadata already loaded in database.")
+
         except AttributeError as e:
             log.warn("Target %s metadata not defined." % target)
             log.warn("Terminating engine.")
             log.debug(e)
-            return
+            continue
 
         # Download data into the temporary directory under "data".
         if (not args.debug) or (args.debug and args.download):
