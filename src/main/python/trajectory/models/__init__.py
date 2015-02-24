@@ -1,3 +1,4 @@
-from trajectory.models import models, meta
+from trajectory.models import meta
+from trajectory.models.models import University, Department, Course
 
-__all__ = ["models", "meta"]
+__all__ = ["University", "Department", "Course", "meta"]
