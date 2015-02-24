@@ -14,9 +14,9 @@ import trajectory.log
 import sys
 import os
 
-from trajectory import engines, scrape, database
+from trajectory import engines, scrape
 from trajectory import constants as TRJ
-from trajectory.models import Engine, Base
+from trajectory.models import Engine
 
 def main():
     """
@@ -57,7 +57,7 @@ def main():
     # Initialize database connection.
     log.info("Initializing database connection.")
     Session = sessionmaker(bind=Engine)
-    args.db = session()
+    args.session = Session()
 
 
     # Create temporary directory.
@@ -71,7 +71,8 @@ def main():
 
     # Exit the program.
     log.info("Exiting.")
-    db.close()
+    args.session.commit()
+    args.session.close()
     sys.exit( 0 )
 
 
