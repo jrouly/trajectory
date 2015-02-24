@@ -17,28 +17,18 @@ The metadata object `META` is a simple Python dictionary of the following
 structure:
 
     META = {
-        'schools': [
-            {
-                'name': "Example University",
-                'abbrev': "EU",
-                'web': "example.edu",
+        'school': {
+            'name': "Example University",
+            'abbreviation': "EU",
+            'url': "example.edu",
             },
-        ],
         'departments': [
             {
-                'school': "Example University",
                 'name': "Sample Department",
-                'abbrev': "SD",
-                'web': "sample.example.edu",
+                'abbreviation': "SD",
+                'url': "sample.example.edu",
             },
-        ],
-        'programs': [
-            {
-                'school': "Example University",
-                'name': "EU SD",
-                'abbrev': "eu_sd",
-            },
-        ],
+        ]
     }
 
 Multiple programs, departments, and schools can be specified in a single
