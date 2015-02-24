@@ -7,7 +7,7 @@ Define the models package.
 
 
 from sqlalchemy.orm import relationship, backref
-from sqlalchemy import ForeignKey, Column, Integer, String
+from sqlalchemy import UniqueConstraint, ForeignKey, Column, Integer, String
 
 from trajectory import constants as TRJ
 from trajectory.models import meta
@@ -59,6 +59,10 @@ class Course(meta.Base):
     """
 
     __tablename__ = "course"
+    __table_args__ = (
+            UniqueConstraint('number', 'title', 'department_id'),
+            )
+
     id = Column(Integer, primary_key=True)
     number = Column(Integer, nullable=False)
     title = Column(String, nullable=False)
