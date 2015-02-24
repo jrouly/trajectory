@@ -12,7 +12,7 @@ else:
     HOME = os.environ.get("TRJ_HOME")
 
 # Database location.
-DATABASE_URI = "sqlite:///data.db"
+DATABASE_URI = "sqlite:///%s" % os.path.join(HOME, "data.db")
 #DATABASE_URI = "postgresql://user@localhost/mydatabase"
 #DATABASE_URI = "mysql://user@localhost/mydatabase"
 
