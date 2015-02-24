@@ -6,7 +6,8 @@ This file is the scraping engine tooled to GMU's CS department.
 """
 
 
-from trajectory import database, clean
+from trajectory import clean
+from trajectory.models import University, Department, Course
 from bs4 import BeautifulSoup
 import requests
 import re
@@ -63,17 +64,15 @@ def scrape(args):
     # Piecewise course page url.
     course_url = "http://catalog.gmu.edu/preview_course.php?catoid=%s&coid=%s"
 
-    # Pregenerate SQL data.
-    sql = ["INSERT INTO Courses (DepartmentID, Num, Title, Description) ",
-            "VALUES "]
-    course_sql = "('%(departmentID)s', '%(num)s', '%(title)s', '%(desc)s'), "
-    departmentID = database.get_departmentID(args,
-            school_name=META.get("departments")[0].get("school"),
-            department_abbrev=META.get("departments")[0].get("abbrev"))
-
-    if departmentID is None:
-        log.warn("No valid Department ID found, ensure target is registered.")
-        return
+    # Fetch existing metadata objects from database.
+    university = META.get("school").get("name")
+    university = args.session.query(University)\
+            .filter(University.name==university)\
+            .first()
+    departments = {department.abbreviation.lower() : department
+                    for department in args.session.query(Department)\
+                        .filter(Department.university==university)\
+                        .all()}
 
     # Identify relevant information for each course.
     prereqs = {}
@@ -88,11 +87,11 @@ def scrape(args):
 
         # Identify coid to get description.
         onclick = course['onclick']
-        (catid, coid) = re.sub( catid_re, "", onclick ).split(", ")
+        (catid, coid) = re.sub(catid_re, "", onclick).split(", ")
 
         # Generate a BeautifulSoup object of the course description.
-        course_page = requests.get( course_url % (catid, coid) )
-        course_soup = BeautifulSoup( course_page.text )
+        course_page = requests.get(course_url % (catid, coid))
+        course_soup = BeautifulSoup(course_page.text)
         content = course_soup.find(class_="block_content_popup").hr.text
 
         # Clean up the description.
@@ -119,21 +118,11 @@ def scrape(args):
         if description is None:
             continue
 
-        # Interpolate the SQL query.
-        sql.append( course_sql % {"departmentID": departmentID,
-                                  "num": cnum,
-                                  "title": title,
-                                  "desc": description} )
-
-    # Generate the sql string.
-    sql[-1] = sql[-1][:-2] # remove trailing comma
-    sql.append(";")
-    sql = "".join(sql)
-
-    # Commit the sql query.
-    c = args.db.cursor()
-    c.executescript( sql )
-    args.db.commit()
+        # Generate the appropriate course object.
+        departments[prefix.lower()].courses.append(Course(
+            number=cnum,
+            title=title,
+            description=description))
 
     log.info( "Completed scraping." )
 

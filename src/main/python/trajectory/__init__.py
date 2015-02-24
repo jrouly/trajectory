@@ -103,6 +103,7 @@ def clean(args, string):
 
     # Perform stopword removal using a cached stopword object.
     # Additionally, perform stemming on each word.
+    from trajectory import constants as TRJ
     string = ' '.join(set([stem_word(word) for word in string.split()
                             if word not in TRJ.STOP_WORDS]))
 
