@@ -14,12 +14,7 @@ import sqlite3
 import sys
 import os
 
-# Constant values.
-# TODO: These should be read from a configuration at some point.
-PROG_NAME = "Trajectory"
-PROG_DESC = "This Python application is used to acquire (scrape, clean) a dataset."
-PROG_VERSION = PROG_NAME + " 0.0"
-
+from trajectory import constants as TRJ
 
 def main():
     """
@@ -27,20 +22,12 @@ def main():
     logic depending on what the user wants to do.
     """
 
-    # Verify that the TRJ_HOME variable is set.
-    if os.environ.get("TRJ_HOME") is None:
-        print("TRJ_HOME not found. Exiting.")
-        sys.exit( 1 )
-    else:
-        HOME = os.environ.get("TRJ_HOME")
-
-
     # Create top-level command line argument parser.
-    parser = ArgumentParser(description=PROG_DESC, prog=PROG_NAME)
-    parser.add_argument("--version", action="version", version=PROG_VERSION)
+    parser = ArgumentParser(description=TRJ.PROGRAM_DESC, prog=TRJ.PROGRAM_NAME)
+    parser.add_argument("--version", action="version", version=TRJ.PROGRAM_VERSION)
     parser.add_argument("--debug", action="store_true")
     parser.add_argument("--sqlite-file", help="SQLite data store location.",
-            default=os.path.join(HOME, "data.db"))
+            default=os.path.join(TRJ.HOME, "data.db"))
 
 
     # Create arguments for scraping.
@@ -75,14 +62,14 @@ def main():
 
 
     # Cache stopwords object.
-    args.resources = os.path.join(HOME, "src", "main", "resources")
+    args.resources = os.path.join(TRJ.HOME, "src", "main", "resources")
     stoplist_path = os.path.join(args.resources, "stoplists", "en.txt")
     args.stoplist = set(open(stoplist_path, "r").read().splitlines())
 
 
     # Create temporary directory.
     import tempfile
-    args.home = HOME
+    args.home = TRJ.HOME
     with tempfile.TemporaryDirectory(prefix="trj_") as args.tmp_dir:
 
       # Hand off control flow to scraper module.
