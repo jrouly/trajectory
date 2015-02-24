@@ -15,28 +15,18 @@ import os
 
 # Constant values.
 META = {
-    'schools': [
-        {
-            'name': "Louisiana State University",
-            'abbrev': "LSU",
-            'web': "lsu.edu",
-        },
-    ],
+    'school': {
+        'name': "Louisiana State University",
+        'abbreviation': "LSU",
+        'url': "lsu.edu",
+    },
     'departments': [
         {
-            'school': "Louisiana State University",
             'name': "Computer Science",
-            'abbrev': "CSC",
-            'web': "cse.lsu.edu",
+            'abbreviation': "CSC",
+            'url': "cse.lsu.edu",
         },
-    ],
-    'programs': [
-        {
-            'school': "Louisiana State University",
-            'name': "LSU CS",
-            'abbrev': "lsu_cs",
-        },
-    ],
+    ]
 }
 
 

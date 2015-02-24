@@ -1,8 +1,8 @@
 """
-trajectory/engines/rpi_cs.py
+trajectory/engines/ksu_cs.py
 Author: Jean Michel Rouly
 
-This file is the scraping engine tooled to RPI's CS department.
+This file is the scraping engine tooled to Kansas State's CS department.
 """
 
 
@@ -16,15 +16,15 @@ import os
 # Constant values.
 META = {
     'school': {
-        'name': "Rensselaer Polytechnic Institute",
-        'abbreviation': "RPI",
-        'url': "rpi.edu",
+        'name': "Kansas State University",
+        'abbreviation': "KSU",
+        'url': "ksu.edu",
     },
     'departments': [
         {
             'name': "Computer Science",
-            'abbreviation': "CSCI",
-            'url': "cs.rpi.edu",
+            'abbreviation': "CIS",
+            'url': "cis.ksu.edu",
         },
     ]
 }
@@ -32,20 +32,20 @@ META = {
 
 def scrape(args):
     """
-    Scrape the available syllabi from the RPI CS page into a local
+    Scrape the available syllabi from the KSU CS page into a local
     directory.
     """
 
 
     import logging
     log = logging.getLogger("root")
-    log.info( "Scraping RPI CS data." )
+    log.info( "Scraping KSU CS data." )
 
 
     # Generate a BeautifulSoup object.
-    catalog_index_url = "http://catalog.rpi.edu/content.php?filter[27]=CSCI&cur_cat_oid=13&navoid=313"
-    catalog_index = requests.get( catalog_index_url )
-    soup = BeautifulSoup( catalog_index.text )
+    catalog_index_url = "http://catalog.k-state.edu/content.php?filter[27]=CIS&cur_cat_oid=13&navoid=1425"
+    catalog_index = requests.get(catalog_index_url)
+    soup = BeautifulSoup(catalog_index.text)
 
     # Identify the list of courses.
     course_list = soup.find_all(
@@ -57,7 +57,7 @@ def scrape(args):
     coid_re = re.compile("(?<=coid=)\d+")
 
     # Piecewise course page url.
-    course_url = "http://catalog.rpi.edu/preview_course_nopop.php?catoid=%s&coid=%s"
+    course_url = "http://catalog.k-state.edu/preview_course_nopop.php?catoid=%s&coid=%s"
 
     # Pregenerate SQL data.
     sql = ["INSERT INTO Courses (DepartmentID, Num, Title, Description) ",
@@ -89,32 +89,19 @@ def scrape(args):
         coid = coid_re.search(href).group(0)
 
         # Generate a BeautifulSoup object of the course description.
-        course_page = requests.get( course_url % (catoid, coid) )
-        course_soup = BeautifulSoup( course_page.text )
-        content = course_soup.find(class_="block_content").hr.text
+        course_page = requests.get(course_url % (catoid, coid))
+        course_soup = BeautifulSoup(course_page.text)
+        content = course_soup.find(class_="block_content").hr
 
-        # Clean up the description.
-        description = content
-        try:
-            description = description[:description.index("Credit Hours")]
-            description = description[:description.index("When Offered")]
-        except:
-            pass
-
-        # Identify prerequisites
-        # TODO: Match these up with their database entries.
-        prereq_index = description.find("Prerequisit")
-        if prereq_index > -1:
-            prereq_string = description[prereq_index:]
-            description = description[:prereq_index]
-
-            prereq_re = re.compile("\w{2,4}\s\d{3}")
-            matches = re.findall(prereq_re, prereq_string)
-            if len(matches) > 0:
-                prereqs["%s %s" % (prefix, cnum)] = matches
+        # Remove the metadata.
+        s = content.find("strong")
+        while s is not None:
+            a = s.find_next_sibling()
+            s.decompose()
+            s = a
 
         # Clean the description string
-        description = clean(args, description)
+        description = clean(args, content.text)
         if description is None:
             continue
 
@@ -128,6 +115,9 @@ def scrape(args):
     sql[-1] = sql[-1][:-2] # remove trailing comma
     sql.append(";")
     sql = "".join(sql)
+
+    log.debug(sql)
+    return
 
     # Commit the sql query.
     c = args.db.cursor()

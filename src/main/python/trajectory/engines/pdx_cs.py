@@ -15,40 +15,28 @@ import os
 
 # Constant values.
 META = {
-    'schools': [
-        {
-            'name': "Portland State University",
-            'abbrev': "PDX",
-            'web': "pdx.edu",
-        },
-    ],
+    'school': {
+        'name': "Portland State University",
+        'abbreviation': "PDX",
+        'url': "pdx.edu",
+    },
     'departments': [
         {
-            'school': "Portland State University",
             'name': "Computer Science",
-            'abbrev': "CS",
-            'web': "pdx.edu/computer-science",
+            'abbreviation': "CS",
+            'url': "pdx.edu/computer-science",
         },
         {
-            'school': "Portland State University",
             'name': "Systems Science",
-            'abbrev': "SYSC",
-            'web': "pdx.edu/sysc",
+            'abbreviation': "SYSC",
+            'url': "pdx.edu/sysc",
         },
         {
-            'school': "Portland State University",
             'name': "Electrical and Computer Engineering",
-            'abbrev': "ECE",
-            'web': "pdx.edu/ece",
-        },
-    ],
-    'programs': [
-        {
-            'school': "Portland State University",
-            'name': "PDX CS",
-            'abbrev': "pdx_cs",
-        },
-    ],
+            'abbreviation': "ECE",
+            'url': "pdx.edu/ece",
+        }
+    ]
 }
 
 

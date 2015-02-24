@@ -15,28 +15,18 @@ import os
 
 # Constant values.
 META = {
-    'schools': [
-        {
-            'name': "Stanford University",
-            'abbrev': "Stanford",
-            'web': "stanford.edu",
-        },
-    ],
+    'school': {
+        'name': "Stanford University",
+        'abbreviation': "Stanford",
+        'url': "stanford.edu",
+    },
     'departments': [
         {
-            'school': "Stanford University",
             'name': "Computer Science",
-            'abbrev': "CS",
-            'web': "cs.stanford.edu",
+            'abbreviation': "CS",
+            'url': "cs.stanford.edu",
         },
-    ],
-    'programs': [
-        {
-            'school': "Stanford University",
-            'name': "Stanford CS",
-            'abbrev': "stanford_cs",
-        },
-    ],
+    ]
 }
 
 

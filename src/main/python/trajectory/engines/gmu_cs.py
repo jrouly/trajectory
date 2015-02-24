@@ -15,34 +15,23 @@ import os
 
 # Constant values.
 META = {
-    'schools': [
-        {
-            'name': "George Mason University",
-            'abbrev': "GMU",
-            'web': "gmu.edu",
+    'school': {
+        'name': "George Mason University",
+        'abbreviation': "GMU",
+        'url': "gmu.edu",
         },
-    ],
     'departments': [
         {
-            'school': "George Mason University",
             'name': "Computer Science",
-            'abbrev': "CS",
-            'web': "cs.gmu.edu",
+            'abbreviation': "CS",
+            'url': "cs.gmu.edu",
         },
         {
-            'school': "George Mason University",
             'name': "Electrical and Computer Engineering",
-            'abbrev': "ECE",
-            'web': "ece.gmu.edu",
+            'abbreviation': "ECE",
+            'url': "ece.gmu.edu",
         },
-    ],
-    'programs': [
-        {
-            'school': "George Mason University",
-            'name': "GMU CS",
-            'abbrev': "gmu_cs",
-        },
-    ],
+    ]
 }
 
 

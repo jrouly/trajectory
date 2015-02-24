@@ -74,7 +74,7 @@ def scrape(args):
             try:
                 scraper.scrape(args)
             except NotImplementedError as e:
-                log.warn( "Target %s has not been defined. Skipping." %
+                log.warn( "Target %s has not been defined. Skipping." % \
                         target )
 
         else:
