@@ -7,6 +7,7 @@ Define the trajectory package.
 
 
 from trajectory import log, engines
+from trajectory import constants as TRJ
 
 
 __all__ = ["log", "engines"]
@@ -79,7 +80,7 @@ def clean(args, string):
     # Perform stopword removal using a cached stopword object.
     # Additionally, perform stemming on each word.
     string = ' '.join(set([stem_word(word) for word in string.split()
-                            if word not in args.stoplist]))
+                            if word not in TRJ.STOP_WORDS]))
 
     # Remove singletons or pairs of letters.
     singletons = re.compile("(?<!\w)\w{1,2}(\s|$)")

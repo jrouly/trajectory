@@ -15,3 +15,10 @@ else:
 DATABASE_URI = "sqlite:///data.db"
 #DATABASE_URI = "postgresql://user@localhost/mydatabase"
 #DATABASE_URI = "mysql://user@localhost/mydatabase"
+
+# Resource locations.
+__RESOURCES = os.path.join(HOME, "src", "main", "resources")
+__STOP_WORDS_FILE = os.path.join(HOME, __RESOURCES, "stoplists", "en.txt")
+
+# Stop words cache.
+STOP_WORDS = set(open(__STOP_WORDS_FILE, "r").read().splitlines())

@@ -7,13 +7,15 @@ application structure.
 """
 
 
-from trajectory import engines, scrape, database
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy import create_engine
+
 from argparse import ArgumentParser
 import trajectory.log
-import sqlite3
 import sys
 import os
 
+from trajectory import engines, scrape, database
 from trajectory import constants as TRJ
 
 def main():
@@ -56,15 +58,9 @@ def main():
 
     # Initialize database connection.
     log.info("Initializing database connection.")
-    db = sqlite3.connect( args.sqlite_file )
-    args.db = db
-    database.initialize( args )
-
-
-    # Cache stopwords object.
-    args.resources = os.path.join(TRJ.HOME, "src", "main", "resources")
-    stoplist_path = os.path.join(args.resources, "stoplists", "en.txt")
-    args.stoplist = set(open(stoplist_path, "r").read().splitlines())
+    engine = create_engine(TRJ.DATABASE_URI)
+    Session = sessionmaker(bind=engine)
+    args.db = session()
 
 
     # Create temporary directory.
