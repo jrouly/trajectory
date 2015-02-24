@@ -1,3 +1,10 @@
+##
+## WARNING: THIS FILE IS DEPRECATED.
+## IT LIKELY WILL NOT WORK.
+##
+
+
+
 """
 database.py
 Author: Jean Michel Rouly
