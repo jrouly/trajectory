@@ -1,5 +1,7 @@
 # Trajectory
 
+[![Join the chat at https://gitter.im/jrouly/trajectory](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/jrouly/trajectory?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 Trajectory is a working title for my CS 390 undergraduate research project.
 I am taking university syllabus data and applying LDA topic modeling.
 
