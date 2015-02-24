@@ -6,7 +6,7 @@ PROGRAM_VERSION = PROGRAM_NAME + " 0.1"
 # Program home directory.
 import sys, os
 if os.environ.get("TRJ_HOME") is None:
-    print("TRJ_HOME not found. Exiting.")
+    print("Environment variable TRJ_HOME not set. Exiting.")
     sys.exit( 1 )
 else:
     HOME = os.environ.get("TRJ_HOME")
