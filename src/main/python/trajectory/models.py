@@ -32,7 +32,7 @@ class University(Base):
     departments = relationship("Department", backref="university")
 
     def __repr__(self):
-        return "<University: %s>" % self.name
+        return "<University: '%s'>" % self.name
 
 class Department(Base):
     """
@@ -49,7 +49,9 @@ class Department(Base):
     courses = relationship("Course", backref="department")
 
     def __repr__(self):
-        return "<Department: %s %s>" % \
+        if self.university is None:
+            return "<Department: None '%s'>" % self.name
+        return "<Department: '%s' '%s'>" % \
                 (self.university.abbreviation,
                  self.name)
 
@@ -69,9 +71,13 @@ class Course(Base):
     prerequisites = relationship("Course")
 
     def __repr__(self):
-        return "<Course: %s %s %s>" % \
+        if self.department is None:
+            return "<Course: None %s '%s'>" % \
+                    (self.number, self.title)
+        return "<Course: %s %s %s %s>" % \
                 (self.department.university.name,
                  self.department.abbreviation,
+                 self.number,
                  self.title)
 
 # Register models with the database ORM mapping.
