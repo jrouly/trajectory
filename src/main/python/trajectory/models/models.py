@@ -1,23 +1,19 @@
 """
-trajectory/models.py
+trajectory/models/models.py
 Author: Jean Michel Rouly
 
 Define the models package.
 """
 
 
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy import ForeignKey, Column, Integer, String
-from sqlalchemy import create_engine
 
 from trajectory import constants as TRJ
+from trajectory.models import meta
 
-# Define the declarative ORM base.
-Engine = create_engine(TRJ.DATABASE_URI)
-Base = declarative_base()
 
-class University(Base):
+class University(meta.Base):
     """
     Full data about any particular university, including its web address,
     name, and any common abbreviation.
@@ -34,7 +30,8 @@ class University(Base):
     def __repr__(self):
         return "<University: '%s'>" % self.name
 
-class Department(Base):
+
+class Department(meta.Base):
     """
     Full data about any department at a specific school.
     """
@@ -55,7 +52,8 @@ class Department(Base):
                 (self.university.abbreviation,
                  self.name)
 
-class Course(Base):
+
+class Course(meta.Base):
     """
     A course offering, which belongs to a department at a school.
     """
@@ -80,5 +78,6 @@ class Course(Base):
                  self.number,
                  self.title)
 
+
 # Register models with the database ORM mapping.
-Base.metadata.create_all(Engine)
+meta.Base.metadata.create_all(meta.Engine)
