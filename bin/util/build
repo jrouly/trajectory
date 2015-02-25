@@ -2,7 +2,8 @@
 
 
 # Check if TRJ_HOME is not set.
-if [ -z $TRJ_HOME ]; then
+if [ -z $TRJ_HOME ]
+then
   # Notify user that TRJ_HOME is not set.
   echo "Environment variable TRJ_HOME not found."
   echo "Please configure the environment variable TRJ_HOME."
