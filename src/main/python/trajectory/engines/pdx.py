@@ -77,7 +77,7 @@ def scrape(args):
         log.debug(course.text)
         full_title = re.compile("\s+").split(course.text)
         prefix = full_title[0]
-        cnum = full_title[1]
+        cnum = re.sub('[/]', '-', full_title[1])
         title = ' '.join(full_title[2:])
 
         try:
