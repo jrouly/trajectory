@@ -88,30 +88,24 @@ def scrape(args):
             continue
 
         # Begin downloading course data.
-        if (not args.debug) or (args.debug and args.download):
-            try:
+        try:
 
-                # Check if there are already courses defined for any
-                # departments within this university. If there are, skip
-                # this target.
-                if args.session.query(Course).join(Department) \
-                        .filter(Course.department_id==Department.id)\
-                        .filter(Department.university==university)\
-                        .count() > 0:
-                    log.warn("Target %s already has courses defined." % \
-                            target)
+            # Check if there are already courses defined for any
+            # departments within this university. If there are, skip
+            # this target.
+            if args.session.query(Course).join(Department) \
+                    .filter(Course.department_id==Department.id)\
+                    .filter(Department.university==university)\
+                    .count() > 0:
+                log.warn("Target %s already has courses defined." % target)
 
-                # Otherwise, go ahead and scrape the course data for this
-                # target.
-                else:
-                    scraper.scrape(args)
+            # Otherwise, go ahead and scrape the course data for this
+            # target.
+            else:
+                scraper.scrape(args)
 
-            except NotImplementedError as e:
-                log.warn("Target %s has not been defined. Skipping." % \
-                        target )
-
-        else:
-            log.warn("No action performed.")
+        except NotImplementedError as e:
+            log.warn("Target %s has not been defined. Skipping." % target )
 
         log.info("Disengaging scraper engine.")
 
@@ -157,3 +151,48 @@ def clean(args, string):
     # Return cleaned string.
     return string
 
+
+def export(args):
+    """
+    Read all data from the database and store it to disk for analysis.
+    """
+
+    from trajectory.models import Course, Department, University
+    import os
+
+    import logging, re
+    log = logging.getLogger("root")
+    log.info("Begin data export.")
+
+    # Create the base output directory in the temporary store for copying
+    # over later.
+    data = os.path.join(args.tmp, "data")
+    os.mkdir(data)
+    log.debug("Creating folder %s." % data)
+
+    # Get access to the data.
+    universities = args.session.query(University).all()
+
+    # Dump data in folders broken down by university.
+    for university in universities:
+
+        # Create folder to store univerity data.
+        path = os.path.join(data, university.abbreviation)
+        os.mkdir(path)
+        log.debug("Creating folder %s." % path)
+
+        # Retrieve and flatten course list.
+        departments = university.departments
+        courses = [department.courses for department in departments]
+        courses = [course for department in courses for course in department]
+
+        label = lambda course: "%s_%s.txt" % \
+                (course.department.abbreviation, course.number)
+
+        # Write course descriptions to files.
+        for course in courses:
+            course_path = os.path.join(path, label(course))
+            with open(course_path, "w") as course_file:
+                course_file.write(course.description)
+
+    log.info("Data export complete.")

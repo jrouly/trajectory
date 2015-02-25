@@ -14,7 +14,7 @@ import os
 
 from trajectory import engines
 from trajectory import config as TRJ
-from trajectory.core import scrape
+from trajectory.core import scrape, export
 from trajectory.models.meta import Engine, Session
 
 def main():
@@ -27,15 +27,21 @@ def main():
     parser = ArgumentParser(description=TRJ.PROGRAM_DESC, prog=TRJ.PROGRAM_NAME)
     parser.add_argument("--version", action="version", version=TRJ.PROGRAM_VERSION)
     parser.add_argument("--debug", action="store_true")
+    subparsers = parser.add_subparsers(dest="command",
+        help="Either download new data or export existing data to disk.")
 
 
     # Create arguments for scraping.
-    parser.add_argument("targets", choices=engines.list(),
+    download_parser = subparsers.add_parser("download",
+            help="Download data from the Web.")
+    download_parser.add_argument("targets", choices=engines.list(),
             nargs="+",
-            help="Scraping targets. Select one or more.")
-    parser.add_argument("--download",
-            help="Download data from the Web.",
-            action="store_true")
+            help="Scraping targets, select one or more.")
+
+
+    # Create arguments for exporting.
+    export_parser = subparsers.add_parser("export",
+            help="Export data to disk for analysis.")
 
 
     # Parse command line arguments.
@@ -58,10 +64,19 @@ def main():
     # Create temporary directory.
     import tempfile
     args.home = TRJ.HOME
-    with tempfile.TemporaryDirectory(prefix=TRJ.TEMP_PREFIX) as args.tmp_dir:
+    with tempfile.TemporaryDirectory(prefix=TRJ.TEMP_PREFIX) as args.tmp:
 
-      # Hand off control flow to scraper module.
-      scrape( args )
+        # Hand off control flow to export module.
+        if args.command == "export":
+            export(args)
+
+        # Hand off control flow to scraper module.
+        elif args.command == "download":
+            scrape( args )
+
+        # Otherwise no command was selected
+        else:
+            log.warn("No command specified.")
 
 
     # Exit the program.
