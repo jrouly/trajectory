@@ -58,7 +58,7 @@ def main():
     # Create temporary directory.
     import tempfile
     args.home = TRJ.HOME
-    with tempfile.TemporaryDirectory(prefix="trj_") as args.tmp_dir:
+    with tempfile.TemporaryDirectory(prefix=TRJ.TEMP_PREFIX) as args.tmp_dir:
 
       # Hand off control flow to scraper module.
       scrape( args )

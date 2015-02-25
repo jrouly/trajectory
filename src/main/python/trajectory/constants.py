@@ -22,3 +22,6 @@ __STOP_WORDS_FILE = os.path.join(HOME, __RESOURCES, "stoplists", "en.txt")
 
 # Stop words cache.
 STOP_WORDS = set(open(__STOP_WORDS_FILE, "r").read().splitlines())
+
+# Tempfile prefix.
+TEMP_PREFIX = "trj_"
