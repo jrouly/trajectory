@@ -52,4 +52,4 @@ set +e
 
 
 # Pass arguments to python trj interface.
-python src/main/python/trj "$@"
+python src/main/python/trj.py "$@"
