@@ -1,6 +1,8 @@
 PorterStemmer==0.5
+SQLAlchemy==0.9.8
 Werkzeug==0.9.6
 beautifulsoup4==4.3.2
+ipython==2.3.1
 numpy==1.9.0
 requests==2.4.1
 scikit-learn==0.15.2
