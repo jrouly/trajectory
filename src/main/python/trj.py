@@ -1,5 +1,5 @@
 """
-trajectory.py
+trj.py
 Author: Jean Michel Rouly
 
 This is the main executable file. Use it to call subcommands in the
