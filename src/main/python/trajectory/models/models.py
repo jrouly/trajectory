@@ -66,6 +66,7 @@ class Course(meta.Base):
     number = Column(Integer, nullable=False)
     title = Column(String, nullable=False)
     description = Column(String, nullable=False)
+    description_raw = Column(String, nullable=False)
     department_id = Column(Integer, ForeignKey("department.id"))
     parent_id = Column(Integer, ForeignKey("course.id"))
 

@@ -114,6 +114,7 @@ def scrape(args):
                 prereqs["%s %s" % (prefix, cnum)] = matches
 
         # Clean the description string
+        description_raw = description
         description = clean(args, description)
         if description is None:
             continue
@@ -122,7 +123,8 @@ def scrape(args):
         departments[prefix.lower()].courses.append(Course(
             number=cnum,
             title=title,
-            description=description))
+            description=description,
+            description_raw=description_raw))
 
     log.info( "Completed scraping." )
 

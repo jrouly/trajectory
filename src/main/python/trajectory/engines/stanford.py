@@ -102,6 +102,7 @@ def scrape(args):
                 description = description[:prereq_index]
 
             # Clean the description string
+            description_raw = description
             description = clean(args, description)
             if description is None:
                 continue
@@ -110,6 +111,7 @@ def scrape(args):
             departments[prefix.lower()].courses.append(Course(
                 number=cnum,
                 title=title,
+                description_raw=description_raw,
                 description=description))
 
         # Go to the next page.

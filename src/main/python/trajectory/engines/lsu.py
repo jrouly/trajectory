@@ -96,6 +96,7 @@ def scrape(args):
         [em.decompose() for em in content.find_all("em") if True]
 
         # Clean the description string
+        description_raw = content.text
         description = clean(args, content.text)
         if description is None:
             continue
@@ -104,6 +105,7 @@ def scrape(args):
         departments[prefix.lower()].courses.append(Course(
             number=cnum,
             title=title,
+            description_raw=description,
             description=description))
 
     log.info( "Completed scraping." )
