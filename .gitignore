@@ -1,6 +1,7 @@
 # Project specific
 env/
 *.db
+.runonce
 
 
 # Byte-compiled / optimized / DLL files
