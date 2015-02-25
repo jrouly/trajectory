@@ -7,7 +7,7 @@ global scale.
 """
 
 
-from trajectory import constants as TRJ
+from trajectory import config as TRJ
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine

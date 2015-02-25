@@ -13,7 +13,7 @@ import sys
 import os
 
 from trajectory import engines
-from trajectory import constants as TRJ
+from trajectory import config as TRJ
 from trajectory.core import scrape
 from trajectory.models.meta import Engine, Session
 

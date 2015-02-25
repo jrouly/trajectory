@@ -9,7 +9,6 @@ Define the models package.
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy import UniqueConstraint, ForeignKey, Column, Integer, String
 
-from trajectory import constants as TRJ
 from trajectory.models import meta
 
 
