@@ -7,7 +7,8 @@ Define the models package.
 
 
 from sqlalchemy.orm import relationship, backref
-from sqlalchemy import UniqueConstraint, ForeignKey, Column, Integer, String
+from sqlalchemy import Table, UniqueConstraint, ForeignKey
+from sqlalchemy import Column, Integer, String, Float
 
 from trajectory.models import meta
 
@@ -72,6 +73,8 @@ class Course(meta.Base):
 
     prerequisites = relationship("Course")
 
+    topics = relationship("CourseTopicAssociation", backref="course")
+
     def __repr__(self):
         if self.department is None:
             return "<Course: None %s '%s'>" % \
@@ -81,6 +84,37 @@ class Course(meta.Base):
                  self.department.abbreviation,
                  self.number,
                  self.title)
+
+
+class Topic(meta.Base):
+    """
+    A statistically generated 'topic' which represents the concepts covered
+    in a document.
+    """
+
+    __tablename__ = "topic"
+    id = Column(Integer, primary_key=True)
+    words = Column(String, nullable=False)
+
+    def __repr__(self):
+        return "<Topic: %s>" % self.id
+
+
+class CourseTopicAssociation(meta.Base):
+    """
+    Define an association between a topic and a course.
+    """
+
+    __tablename__ = "course_topic_association"
+    course_id = Column(Integer, ForeignKey("course.id"), primary_key=True)
+    topic_id = Column(Integer, ForeignKey("topic.id"), primary_key=True)
+    proportion = Column(Float)
+
+    topic = relationship("Topic", backref="course_assocs")
+
+    def __repr__(self):
+        return "<TopicAssociation: (%s, %s, %s)>" % \
+                (self.topic_id, self.course_id, self.proportion)
 
 
 # Register models with the database ORM mapping.
