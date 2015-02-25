@@ -173,8 +173,8 @@ public class Trajectory {
 
     try {
 
-      // Join the requested data path and its subdirectory "clean".
-      Path dataPath = Paths.get( requestedDataPath, "clean" );
+      // Attempt to resolve the user's data path.
+      Path dataPath = Paths.get( requestedDataPath );
       dataDirectory = dataPath.toFile();
 
     } catch( InvalidPathException exp ) {
@@ -214,7 +214,7 @@ public class Trajectory {
     pipeList.add( new CharSequence2TokenSequence(
                           Pattern.compile("\\p{L}[\\p{L}\\p{P}]+\\p{L}")) );
     pipeList.add( new TokenSequenceLowercase() );
-    pipeList.add( new TokenSequenceRemoveStopwords(false, false) );
+    //pipeList.add( new TokenSequenceRemoveStopwords(false, false) );
     pipeList.add( new TokenSequence2FeatureSequence() );
     return new SerialPipes(pipeList);
 
