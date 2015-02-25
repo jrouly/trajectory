@@ -42,10 +42,17 @@ def main():
     # Create arguments for exporting.
     export_parser = subparsers.add_parser("export",
             help="Export data to disk for analysis.")
+    export_parser.add_argument("--data-directory",
+            required=True,
+            help="The data directory to store in.",
+            action="store")
 
 
     # Parse command line arguments.
     args = parser.parse_args(sys.argv[1:])
+    if args.command is None:
+        parser.print_help()
+        sys.exit(0)
 
 
     # Construct global logging object.
@@ -83,7 +90,7 @@ def main():
     log.info("Exiting.")
     args.session.commit()
     args.session.close()
-    sys.exit( 0 )
+    sys.exit(0)
 
 
 if __name__ == '__main__':

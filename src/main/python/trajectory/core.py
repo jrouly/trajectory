@@ -166,9 +166,12 @@ def export(args):
 
     # Create the base output directory in the temporary store for copying
     # over later.
-    data = os.path.join(args.tmp, "data")
-    os.mkdir(data)
-    log.debug("Creating folder %s." % data)
+    try:
+        os.mkdir(args.data_directory)
+        log.debug("Creating folder %s." % args.data_directory)
+    except FileExistsError:
+        log.warn("Data directory '%s' already exists." % args.data_directory)
+        return
 
     # Get access to the data.
     universities = args.session.query(University).all()
@@ -177,21 +180,28 @@ def export(args):
     for university in universities:
 
         # Create folder to store univerity data.
-        path = os.path.join(data, university.abbreviation)
+        path = os.path.join(args.data_directory, university.abbreviation)
         os.mkdir(path)
-        log.debug("Creating folder %s." % path)
+        log.debug("Dumping to folder %s." % path)
 
         # Retrieve and flatten course list.
         departments = university.departments
         courses = [department.courses for department in departments]
         courses = [course for department in courses for course in department]
 
-        label = lambda course: "%s_%s.txt" % \
-                (course.department.abbreviation, course.number)
+        # Label a course with its number and a counter value.
+        label = lambda course, d: "%s_%s_%d.txt" % \
+                (course.department.abbreviation, course.number, d)
 
-        # Write course descriptions to files.
+        # Write course descriptions to files. Include a counter integer
+        # after the file name to distinguish multiple entries of the same
+        # course with different titles.
         for course in courses:
-            course_path = os.path.join(path, label(course))
+            counter = 1
+            course_path = os.path.join(path, label(course, counter))
+            while os.path.isfile(course_path):
+                counter += 1
+                course_path = os.path.join(path, label(course, counter))
             with open(course_path, "w") as course_file:
                 course_file.write(course.description)
 
