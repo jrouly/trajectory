@@ -27,8 +27,12 @@ def scrape(args):
         log.info("Engaging scraper engine: %s" % target)
 
         # Prepend the target name with a dot for importing.
-        target_module = ".%s" % target
-        scraper = import_module( target_module, "trajectory.engines" )
+        try:
+            target_module = ".%s" % target
+            scraper = import_module( target_module, "trajectory.engines" )
+        except ImportError:
+            log.warn("No engine named '%s'." % target)
+            continue
 
         # Register the target with the database, if not already present.
         try:
