@@ -182,27 +182,39 @@ def export(args):
         # Create folder to store univerity data.
         path = os.path.join(args.data_directory, university.abbreviation)
         os.mkdir(path)
-        log.debug("Dumping to folder %s." % path)
+        log.debug("Creating folder %s." % path)
 
-        # Retrieve and flatten course list.
+        # Retrieve list of known university departments.
         departments = university.departments
-        courses = [department.courses for department in departments]
-        courses = [course for department in courses for course in department]
 
-        # Label a course with its number and a counter value.
-        label = lambda course, d: "%s_%s_%d.txt" % \
-                (course.department.abbreviation, course.number, d)
+        # Dump data in folders broken down by department (prefix).
+        for department in departments:
 
-        # Write course descriptions to files. Include a counter integer
-        # after the file name to distinguish multiple entries of the same
-        # course with different titles.
-        for course in courses:
-            counter = 1
-            course_path = os.path.join(path, label(course, counter))
-            while os.path.isfile(course_path):
-                counter += 1
+            # Create folder to store department data.
+            path = os.path.join(
+                    args.data_directory,
+                    university.abbreviation,
+                    department.abbreviation)
+            os.mkdir(path)
+            log.debug("Dumping to folder %s." % path)
+
+            # Retrieve course list.
+            courses = department.courses
+
+            # Label a course with its number and a counter value.
+            label = lambda course, d: "%s_%s_%d.txt" % \
+                    (course.department.abbreviation, course.number, d)
+
+            # Write course descriptions to files. Include a counter integer
+            # after the file name to distinguish multiple entries of the same
+            # course with different titles.
+            for course in courses:
+                counter = 1
                 course_path = os.path.join(path, label(course, counter))
-            with open(course_path, "w") as course_file:
-                course_file.write(course.description)
+                while os.path.isfile(course_path):
+                    counter += 1
+                    course_path = os.path.join(path, label(course, counter))
+                with open(course_path, "w") as course_file:
+                    course_file.write(course.description)
 
     log.info("Data export complete.")
