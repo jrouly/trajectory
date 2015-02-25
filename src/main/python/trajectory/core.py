@@ -218,3 +218,20 @@ def export(args):
                     course_file.write(course.description)
 
     log.info("Data export complete.")
+
+
+def import_topics(args):
+    """
+    Read topic data generated from the learn module and store it in the
+    database.
+    """
+
+    import logging, re
+    log = logging.getLogger("root")
+    log.info("Begin topic import.")
+
+    with open(args.topic_file, "r") as topic_file:
+        for line in topic_file:
+            log.debug(line)
+
+    log.info("Topic import complete.")

@@ -9,12 +9,13 @@ application structure.
 
 from argparse import ArgumentParser
 import trajectory.log
+import traceback
 import sys
 import os
 
 from trajectory import engines
 from trajectory import config as TRJ
-from trajectory.core import scrape, export
+from trajectory.core import scrape, export, import_topics
 from trajectory.models.meta import Engine, Session
 
 def main():
@@ -45,6 +46,14 @@ def main():
             help="The data directory to store in.",
             action="store")
 
+    # Create arguments for importing topics.
+    import_parser = subparsers.add_parser("import-topics",
+            help="Import learned topics to the database.")
+    import_parser.add_argument("--topic-file",
+            required=True,
+            help="The stored topics.dat file from the learn module.",
+            action="store")
+
     # Parse command line arguments.
     args = parser.parse_args(sys.argv[1:])
     if args.command is None:
@@ -65,7 +74,10 @@ def main():
 
         # Hand off control flow to scraper module.
         elif args.command == "download":
-            scrape( args )
+            scrape(args)
+
+        elif args.command == "import-topics":
+            import_topics(args)
 
         # Otherwise no command was selected
         else:
@@ -78,7 +90,9 @@ def main():
     except Exception as error:
 
         log.warn("Unknown error encountered.")
-        log.debug(error)
+        log.warn(error)
+        if args.debug:
+            traceback.print_exc()
 
     # Shut down safely.
     finally:
