@@ -56,13 +56,11 @@ def main():
 
     # Parse command line arguments.
     args = parser.parse_args(sys.argv[1:])
-    if args.command is None:
-        parser.print_help()
-        sys.exit(0)
 
     # Start up the program.
     log = trajectory.log.global_logger("root", debug=args.debug)
     log.info("Beginning trj-scrape.")
+    log.info("Initializing database connection.")
     args.session = Session()
 
     # Wrap main control flow in a try/catch for safety.
@@ -81,7 +79,7 @@ def main():
 
         # Otherwise no command was selected
         else:
-            log.warn("No command specified.")
+            log.info("No command specified.")
 
         # Store any modifications to the database.
         args.session.commit()
