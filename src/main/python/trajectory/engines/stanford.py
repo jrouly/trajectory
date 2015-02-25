@@ -6,7 +6,8 @@ This file is the scraping engine tooled to Stanford's CS department.
 """
 
 
-from trajectory import database, clean
+from trajectory.models import University, Department, Course
+from trajectory import clean
 from bs4 import BeautifulSoup
 import requests
 import re
@@ -42,17 +43,15 @@ def scrape(args):
     log.info("Scraping Stanford CS data.")
 
 
-    # Pregenerate SQL data.
-    sql = ["INSERT INTO Courses (DepartmentID, Num, Title, Description) ",
-            "VALUES "]
-    course_sql = "('%(departmentID)s', '%(num)s', '%(title)s', '%(desc)s'), "
-    departmentID = database.get_departmentID(args,
-            school_name=META.get("departments")[0].get("school"),
-            department_abbrev=META.get("departments")[0].get("abbrev"))
-
-    if departmentID is None:
-        log.warn("No valid Department ID found, ensure target is registered.")
-        return
+    # Fetch existing metadata objects from database.
+    university = META.get("school").get("name")
+    university = args.session.query(University)\
+            .filter(University.name==university)\
+            .first()
+    departments = {department.abbreviation.lower() : department
+                    for department in args.session.query(Department)\
+                        .filter(Department.university==university)\
+                        .all()}
 
 
     # Static connection information
@@ -107,26 +106,14 @@ def scrape(args):
             if description is None:
                 continue
 
-            # Interpolate the SQL query.
-            sql.append( course_sql % {"departmentID": departmentID,
-                                    "num": cnum,
-                                    "title": title,
-                                    "desc": description} )
+            # Generate the appropriate course object.
+            departments[prefix.lower()].courses.append(Course(
+                number=cnum,
+                title=title,
+                description=description))
 
         # Go to the next page.
         catalog_page = catalog_page + 1
-
-
-    # Generate the sql string.
-    sql[-1] = sql[-1][:-2] # remove trailing comma
-    sql.append(";")
-    sql = "".join(sql)
-
-
-    # Commit the sql query.
-    c = args.db.cursor()
-    c.executescript( sql )
-    args.db.commit()
 
 
     log.info( "Completed scraping." )

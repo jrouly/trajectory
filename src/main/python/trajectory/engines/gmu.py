@@ -6,8 +6,8 @@ This file is the scraping engine tooled to GMU's CS department.
 """
 
 
-from trajectory import clean
 from trajectory.models import University, Department, Course
+from trajectory import clean
 from bs4 import BeautifulSoup
 import requests
 import re
