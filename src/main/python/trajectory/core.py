@@ -164,8 +164,8 @@ def export(args):
     log = logging.getLogger("root")
     log.info("Begin data export.")
 
-    # Create the base output directory in the temporary store for copying
-    # over later.
+    # Create the base output directory in the user specified output data
+    # directory.
     try:
         os.mkdir(args.data_directory)
         log.debug("Creating folder %s." % args.data_directory)

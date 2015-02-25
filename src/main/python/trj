@@ -30,14 +30,12 @@ def main():
     subparsers = parser.add_subparsers(dest="command",
         help="Either download new data or export existing data to disk.")
 
-
     # Create arguments for scraping.
     download_parser = subparsers.add_parser("download",
             help="Download data from the Web.")
     download_parser.add_argument("targets", choices=engines.list(),
             nargs="+",
             help="Scraping targets, select one or more.")
-
 
     # Create arguments for exporting.
     export_parser = subparsers.add_parser("export",
@@ -47,31 +45,19 @@ def main():
             help="The data directory to store in.",
             action="store")
 
-
     # Parse command line arguments.
     args = parser.parse_args(sys.argv[1:])
     if args.command is None:
         parser.print_help()
         sys.exit(0)
 
-
-    # Construct global logging object.
+    # Start up the program.
     log = trajectory.log.global_logger("root", debug=args.debug)
-
-
-    # Start up program.
     log.info("Beginning trj-scrape.")
-
-
-    # Initialize database connection.
-    log.info("Initializing database connection.")
     args.session = Session()
 
-
-    # Create temporary directory.
-    import tempfile
-    args.home = TRJ.HOME
-    with tempfile.TemporaryDirectory(prefix=TRJ.TEMP_PREFIX) as args.tmp:
+    # Wrap main control flow in a try/catch for safety.
+    try:
 
         # Hand off control flow to export module.
         if args.command == "export":
@@ -85,13 +71,22 @@ def main():
         else:
             log.warn("No command specified.")
 
+        # Store any modifications to the database.
+        args.session.commit()
 
-    # Exit the program.
-    log.info("Exiting.")
-    args.session.commit()
-    args.session.close()
-    sys.exit(0)
+    # Handle any unknown errors gracefully.
+    except Exception as error:
 
+        log.warn("Unknown error encountered.")
+        log.debug(error)
+
+    # Shut down safely.
+    finally:
+
+        # Exit the program.
+        log.info("Exiting.")
+        args.session.close()
+        sys.exit(0)
 
 if __name__ == '__main__':
     main()
