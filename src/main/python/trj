@@ -12,8 +12,9 @@ import trajectory.log
 import sys
 import os
 
-from trajectory import engines, scrape
+from trajectory import engines
 from trajectory import constants as TRJ
+from trajectory.core import scrape
 from trajectory.models.meta import Engine, Session
 
 def main():
@@ -31,12 +32,9 @@ def main():
     # Create arguments for scraping.
     parser.add_argument("targets", choices=engines.list(),
             nargs="+",
-            help="Scraping engines.")
+            help="Scraping targets. Select one or more.")
     parser.add_argument("--download",
             help="Download data from the Web.",
-            action="store_true")
-    parser.add_argument("--digest",
-            help="Digest and clean local data.",
             action="store_true")
 
 

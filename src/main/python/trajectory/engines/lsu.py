@@ -7,7 +7,7 @@ This file is the scraping engine tooled to LSU's CS department.
 
 
 from trajectory.models import University, Course, Department
-from trajectory import clean
+from trajectory.core import clean
 from bs4 import BeautifulSoup
 import requests
 import re

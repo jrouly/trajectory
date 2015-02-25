@@ -7,7 +7,7 @@ This file is the scraping engine tooled to Kansas State's CS department.
 
 
 from trajectory.models import University, Department, Course
-from trajectory import clean
+from trajectory.core import clean
 from bs4 import BeautifulSoup
 import requests
 import re
