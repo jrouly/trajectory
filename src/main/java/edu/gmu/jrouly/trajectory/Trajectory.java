@@ -3,7 +3,10 @@ package edu.gmu.jrouly.trajectory;
 import java.io.File;
 import java.io.IOException;
 import java.io.FileFilter;
+import java.io.FileWriter;
 import java.io.PrintWriter;
+
+import java.text.SimpleDateFormat;
 
 import java.net.URI;
 
@@ -12,6 +15,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Formatter;
 import java.util.Map;
 import java.util.Iterator;
@@ -52,8 +56,9 @@ public class Trajectory {
   // Debug flag status.
   private static boolean debug;
 
-  // Input data directory (cleaned data).
-  private static File dataDirectory = null;
+  // I/O directories.
+  private static File inDirectory = null;
+  private static File outDirectory = null;
 
   // Number of threads to use for the parallel model.
   private static final int DEFAULT_NUM_THREADS = 2;
@@ -85,7 +90,7 @@ public class Trajectory {
 
     // Get list of targets in data directory.
     System.out.println( "> Establishing data targets." );
-    File[] targets = dataDirectory.listFiles();
+    File[] targets = inDirectory.listFiles();
 
     // Get an iterator over data targets.
     System.out.println( "> Creating data iterator." );
@@ -112,11 +117,7 @@ public class Trajectory {
     }
 
     // Print out results in a CSV format.
-    System.out.println( "> Printing document key." );
-    printDocumentKey(new PrintWriter(System.out), model);
-
-    System.out.println( "> Printing topic key." );
-    printTopicKey(new PrintWriter(System.out), model);
+    printResults(model);
 
     // Exit.
     System.out.println( "> Exit." );
@@ -140,10 +141,6 @@ public class Trajectory {
     // If the "debug" argument is present, then its value is true.
     debug = argmap.containsKey( "debug" );
 
-    // Grab the value of the "data" argument, which is set as a required
-    // command line parameter. If it's null, something went wrong.
-    String requestedDataPath = argmap.get( "data" );
-
     // If the numThreads argument is present, grab its value.
     if( argmap.containsKey( "threads" ) ) {
       String numThreadsString = argmap.get( "threads" );
@@ -162,29 +159,47 @@ public class Trajectory {
       numTopics = Integer.parseInt( numTopicsString );
     }
 
+    boolean default_out = true;
     try {
 
-      // Attempt to resolve the user's data path.
-      Path dataPath = Paths.get( requestedDataPath );
-      dataDirectory = dataPath.toFile();
+      // Grab and process the "in" path request.
+      String requestedInPath = argmap.get( "in" );
+      Path inPath = Paths.get( requestedInPath );
+      inDirectory = inPath.toFile();
+
+      // Grab and process the "out" path request.
+      if( argmap.containsKey( "out" ) ) {
+        default_out = false;
+        String requestedOutPath = argmap.get( "out" );
+        Path outPath = Paths.get( requestedOutPath );
+        outDirectory = outPath.toFile();
+      }
 
     } catch( InvalidPathException exp ) {
 
       // The user-suggested path was invalid.
-      System.err.println( "> Unable to resolve the data path." );
+      System.err.println( "> Unable to resolve the requested I/O paths." );
       System.exit( 1 );
 
     }
 
     // Verify that the cleaned data directory can be located on the disk.
-    if( ! dataDirectory.isDirectory() ) {
-      System.err.println( "> Unable to resolve the data path \""
-                          + dataDirectory.toString()
-                          + "\"" );
+    if( ! inDirectory.isDirectory() ) {
+      System.err.println( "> Unable to resolve the input path \""
+                          + inDirectory.toString() + "\"." );
+      System.exit( 1 );
+    } else if( ! default_out && ! outDirectory.isDirectory() ) {
+      System.err.println( "> Unable to resolve the output path \""
+                          + outDirectory.toString() + "\"." );
       System.exit( 1 );
     } else {
-      System.out.println( "> Using cleaned data directory: "
-                          + dataDirectory.toString() );
+      System.out.println( "> Using input directory: "
+                          + inDirectory.toString() );
+      if( default_out )
+        System.out.println( "> Directing output to standard out." );
+      else
+        System.out.println( "> Using output directory: "
+                            + outDirectory.toString() );
     }
 
   }
@@ -270,19 +285,33 @@ public class Trajectory {
   }
 
 
-  /**
-   * Print out the list of documents along with their proportion of topics
-   * for every topic.
-   *
-   * @param out The output stream to print to.
-   * @param model The LDA model to read from.
-   */
-  private static void printDocumentKey(
-      PrintWriter out,
-      ParallelTopicModel model ) {
+  // TODO: Make this not suck.
+  private static void printResults(ParallelTopicModel model) {
 
+    // Define a PrintWriter either to a new log file or default to standard
+    // output.
+    PrintWriter writer;
+    if( outDirectory != null ) {
+      try {
+        Path outDirectoryPath = outDirectory.toPath();
+        Path outFilePath = Paths.get(
+          new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss")
+            .format(new Date()) + ".log");
+        outDirectory = outDirectoryPath.resolve(outFilePath).toFile();
+        writer = new PrintWriter(new FileWriter(outDirectory), true);
+      } catch( IOException io ) {
+        // Default to standard output.
+        System.err.println( "> Unable to access output directory, defaulting to standard out." );
+        writer = new PrintWriter(System.out, true);
+      }
+    }
+    else {
+      // Default to standard output.
+      writer = new PrintWriter(System.out, true);
+    }
+
+    System.out.println( "> Printing document key." );
     ArrayList<TopicAssignment> data = model.getData();
-
     for( int document = 0; document < data.size(); document++ ) {
 
       // Isolate the course ID (the filename minus the .txt extension).
@@ -292,43 +321,30 @@ public class Trajectory {
       String course = filename.substring(0, filename.lastIndexOf('.'));
 
       double[] topicProbabilities = model.getTopicProbabilities(document);
-      out.printf("%d, %s", document, course);
+      writer.printf("%d, %s", document, course);
 
       for( int topic = 0; topic < topicProbabilities.length; topic++ ) {
         double proportion = topicProbabilities[topic];
-        out.printf(", %d, %f", topic, proportion);
+        writer.printf(", %d, %f", topic, proportion);
       }
-      out.println();
+      writer.println();
     }
-
-    out.flush();
-  }
-
-
-  /**
-   * Print out the list of topics along with their top words and the
-   * frequencies of those words.
-   *
-   * @param out The stream to print to.
-   * @param model The LDA model to read from.
-   */
-  private static void printTopicKey(
-      PrintWriter out,
-      ParallelTopicModel model ) {
+    writer.println(); // Add a newline after the first key.
 
     // Get top 10 words for each topic.
+    System.out.println( "> Printing topic key." );
     Object[][] topics = model.getTopWords( 10 );
     for( int i = 0; i < topics.length; i++ ) {
       Object[] topic = topics[i]; // Get topic's word list.
-      out.printf( "%d", i );
+      writer.printf( "%d", i );
       for( int j = 0; j < topic.length; j++ ) {
         String word = topic[j].toString();
-        out.printf( ", %s", word );
+        writer.printf( ", %s", word );
       }
-      out.println();
+      writer.println();
     }
 
-    out.flush();
+    writer.flush();
   }
 
 
