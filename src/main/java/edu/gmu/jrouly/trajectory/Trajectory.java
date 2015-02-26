@@ -78,50 +78,50 @@ public class Trajectory {
    * Read input from the command line and execute an LDA topic model over a
    * given set of data according to user defined constraints.
    */
-  public static void main( String[] args ) {
+  public static void main(String[] args) {
 
     // Set command line flags and values.
-    System.out.println( "> Parsing command line arguments." );
-    parseArgs( args );
+    System.out.println("> Parsing command line arguments.");
+    parseArgs(args);
 
     // Generate data processing pipeline.
-    System.out.println( "> Building data processing pipeline." );
+    System.out.println("> Building data processing pipeline.");
     Pipe pipe = buildPipe();
 
     // Get list of targets in data directory.
-    System.out.println( "> Establishing data targets." );
+    System.out.println("> Establishing data targets.");
     File[] targets = inDirectory.listFiles();
 
     // Get an iterator over data targets.
-    System.out.println( "> Creating data iterator." );
-    FileIterator iterator = getDataIterator( targets );
+    System.out.println("> Creating data iterator.");
+    FileIterator iterator = getDataIterator(targets);
 
     // Build an instance set from data targets.
-    System.out.println( "> Creating data instances." );
-    InstanceList instances = new InstanceList( pipe );
-    instances.addThruPipe( iterator );
+    System.out.println("> Creating data instances.");
+    InstanceList instances = new InstanceList(pipe);
+    instances.addThruPipe(iterator);
 
     // Create an LDA Topic Model.
-    System.out.println( "> Initializing LDA Topic Model." );
-    ParallelTopicModel model = buildModel( instances );
+    System.out.println("> Initializing LDA Topic Model.");
+    ParallelTopicModel model = buildModel(instances);
 
     // Train the Topic Model.
-    System.out.println( "> Training LDA Topic Model." );
+    System.out.println("> Training LDA Topic Model.");
 
     try {
       model.estimate();
-    } catch( IOException exp ) {
+    } catch(IOException exp) {
       // The model broke when reading in files.
-      System.err.println( "> Error when reading from data set." );
-      System.exit( 1 );
+      System.err.println("> Error when reading from data set.");
+      System.exit(1);
     }
 
     // Print out results in a CSV format.
     printResults(model);
 
     // Exit.
-    System.out.println( "> Exit." );
-    System.exit( 0 );
+    System.out.println("> Exit.");
+    System.exit(0);
     return;
 
   }
@@ -133,73 +133,73 @@ public class Trajectory {
    * @param args command line arguments
    * @see edu.gmu.jrouly.trajectory.CLI
    */
-  private static void parseArgs( String[] args ) {
+  private static void parseArgs(String[] args) {
 
     // Parse the command line arguments.
-    Map<String, String> argmap = CLI.parse( args );
+    Map<String, String> argmap = CLI.parse(args);
 
     // If the "debug" argument is present, then its value is true.
-    debug = argmap.containsKey( "debug" );
+    debug = argmap.containsKey("debug");
 
     // If the numThreads argument is present, grab its value.
-    if( argmap.containsKey( "threads" ) ) {
-      String numThreadsString = argmap.get( "threads" );
-      numThreads = Integer.parseInt( numThreadsString );
+    if(argmap.containsKey("threads")) {
+      String numThreadsString = argmap.get("threads");
+      numThreads = Integer.parseInt(numThreadsString);
     }
 
     // If the numIter argument is present, grab its value.
-    if( argmap.containsKey( "iterations" ) ) {
-      String numIterationsString = argmap.get( "iterations" );
-      numIterations = Integer.parseInt( numIterationsString );
+    if(argmap.containsKey("iterations")) {
+      String numIterationsString = argmap.get("iterations");
+      numIterations = Integer.parseInt(numIterationsString);
     }
 
     // If the numTopics argument is present, grab its value.
-    if( argmap.containsKey( "topics" ) ) {
-      String numTopicsString = argmap.get( "topics" );
-      numTopics = Integer.parseInt( numTopicsString );
+    if(argmap.containsKey("topics")) {
+      String numTopicsString = argmap.get("topics");
+      numTopics = Integer.parseInt(numTopicsString);
     }
 
     boolean default_out = true;
     try {
 
       // Grab and process the "in" path request.
-      String requestedInPath = argmap.get( "in" );
-      Path inPath = Paths.get( requestedInPath );
+      String requestedInPath = argmap.get("in");
+      Path inPath = Paths.get(requestedInPath);
       inDirectory = inPath.toFile();
 
       // Grab and process the "out" path request.
-      if( argmap.containsKey( "out" ) ) {
+      if(argmap.containsKey("out")) {
         default_out = false;
-        String requestedOutPath = argmap.get( "out" );
-        Path outPath = Paths.get( requestedOutPath );
+        String requestedOutPath = argmap.get("out");
+        Path outPath = Paths.get(requestedOutPath);
         outDirectory = outPath.toFile();
       }
 
-    } catch( InvalidPathException exp ) {
+    } catch(InvalidPathException exp) {
 
       // The user-suggested path was invalid.
-      System.err.println( "> Unable to resolve the requested I/O paths." );
-      System.exit( 1 );
+      System.err.println("> Unable to resolve the requested I/O paths.");
+      System.exit(1);
 
     }
 
     // Verify that the cleaned data directory can be located on the disk.
-    if( ! inDirectory.isDirectory() ) {
-      System.err.println( "> Unable to resolve the input path \""
-                          + inDirectory.toString() + "\"." );
-      System.exit( 1 );
-    } else if( ! default_out && ! outDirectory.isDirectory() ) {
-      System.err.println( "> Unable to resolve the output path \""
-                          + outDirectory.toString() + "\"." );
-      System.exit( 1 );
+    if(! inDirectory.isDirectory()) {
+      System.err.println("> Unable to resolve the input path \""
+                          + inDirectory.toString() + "\".");
+      System.exit(1);
+    } else if(! default_out && ! outDirectory.isDirectory()) {
+      System.err.println("> Unable to resolve the output path \""
+                          + outDirectory.toString() + "\".");
+      System.exit(1);
     } else {
-      System.out.println( "> Using input directory: "
-                          + inDirectory.toString() );
-      if( default_out )
-        System.out.println( "> Directing output to standard out." );
+      System.out.println("> Using input directory: "
+                          + inDirectory.toString());
+      if(default_out)
+        System.out.println("> Directing output to standard out.");
       else
-        System.out.println( "> Using output directory: "
-                            + outDirectory.toString() );
+        System.out.println("> Using output directory: "
+                            + outDirectory.toString());
     }
 
   }
@@ -216,12 +216,12 @@ public class Trajectory {
     ArrayList<Pipe> pipeList = new ArrayList<Pipe>();
 
     // Pipes: lowercase, tokenize, remove stopwords, map to features.
-    pipeList.add( new Input2CharSequence("UTF-8") );
-    pipeList.add( new CharSequence2TokenSequence(
-                          Pattern.compile("\\p{L}[\\p{L}\\p{P}]+\\p{L}")) );
-    pipeList.add( new TokenSequenceLowercase() );
-    //pipeList.add( new TokenSequenceRemoveStopwords(false, false) );
-    pipeList.add( new TokenSequence2FeatureSequence() );
+    pipeList.add(new Input2CharSequence("UTF-8"));
+    pipeList.add(new CharSequence2TokenSequence(
+                          Pattern.compile("\\p{L}[\\p{L}\\p{P}]+\\p{L}")));
+    pipeList.add(new TokenSequenceLowercase());
+    //pipeList.add(new TokenSequenceRemoveStopwords(false, false));
+    pipeList.add(new TokenSequence2FeatureSequence());
     return new SerialPipes(pipeList);
 
   }
@@ -234,12 +234,12 @@ public class Trajectory {
    * @param directories list of file pointers to data directories (per set)
    * @return iterator over data files
    */
-  private static FileIterator getDataIterator( File[] directories ) {
+  private static FileIterator getDataIterator(File[] directories) {
 
     // Construct a file iterator recursing over the data directories that
     // only accepts files with the .txt extension.
     FileIterator iterator =
-      new FileIterator( directories,
+      new FileIterator(directories,
                         new FileFilter() {
                           @Override
                           public boolean accept(File file) {
@@ -247,7 +247,7 @@ public class Trajectory {
                                    file.isFile();
                           }
                         },
-                        FileIterator.LAST_DIRECTORY );
+                        FileIterator.LAST_DIRECTORY);
 
     return iterator;
 
@@ -260,25 +260,25 @@ public class Trajectory {
    * @param instances set of data instances
    * @return untrained LDA topic model
    */
-  private static ParallelTopicModel buildModel( InstanceList instances ) {
+  private static ParallelTopicModel buildModel(InstanceList instances) {
 
     // Create the topic model.
     // 1st paremeter: number of topics
     // 2nd parameter: alpha sum, defaults to number of topics
     // 3rd parameter: beta, defaults to 0.01
-    ParallelTopicModel model = new ParallelTopicModel( numTopics );
+    ParallelTopicModel model = new ParallelTopicModel(numTopics);
 
     // Set data instances.
-    model.addInstances( instances );
+    model.addInstances(instances);
 
     // Use two parallel samplers, which each look at one half the corpus and combine
     // statistics after every iteration.
-    model.setNumThreads( numThreads );
+    model.setNumThreads(numThreads);
 
     // Run the model for n iterations and stop.
     // For debugging, n=50 is a good number.
     // For real applications, use n=1000 to n=2000 iterations.
-    model.setNumIterations( numIterations );
+    model.setNumIterations(numIterations);
 
     return model;
 
@@ -291,7 +291,7 @@ public class Trajectory {
     // Define a PrintWriter either to a new log file or default to standard
     // output.
     PrintWriter writer;
-    if( outDirectory != null ) {
+    if(outDirectory != null) {
       try {
         Path outDirectoryPath = outDirectory.toPath();
         Path outFilePath = Paths.get(
@@ -299,9 +299,9 @@ public class Trajectory {
             .format(new Date()) + ".log");
         outDirectory = outDirectoryPath.resolve(outFilePath).toFile();
         writer = new PrintWriter(new FileWriter(outDirectory), true);
-      } catch( IOException io ) {
+      } catch(IOException io) {
         // Default to standard output.
-        System.err.println( "> Unable to access output directory, defaulting to standard out." );
+        System.err.println("> Unable to access output directory, defaulting to standard out.");
         writer = new PrintWriter(System.out, true);
       }
     }
@@ -310,9 +310,9 @@ public class Trajectory {
       writer = new PrintWriter(System.out, true);
     }
 
-    System.out.println( "> Printing document key." );
+    System.out.println("> Printing document key.");
     ArrayList<TopicAssignment> data = model.getData();
-    for( int document = 0; document < data.size(); document++ ) {
+    for(int document = 0; document < data.size(); document++) {
 
       // Isolate the course ID (the filename minus the .txt extension).
       Object name = data.get(document).instance.getName();
@@ -323,7 +323,7 @@ public class Trajectory {
       double[] topicProbabilities = model.getTopicProbabilities(document);
       writer.printf("%d, %s", document, course);
 
-      for( int topic = 0; topic < topicProbabilities.length; topic++ ) {
+      for(int topic = 0; topic < topicProbabilities.length; topic++) {
         double proportion = topicProbabilities[topic];
         writer.printf(", %d, %f", topic, proportion);
       }
@@ -332,14 +332,14 @@ public class Trajectory {
     writer.println(); // Add a newline after the first key.
 
     // Get top 10 words for each topic.
-    System.out.println( "> Printing topic key." );
-    Object[][] topics = model.getTopWords( 10 );
-    for( int i = 0; i < topics.length; i++ ) {
+    System.out.println("> Printing topic key.");
+    Object[][] topics = model.getTopWords(10);
+    for(int i = 0; i < topics.length; i++) {
       Object[] topic = topics[i]; // Get topic's word list.
-      writer.printf( "%d", i );
-      for( int j = 0; j < topic.length; j++ ) {
+      writer.printf("%d", i);
+      for(int j = 0; j < topic.length; j++) {
         String word = topic[j].toString();
-        writer.printf( ", %s", word );
+        writer.printf(", %s", word);
       }
       writer.println();
     }
@@ -413,7 +413,7 @@ public class Trajectory {
 
 
     System.out.println();
-    model.printDocumentTopics( new PrintWriter( System.out ), 0.0, 5 );
+    model.printDocumentTopics(new PrintWriter(System.out), 0.0, 5);
 
 
 

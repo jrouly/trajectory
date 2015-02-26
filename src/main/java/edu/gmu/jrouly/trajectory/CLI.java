@@ -27,33 +27,33 @@ public class CLI {
   private static Options getOptions() {
 
     // Allow debugging output to show.
-    Option debugOption = new Option( "debug", "print debug messages" );
+    Option debugOption = new Option("debug", "print debug messages");
 
     // Specify the number of parallel LDA threads to use in the parallle
     // Mallet model.
     Option threadsOption = OptionBuilder.withArgName("num threads")
       .hasArg()
-      .withDescription( "number of parallel LDA threads" )
+      .withDescription("number of parallel LDA threads")
       .create("threads");
 
     // Number of iterations when training the LDA model.
     Option iterOption = OptionBuilder.withArgName("num iterations")
       .hasArg()
-      .withDescription( "number of iterations" )
+      .withDescription("number of iterations")
       .create("iterations");
 
     // Number of expected topics.
     Option topicOption = OptionBuilder.withArgName("num topics")
       .hasArg()
-      .withDescription( "number of expected topics" )
+      .withDescription("number of expected topics")
       .create("topics");
 
     // Specify the data directory to read from.
     Option inDirOption = OptionBuilder.withArgName("path")
       .hasArg()
-      .withDescription( "path to the data directory (required)" )
+      .withDescription("path to the data directory (required)")
       .create("in");
-    inDirOption.setRequired( true );
+    inDirOption.setRequired(true);
 
     // Specify the results directory to store out to.
     Option outDirOption = OptionBuilder.withArgName("path")
@@ -63,12 +63,12 @@ public class CLI {
 
     // Add options to the options dictionary.
     Options options = new Options();
-    options.addOption( debugOption   );
-    options.addOption( threadsOption );
-    options.addOption( iterOption    );
-    options.addOption( topicOption   );
-    options.addOption( inDirOption   );
-    options.addOption( outDirOption  );
+    options.addOption(debugOption  );
+    options.addOption(threadsOption);
+    options.addOption(iterOption   );
+    options.addOption(topicOption  );
+    options.addOption(inDirOption  );
+    options.addOption(outDirOption );
 
     return options;
 
@@ -92,26 +92,26 @@ public class CLI {
     try {
 
       // Parse the command line arguments.
-      CommandLine line = parser.parse( options, args );
+      CommandLine line = parser.parse(options, args);
 
       // Read the list of parsed, recognized options.
       Option[] parsedOptions = line.getOptions();
 
       // For each parsed option, store it and its value in a map.
-      for( Option o : parsedOptions ) {
+      for(Option o : parsedOptions) {
         String k = o.getOpt();
-        String v = line.getOptionValue( k );
-        map.put( k, v );
+        String v = line.getOptionValue(k);
+        map.put(k, v);
       }
 
-    } catch( ParseException exp ) {
+    } catch(ParseException exp) {
 
       // Something went wrong!
-      System.err.println( "Parsing failed. Reason: " + exp.getMessage() );
+      System.err.println("Parsing failed. Reason: " + exp.getMessage());
       System.err.println();
       HelpFormatter formatter = new HelpFormatter();
-      formatter.printHelp( "trajectory", options );
-      System.exit( 1 );
+      formatter.printHelp("trajectory", options);
+      System.exit(1);
 
     }
 
