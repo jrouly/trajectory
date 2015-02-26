@@ -3,6 +3,7 @@ env/
 *.db
 .runonce
 results/
+data/
 
 
 # Byte-compiled / optimized / DLL files
