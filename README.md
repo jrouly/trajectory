@@ -2,65 +2,56 @@
 
 [![Join the chat at https://gitter.im/jrouly/trajectory](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/jrouly/trajectory?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-Trajectory is a working title for my CS 390 undergraduate research project.
-I am taking university syllabus data and applying LDA topic modeling.
+Trajectory is a working title for my CS 390 undergraduate research project. I am taking university course description data and applying LDA topic modeling.
 
 ## Requirements
 
-The basic requirements are Java JDK 7 or higher, Python 3.0 or higher.
-Optionally, the system dependencies `catdoc` and `pdftotext` are
-recommended for converting DOC and PDF syllabus datasets to standard
-textual formats.
+The basic requirements are Java JDK 7 or higher, Python 3.0 or higher. Support for the database layer requires system copies of MySQL, PostGres, SQLite, or similar software.
 
 
 ## Setup
 
-Note that this project contains an unholy combination of Bash scripts,
-Python tools, and Java code. Proceed with setup carefully.
+Note that this project contains an unholy combination of Bash scripts, Python tools, and Java code. Proceed with setup carefully.
 
 Begin by exporting the `$TRJ_HOME` path variable.
 
     $ export TRJ_HOME=$(pwd)
 
-Running the setup script will create and activate a virtual environment and
-install Python requirements.
-
-    $ bin/setup
-
 You will also need to build any compiled code.
 
-    $ bin/build
+    $ bin/util/build
+
+If at any time you wish to clear the compiled code, execute the included clean script.
+
+    $ bin/util/clean
+
+To specify or change the database URI and scheme, modify the `config.py` file. Specifically, look for `DATABASE_URI`. It defaults to a SQLite file named `data.db`.
 
 ## Use
 
-To scrape and process downloaded syllabus data, use the `trj-scrape`
-script.
+To scrape and process downloaded syllabus data, use the `bin/scrape` script.
 
-    $ bin/trj-scrape [-h] [--version] [--debug] {scrape,clean} {targets}
+    $ bin/scrape [-h] [--version] [--debug]
+                  {download,export,import-topics} ...
 
-### To download syllabi from a prebuilt target
+To execute the learning module, use the `bin/learn` script.
 
-#### Scrape: Download
+    $ bin/learn -debug -in <path> [-iterations <n>]
+                  [-out <path>] [-threads <n>] [-topics <n>]
 
-    $ bin/trj-scrape scrape [target] --download
+### Download syllabi from a prebuilt target
 
-#### Scrape: Clean
+    $ bin/scrape download [-h] {targets}
 
-Cleaning processes the raw syllabus data, removing meta data, and resulting
-in single-line bags of words.
+### Export downloaded data to disk
 
-    $ bin/trj-scrape scrape [target] --clean
+    $ bin/scrape export [-h] --data-directory <directory>
 
-#### Data: Clean
+This exports data in a format that can be read in by the `Learn` module.
 
-Cleaning the data directory refers to deleting the downloaded and processed
-syllabus data.
+### Run Topic Modeling
 
-    $ bin/trj-scrape clean {data,logs,all}
+    $ bin/learn -debug -in <path> [-iterations <n>]
+                  [-out <path>] [-threads <n>] [-topics <n>]
 
-### LDA Topic Modeling
-
-To run LDA topic modeling, use the `trj-learn` script.
-
-    $ bin/trj-learn -data <path> [-debug] [-iterations <num>] [-threads <num>]
-
+If the `-out <path>` is not specified, data will be printed to standard output. Otherwise, it will be printed to timestamped CSV files that can be read into the `Visualize` module.
