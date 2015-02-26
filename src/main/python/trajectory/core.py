@@ -205,19 +205,17 @@ def export(args):
             # Retrieve course list.
             courses = department.courses
 
-            # Label a course with its number and a counter value.
-            label = lambda course, d: "%s_%s_%d.txt" % \
-                    (course.department.abbreviation, course.number, d)
+            # Label a course with its ID in the database to create an
+            # absolute reference to it.
+            label = lambda course: "%d.txt" % course.id
 
-            # Write course descriptions to files. Include a counter integer
-            # after the file name to distinguish multiple entries of the same
-            # course with different titles.
+            # Write course descriptions to files. Include the course id in
+            # order to distinguish multiple entries of the same course with
+            # different titles.
             for course in courses:
-                counter = 1
-                course_path = os.path.join(path, label(course, counter))
+                course_path = os.path.join(path, label(course))
                 while os.path.isfile(course_path):
-                    counter += 1
-                    course_path = os.path.join(path, label(course, counter))
+                    course_path = os.path.join(path, label(course))
                 with open(course_path, "w") as course_file:
                     course_file.write(course.description)
 
