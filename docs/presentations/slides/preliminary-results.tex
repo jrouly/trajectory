@@ -1,0 +1,106 @@
+\begin{frame}{Preliminary results}
+
+  \only<1>{
+    \framesubtitle{Clustering}
+    \begin{block}{Data}
+      \begin{itemize}
+        \item Scraped from \url{http://cs.gmu.edu/syllabus} archive.
+        \item 1369 syllabus files, some empty.
+        \item 1268 data rows (non-zero syllabi), 7189 features (terms).
+        \item 292 categories (unique section numbers).
+      \end{itemize}
+    \end{block}
+
+    \begin{table}
+      \centering
+      \begin{tabular}{ll}
+      \toprule
+      Execution time & 0.144568s \\
+      Homogeneity & 0.415 \\
+      Completeness & 0.877 \\
+      \bottomrule
+      \end{tabular}
+      \caption{Preliminary clustering metrics\label{table:metrics}}
+    \end{table}
+  }
+
+  \only<2>{
+    \framesubtitle{Clustering}
+    \begin{table}
+      \centering
+      \begin{tabular}{llll}
+      \toprule
+      Cluster 1 &
+      Cluster 2 &
+      Cluster 3 &
+      Cluster 4 \\
+      \midrule
+      intelligence & chapter      & software     & operating \\
+      artificial   & project      & swe          & systems \\
+      agents       & sipser       & testing      & projects \\
+      learning     & networks     & web          & aydin \\
+      tecuci       & layer        & interfaces   & synchronization \\
+      expert       & savitch      & construction & scheduling \\
+      knowledge    & data         & design       & homeworks \\
+      reasoning    & dlc          & constructing & processes \\
+      semantic     & experimental & professor    & group \\
+      intelligent  & design       & quality      & friday \\
+      \bottomrule
+      \end{tabular}
+      \caption{10 Most frequent terms in first four clusters\label{table:results}}
+    \end{table}
+  }
+
+  \only<3>{
+    \framesubtitle{Topic Modeling: Documents}
+    \begin{table}[ht]
+    \centering
+    \begin{tabular}{ll}
+    \toprule
+    Max Tokens: & 12715 \\
+    Total Tokens: & 588131 \\
+    Total Syllabi: & 1570 \\
+    Size on Disk: & 9.1MB clean, 113MB raw \\
+    \bottomrule
+    \end{tabular}
+    \end{table}
+
+    \vfill
+
+    \begin{table}[ht]
+    \centering
+    \begin{tabular}{lllll}
+    \toprule
+    Doc & Topic & Proportion & Topic & Proportion \\
+    \midrule
+    0 & 33 & 0.7666641741676518 & 62 & 0.230550274742815 \\
+    1 & 44 & 0.5776374037067855 & 8  & 0.3152509716025131 \\
+    2 & 86 & 0.8143297134325639 & 62 & 0.18015768047706127 \\
+    3 & 9  & 0.9491106700671812 & 5  & 0.034876914241398584 \\
+    4 & 82 & 0.5736690412365056 & 53 & 0.39539480434234386 \\
+    \bottomrule
+    \end{tabular}
+    \caption{First five documents and their top two topics\label{table:ldadocs}}
+    \end{table}
+  }
+
+  \only<4>{
+    \framesubtitle{Topic Modeling: Topics}
+    \begin{table}[ht]
+    \centering
+    \begin{tabular}{llll}
+    \toprule
+    Topic & Term & Term & Term \\
+    \midrule
+    0 & lisp (98)          & june (57)        & prolog (46)    \\
+    1 & systems (154)      & operating (119)  & system (101)   \\
+    2 & systems (304)      & operating (252)  & students (189) \\
+    3 & randomization (66) & trials (57)      & clinical (57)  \\
+    4 & database (389)     & relational (151) & design (133)   \\
+    \bottomrule
+    \end{tabular}
+    \caption{First five topics and their top four terms\label{table:ldatopics}}
+    \end{table}
+  }
+
+\end{frame}
