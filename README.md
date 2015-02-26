@@ -15,6 +15,8 @@ Note that this project contains an unholy combination of Bash scripts, Python to
 
 Begin by exporting the `$TRJ_HOME` path variable.
 
+    $ git clone http://github.com/jrouly/trajectory
+    $ cd trajectory
     $ export TRJ_HOME=$(pwd)
 
 You will also need to build any compiled code.
