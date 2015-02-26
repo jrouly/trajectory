@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.FileFilter;
 import java.io.PrintWriter;
 
+import java.net.URI;
+
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -27,12 +29,15 @@ import cc.mallet.pipe.TokenSequenceRemoveStopwords;
 import cc.mallet.pipe.iterator.FileIterator;
 
 import cc.mallet.topics.ParallelTopicModel;
+import cc.mallet.topics.TopicAssignment;
 import cc.mallet.topics.TopicInferencer;
 
 import cc.mallet.types.Alphabet;
 import cc.mallet.types.FeatureSequence;
 import cc.mallet.types.IDSorter;
+import cc.mallet.types.Label;
 import cc.mallet.types.LabelSequence;
+import cc.mallet.types.LabelVector;
 import cc.mallet.types.InstanceList;
 import cc.mallet.types.Instance;
 
@@ -102,30 +107,16 @@ public class Trajectory {
       model.estimate();
     } catch( IOException exp ) {
       // The model broke when reading in files.
-      System.err.println( "> Error estimating topics when reading from data set." );
+      System.err.println( "> Error when reading from data set." );
       System.exit( 1 );
     }
 
-    // Print some sample results.
-    System.out.println( "> Printing document topic composition." );
-    model.printDocumentTopics( new PrintWriter( System.out ), 0.0, 5 );
-    System.out.println();
+    // Print out results in a CSV format.
+    System.out.println( "> Printing document key." );
+    printDocumentKey(new PrintWriter(System.out), model);
 
     System.out.println( "> Printing topic key." );
-    // Get top 10 words for each topic.
-    Object[][] topics = model.getTopWords( 10 );
-    for( int i = 0; i < topics.length; i++ ) {
-      Object[] topic = topics[i]; // Get topic's word list.
-      System.out.printf( "%d ", i );
-      for( int j = 0; j < topic.length; j++ ) {
-        String word = topic[j].toString();
-        System.out.printf( "%s", word );
-        if( j < topic.length - 1 ) System.out.print(", ");
-      }
-      System.out.println();
-    }
-
-
+    printTopicKey(new PrintWriter(System.out), model);
 
     // Exit.
     System.out.println( "> Exit." );
@@ -277,6 +268,69 @@ public class Trajectory {
     return model;
 
   }
+
+
+  /**
+   * Print out the list of documents along with their proportion of topics
+   * for every topic.
+   *
+   * @param out The output stream to print to.
+   * @param model The LDA model to read from.
+   */
+  private static void printDocumentKey(
+      PrintWriter out,
+      ParallelTopicModel model ) {
+
+    ArrayList<TopicAssignment> data = model.getData();
+
+    for( int document = 0; document < data.size(); document++ ) {
+
+      // Isolate the course ID (the filename minus the .txt extension).
+      Object name = data.get(document).instance.getName();
+      Path filepath = Paths.get((URI)name);
+      String filename = filepath.getFileName().toString();
+      String course = filename.substring(0, filename.lastIndexOf('.'));
+
+      double[] topicProbabilities = model.getTopicProbabilities(document);
+      out.printf("%d, %s", document, course);
+
+      for( int topic = 0; topic < topicProbabilities.length; topic++ ) {
+        double proportion = topicProbabilities[topic];
+        out.printf(", %d, %f", topic, proportion);
+      }
+      out.println();
+    }
+
+    out.flush();
+  }
+
+
+  /**
+   * Print out the list of topics along with their top words and the
+   * frequencies of those words.
+   *
+   * @param out The stream to print to.
+   * @param model The LDA model to read from.
+   */
+  private static void printTopicKey(
+      PrintWriter out,
+      ParallelTopicModel model ) {
+
+    // Get top 10 words for each topic.
+    Object[][] topics = model.getTopWords( 10 );
+    for( int i = 0; i < topics.length; i++ ) {
+      Object[] topic = topics[i]; // Get topic's word list.
+      out.printf( "%d", i );
+      for( int j = 0; j < topic.length; j++ ) {
+        String word = topic[j].toString();
+        out.printf( ", %s", word );
+      }
+      out.println();
+    }
+
+    out.flush();
+  }
+
 
 
 
