@@ -13,10 +13,9 @@ text was passed through a stemmer to strip morphology from the words and
 eliminate duplicate terms.
 
 The Python scraping framework employed is structured to allow pluggable web
-scrapers tooled to specific syllabus repositories. A major future goal is
-to expand the breadth of data collection across different institutions.
-Development is in progress for new scraping engines tooled to new
-repositories.
+scrapers tooled to specific syllabus repositories. There are a number of
+existing web scrapers in place pointing to different university course
+catalogs.
 
 \begin{table}[ht]
 \centering
@@ -206,9 +205,11 @@ corpus to include implicit expert knowledge.
 The primary software libraries employed to support this project are the
 Python machine learning toolkit
 \texttt{scikit-learn}\footnote{\url{http://scikit-learn.org}}, the Java
-toolkit \texttt{Mallet}\footnote{\url{http://mallet.cs.umass.edu}}, and the
+toolkit \texttt{Mallet}\footnote{\url{http://mallet.cs.umass.edu}}, the
 Python web scraping library
-BeautifulSoup\footnote{\url{http://www.crummy.com/software/BeautifulSoup/}}.
+BeautifulSoup\footnote{\url{http://www.crummy.com/software/BeautifulSoup/}},
+and the Python database abstraction toolkit
+SQLAlchemy\footnote{\url{http://www.sqlalchemy.org}}.
 Other libraries may be incorporated as needed.
 
 %------------------------------------------------

@@ -1,0 +1,172 @@
+\documentclass[twocolumn]{article}
+
+
+% Packages for TR Template
+\usepackage{mathpazo}
+\usepackage{microtype}
+
+
+% Document packages
+\usepackage[T1]{fontenc} % Use 8-bit encoding that has 256 glyphs
+\usepackage{fourier} % Use the Adobe Utopia font for the document - comment this line to return to the LaTeX default
+\usepackage[english]{babel} % English language/hyphenation
+\usepackage{amsmath,amsfonts,amsthm} % Math packages
+\usepackage{natbib} % Natural bibliography styles
+%\usepackage{fullpage}
+\usepackage{hyperref}
+\usepackage{color}
+\usepackage{booktabs}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{acronym} % Used for defining acronyms
+
+
+% Define acronyms
+\acrodef{lda}[LDA]{Latent Dirichlet allocation}
+
+
+% Set numbering styles
+\numberwithin{equation}{section} % Number equations within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+\numberwithin{figure}{section} % Number figures within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+\numberwithin{table}{section} % Number tables within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+
+
+% Construct page dimensions
+\setlength\textwidth{7in}
+\setlength\textheight{9.5in}
+\setlength\oddsidemargin{-0.25in}
+\setlength\topmargin{-0.25in}
+\setlength\headheight{0in}
+\setlength\headsep{0in}
+\setlength\columnsep{18pt}
+\sloppy
+
+
+% Define any custom commands
+\newcommand{\sref}[1]{Section~\ref{#1}}
+\newcommand{\fref}[1]{Figure~\ref{#1}}
+\newcommand{\tref}[1]{Table~\ref{#1}}
+\newcommand{\lref}[1]{Listing~\ref{#1}}
+
+
+\begin{document}
+
+\title{
+\vspace{-0.5in}\rule{\textwidth}{2pt}
+\begin{tabular}{ll}\begin{minipage}{4.75in}\vspace{6px}
+\noindent\LARGE Department of Computer Science\\
+\vspace{-12px}\\
+\noindent\large George Mason University\qquad Technical Reports
+\end{minipage}&\begin{minipage}{2in}\vspace{6px}\small
+4400 University Drive MS\#4A5\\
+Fairfax, VA 22030-4444 USA\\
+http:/$\!$/cs.gmu.edu/\quad 703-993-1530
+\end{minipage}\end{tabular}
+\rule{\textwidth}{2pt}\vspace{0.25in}
+\LARGE \bf
+Unsupervised Academic Curricula Evaluation Through Latent Dirichlet
+Allocation
+}
+
+\date{\today}
+
+\author{
+{\bf Jean Michel Rouly}\\
+jrouly@gmu.edu
+\and
+{\bf Huzefa Rangwala}\\
+rangwala@cs.gmu.edu
+}
+
+\maketitle
+
+
+%----------------------------------------------------------------------------
+% Abstract
+%----------------------------------------------------------------------------
+
+\input{sections/abstract}
+
+
+
+%----------------------------------------------------------------------------
+% Introduction
+%----------------------------------------------------------------------------
+
+\section{Introduction}
+\input{sections/introduction}
+
+
+
+%----------------------------------------------------------------------------
+% Background Information
+%----------------------------------------------------------------------------
+
+\section{Background on \acf{lda}}
+\input{sections/background}
+
+
+
+%----------------------------------------------------------------------------
+% Research Question
+%----------------------------------------------------------------------------
+
+\section{Research Question}
+\input{sections/question}
+
+
+
+%----------------------------------------------------------------------------
+% Methods
+%----------------------------------------------------------------------------
+
+\section{Methods}
+\input{sections/methods}
+
+
+
+%----------------------------------------------------------------------------
+% Discussion
+%----------------------------------------------------------------------------
+
+\section{Discussion}
+\input{sections/discussion}
+
+
+
+%----------------------------------------------------------------------------
+% Conclusion
+%----------------------------------------------------------------------------
+
+\section{Conclusion}
+\input{sections/conclusion}
+
+
+
+%----------------------------------------------------------------------------
+% References
+%----------------------------------------------------------------------------
+
+\clearpage
+\bibliographystyle{plain}
+\bibliography{../bibliography/bibliography}
+
+
+
+%----------------------------------------------------------------------------
+% Appendices
+%----------------------------------------------------------------------------
+
+\appendix
+\section{Appendix}
+
+%------------------------------------------------
+
+Source code of current archive is available online at
+\href{https://github.com/jrouly/trajectory.git}{https://github.com/jrouly/trajectory}.
+
+%------------------------------------------------
+
+
+
+\end{document}
