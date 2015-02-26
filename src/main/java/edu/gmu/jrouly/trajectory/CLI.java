@@ -27,33 +27,39 @@ public class CLI {
   private static Options getOptions() {
 
     // Allow debugging output to show.
-    Option debugOption   = new Option( "debug", "print debug messages" );
+    Option debugOption = new Option( "debug", "print debug messages" );
 
     // Specify the number of parallel LDA threads to use in the parallle
     // Mallet model.
     Option threadsOption = OptionBuilder.withArgName("num threads")
-                                  .hasArg()
-                                  .withDescription( "number of parallel LDA threads" )
-                                  .create("threads");
+      .hasArg()
+      .withDescription( "number of parallel LDA threads" )
+      .create("threads");
 
     // Number of iterations when training the LDA model.
-    Option iterOption    = OptionBuilder.withArgName("num iterations")
-                                  .hasArg()
-                                  .withDescription( "number of iterations" )
-                                  .create("iterations");
+    Option iterOption = OptionBuilder.withArgName("num iterations")
+      .hasArg()
+      .withDescription( "number of iterations" )
+      .create("iterations");
 
     // Number of expected topics.
-    Option topicOption   = OptionBuilder.withArgName("num topics")
-                                  .hasArg()
-                                  .withDescription( "number of expected topics" )
-                                  .create("topics");
+    Option topicOption = OptionBuilder.withArgName("num topics")
+      .hasArg()
+      .withDescription( "number of expected topics" )
+      .create("topics");
 
     // Specify the data directory to read from.
-    Option dataDirOption = OptionBuilder.withArgName("path")
-                                  .hasArg()
-                                  .withDescription( "path to the data directory (required)" )
-                                  .create("data");
-    dataDirOption.setRequired( true );
+    Option inDirOption = OptionBuilder.withArgName("path")
+      .hasArg()
+      .withDescription( "path to the data directory (required)" )
+      .create("in");
+    inDirOption.setRequired( true );
+
+    // Specify the results directory to store out to.
+    Option outDirOption = OptionBuilder.withArgName("path")
+      .hasArg()
+      .withDescription("path to the output directory (defaults to standard out)")
+      .create("out");
 
     // Add options to the options dictionary.
     Options options = new Options();
@@ -61,7 +67,8 @@ public class CLI {
     options.addOption( threadsOption );
     options.addOption( iterOption    );
     options.addOption( topicOption   );
-    options.addOption( dataDirOption );
+    options.addOption( inDirOption   );
+    options.addOption( outDirOption  );
 
     return options;
 
