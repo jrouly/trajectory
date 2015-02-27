@@ -40,6 +40,8 @@ import cc.mallet.types.Alphabet;
 import cc.mallet.types.FeatureSequence;
 import cc.mallet.types.IDSorter;
 import cc.mallet.types.Label;
+import cc.mallet.types.Labeling;
+import cc.mallet.types.LabelAlphabet;
 import cc.mallet.types.LabelSequence;
 import cc.mallet.types.LabelVector;
 import cc.mallet.types.InstanceList;
@@ -312,10 +314,7 @@ public class Trajectory {
     System.out.println("> Printing document key.");
 
     // Print the CSV header.
-    documentWriter.print("docid,courseid");
-    for(int i = 0; i < numTopics; i++)
-      documentWriter.print(",topic");
-    documentWriter.println();
+    documentWriter.println("docid,courseid,topic...");
 
     ArrayList<TopicAssignment> data = model.getData();
     for(int document = 0; document < data.size(); document++) {
@@ -325,14 +324,28 @@ public class Trajectory {
       Path filepath = Paths.get((URI)name);
       String filename = filepath.getFileName().toString();
       String course = filename.substring(0, filename.lastIndexOf('.'));
-
-      double[] topicProbabilities = model.getTopicProbabilities(document);
       documentWriter.printf("%d,%s", document, course);
 
-      for(int topic = 0; topic < topicProbabilities.length; topic++) {
-        double proportion = topicProbabilities[topic];
-        documentWriter.printf(",%d:%f", topic, proportion);
+      // Get the ranking of topics for this instance.
+      LabelSequence topicSequence = data.get(document).topicSequence;
+      LabelSequence.Iterator iter = topicSequence.iterator();
+      LabelAlphabet alphabet = topicSequence.getLabelAlphabet();
+
+      // Get the proportion values for this instance.
+      double[] topicProbabilities = model.getTopicProbabilities(document);
+
+      // Only print the top rank_limit topics, or however many are found.
+      int rank = 0, rank_limit = 5;
+      while(rank < rank_limit && iter.hasNext()) {
+        Label label = (Label)iter.next();
+        int index = alphabet.lookupIndex(label.toString(), false);
+
+        double proportion = topicProbabilities[index];
+        documentWriter.printf(",%d:%f", index, proportion);
+
+        rank++;
       }
+
       documentWriter.println();
     }
     documentWriter.flush();
@@ -344,6 +357,7 @@ public class Trajectory {
     for(int i = 0; i < numWords; i++)
       topicWriter.print(",word");
     topicWriter.println();
+
     Object[][] topics = model.getTopWords(numWords);
     for(int i = 0; i < topics.length; i++) {
       Object[] topic = topics[i]; // Get topic's word list.
