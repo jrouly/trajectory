@@ -15,7 +15,7 @@ import os
 
 from trajectory import engines
 from trajectory import config as TRJ
-from trajectory.core import scrape, export, import_topics
+from trajectory.core import scrape, export, import_results
 from trajectory.models.meta import Engine, Session
 
 def main():
@@ -47,11 +47,15 @@ def main():
             action="store")
 
     # Create arguments for importing topics.
-    import_parser = subparsers.add_parser("import-topics",
+    import_parser = subparsers.add_parser("import-results",
             help="Import learned topics to the database.")
     import_parser.add_argument("--topic-file",
             required=True,
-            help="The stored topics.dat file from the learn module.",
+            help="The stored topic key file from the learn module.",
+            action="store")
+    import_parser.add_argument("--course-file",
+            required=True,
+            help="The stored document key file from the learn module.",
             action="store")
 
     # Parse command line arguments.
@@ -74,8 +78,8 @@ def main():
         elif args.command == "download":
             scrape(args)
 
-        elif args.command == "import-topics":
-            import_topics(args)
+        elif args.command == "import-results":
+            import_results(args)
 
         # Otherwise no command was selected
         else:
