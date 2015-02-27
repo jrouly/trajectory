@@ -48,6 +48,12 @@ public class CLI {
       .withDescription("number of expected topics")
       .create("topics");
 
+    // Number of words to display.
+    Option wordsOption = OptionBuilder.withArgName("num words")
+      .hasArg()
+      .withDescription("number of words to display")
+      .create("words");
+
     // Specify the data directory to read from.
     Option inDirOption = OptionBuilder.withArgName("path")
       .hasArg()
@@ -58,14 +64,16 @@ public class CLI {
     // Specify the results directory to store out to.
     Option outDirOption = OptionBuilder.withArgName("path")
       .hasArg()
-      .withDescription("path to the output directory (defaults to standard out)")
+      .withDescription("path to the output directory (required)")
       .create("out");
+    outDirOption.setRequired(true);
 
     // Add options to the options dictionary.
     Options options = new Options();
     options.addOption(debugOption  );
     options.addOption(threadsOption);
     options.addOption(iterOption   );
+    options.addOption(wordsOption  );
     options.addOption(topicOption  );
     options.addOption(inDirOption  );
     options.addOption(outDirOption );
