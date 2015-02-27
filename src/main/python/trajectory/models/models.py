@@ -110,7 +110,8 @@ class CourseTopicAssociation(meta.Base):
     topic_id = Column(Integer, ForeignKey("topic.id"), primary_key=True)
     proportion = Column(Float)
 
-    topic = relationship("Topic", backref="course_assocs")
+    topic = relationship("Topic",
+            backref=backref("course_assocs", cascade="all, delete-orphan"))
 
     def __repr__(self):
         return "<TopicAssociation: (%s, %s, %s)>" % \
