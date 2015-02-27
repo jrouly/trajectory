@@ -312,9 +312,9 @@ public class Trajectory {
     System.out.println("> Printing document key.");
 
     // Print the CSV header.
-    documentWriter.print("docid, courseid");
+    documentWriter.print("docid,courseid");
     for(int i = 0; i < numTopics; i++)
-      documentWriter.print(", topicid, proportion");
+      documentWriter.print(",topic");
     documentWriter.println();
 
     ArrayList<TopicAssignment> data = model.getData();
@@ -327,11 +327,11 @@ public class Trajectory {
       String course = filename.substring(0, filename.lastIndexOf('.'));
 
       double[] topicProbabilities = model.getTopicProbabilities(document);
-      documentWriter.printf("%d, %s", document, course);
+      documentWriter.printf("%d,%s", document, course);
 
       for(int topic = 0; topic < topicProbabilities.length; topic++) {
         double proportion = topicProbabilities[topic];
-        documentWriter.printf(", %d, %f", topic, proportion);
+        documentWriter.printf(",%d:%f", topic, proportion);
       }
       documentWriter.println();
     }
@@ -342,7 +342,7 @@ public class Trajectory {
 
     topicWriter.print("topicid");
     for(int i = 0; i < numWords; i++)
-      topicWriter.print(", word");
+      topicWriter.print(",word");
     topicWriter.println();
     Object[][] topics = model.getTopWords(numWords);
     for(int i = 0; i < topics.length; i++) {
@@ -350,7 +350,7 @@ public class Trajectory {
       topicWriter.printf("%d", i);
       for(int j = 0; j < topic.length; j++) {
         String word = topic[j].toString();
-        topicWriter.printf(", %s", word);
+        topicWriter.printf(",%s", word);
       }
       topicWriter.println();
     }
