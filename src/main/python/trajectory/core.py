@@ -222,18 +222,49 @@ def export(args):
     log.info("Data export complete.")
 
 
-def import_topics(args):
+def import_results(args):
     """
     Read topic data generated from the learn module and store it in the
     database.
     """
 
-    import logging, re
+    from trajectory.models import Course, Topic, CourseTopicAssociation
+    import logging, csv
     log = logging.getLogger("root")
     log.info("Begin topic import.")
 
+    # Remove old course topics.
+    courses = args.session.query(Course).all()
+    for course in courses:
+        [args.session.delete(topic) for topic in course.topics]
+
+    # Clear out old topics.
+    topics = args.session.query(Topic).all()
+    [args.session.delete(topic) for topic in topics]
+    args.session.commit()
+
+    # Add in new topic definitions.
     with open(args.topic_file, "r") as topic_file:
-        for line in topic_file:
-            log.debug(line)
+        topic_reader = csv.reader(topic_file, delimiter=",")
+        next(topic_reader, None) # skip header
+        for topic in topic_reader:
+            args.session.add(Topic(words=', '.join(topic[1:])))
+
+    # Add the topics to their courses.
+    courses = args.session.query(Course).all()
+    course_query = args.session.query(Course)
+    course_by_id = lambda c: course_query.get(c)
+    with open(args.course_file, "r") as course_file:
+        course_reader = csv.reader(course_file, delimiter=",")
+        next(course_reader, None) # skip header
+        topics_to_add = { # {course:[[id, weight], [id, weight], ...]}
+            course_by_id(row[1]) : [topic.split(':') for topic in row[2:]]
+            for row in course_reader if course_by_id(row[1]) is not None
+        }
+        for course, topic_list in topics_to_add.items():
+            for (topicid, proportion) in topic_list:
+                association = CourseTopicAssociation(proportion=proportion)
+                association.topic_id = topicid
+                course.topics.append(association)
 
     log.info("Topic import complete.")
