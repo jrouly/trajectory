@@ -34,7 +34,40 @@ def generate_html(args):
     paths = {
             'index': os.path.join(args.vis_directory, "index.html"),
             'about': os.path.join(args.vis_directory, "about.html"),
+            'ulist': os.path.join(args.vis_directory, "university_list.html"),
     }
+
+    # Compute and create university directories.
+    universities = args.session.query(University).all()
+    for university in universities:
+        uni_path = os.path.join(
+                args.vis_directory,
+                "universities",
+                university.abbreviation)
+        paths[university.abbreviation] = uni_path
+        os.makedirs(uni_path)
+
+    # Compute university information tuples.
+    # [{
+    #   'university': <University Object>,
+    #   'index-page': university.html,
+    #   'departments': [(<Department>, page), (<Department>, page)]
+    # }]
+    university_list = []
+    for university in universities:
+        uni_dir = paths[university.abbreviation]
+        uni_index = os.path.join(uni_dir, "index.html")
+        departments = [
+            (department, os.path.join(uni_dir, "%s.html" \
+                    % department.abbreviation))
+            for department in university.departments]
+
+        university_list.append({
+            "university": university,
+            "index-page": uni_index,
+            "departments": departments
+        })
+
 
     # Generate static about page.
     with open(paths['about'], "w") as fp:
@@ -50,11 +83,17 @@ def generate_html(args):
             sum([len(department.courses) for department in uni.departments])
 
         # { GMU : totalNumCourses, UMD : totalNumCourses ... }
-        universities = args.session.query(University).all()
-        universities = {university : num_courses_by_uni(university)
+        uni_num_courses = {university : num_courses_by_uni(university)
                             for university in universities}
 
-        fp.write(template.render(universities=universities))
+        fp.write(template.render(universities=uni_num_courses))
+
+    # Generate university list page.
+    with open(paths['ulist'], "w") as fp:
+        template = env.get_template("university_list.html")
+        fp.write(template.render(university_list=university_list))
+
+
 
 
 def serve(args):
