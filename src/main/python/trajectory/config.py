@@ -22,3 +22,6 @@ __STOP_WORDS_FILE = os.path.join(HOME, __RESOURCES, "stoplists", "en.txt")
 
 # Stop words cache.
 STOP_WORDS = set(open(__STOP_WORDS_FILE, "r").read().splitlines())
+
+# Minimum topic weight to measure.
+TOPIC_MIN_WEIGHT = 0.05

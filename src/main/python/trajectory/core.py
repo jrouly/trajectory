@@ -229,6 +229,7 @@ def import_results(args):
     """
 
     from trajectory.models import Course, Topic, CourseTopicAssociation
+    from trajectory import config as TRJ
     import logging, csv
     log = logging.getLogger("root")
     log.info("Begin topic import.")
@@ -258,8 +259,10 @@ def import_results(args):
         course_reader = csv.reader(course_file, delimiter=",")
         next(course_reader, None) # skip header
         topics_to_add = { # {course:[[id, weight], [id, weight], ...]}
-            course_by_id(row[1]) : [topic.split(':') for topic in row[2:]]
-            for row in course_reader if course_by_id(row[1]) is not None
+            course_by_id(row[1]) : [
+                topic.split(':') for topic in row[2:]
+                    if float(topic.split(':')[1]) > TRJ.TOPIC_MIN_WEIGHT
+            ] for row in course_reader if course_by_id(row[1]) is not None
         }
         for course, topic_list in topics_to_add.items():
             for (topicid, proportion) in topic_list:
