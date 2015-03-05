@@ -1,0 +1,43 @@
+{% extends 'layout/base.html' %}
+
+{% block title %}About{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+  <div class="row">
+    <div class="col-lg-12">
+      <h1>About</h1>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-12">
+    <h1>What is Trajectory?</h1>
+    <p><em>Trajectory</em> is a research framework designed to explore the
+    application of Topic Modeling to textual university curriculum data,
+    specifically course descriptions. Automatically extracting content from
+    this corpus allows for larger-scale analysis of university curricula
+    than would be possible with manual inspection.</p>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-12">
+    <h1>What is topic modeling?</h1>
+    <p>In <a href="//en.wikipedia.org/wiki/Machine_learning">machine learning</a>
+    and <a href="//en.wikipedia.org/wiki/Natural_language_processing">natural language processing</a>,
+    a <strong>topic model</strong> is a type of
+    <a href="//en.wikipedia.org/wiki/Statistical_model">statistical model</a>
+    for discovering the abstract "topics" that occur in a collection of
+    documents. Intuitively, given that a document is about a particular
+    topic, one would expect particular words to appear in the document
+    more or less frequently: "dog" and "bone" will appear more often in
+    documents about dogs, "cat" and "meow" will appear in documents about
+    cats, and "the" and "is" will appear equally in both.</p>
+    <small>From Wikipedia: <cite><a href="http://en.wikipedia.org/wiki/Topic_model">Topic Model</a></cite></small>
+  </div>
+</div>
+
+{% endblock %}
