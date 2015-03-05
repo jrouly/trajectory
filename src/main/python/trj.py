@@ -15,7 +15,7 @@ import os
 
 from trajectory import engines
 from trajectory import config as TRJ
-from trajectory.core import scrape, export, import_results, visualize
+from trajectory.core import scrape, export, import_results, generate_visualization
 from trajectory.models.meta import Engine, Session
 
 def main():
@@ -59,9 +59,9 @@ def main():
             action="store")
 
     # Create arguments for visualization module.
-    vis_parser = subparsers.add_argument("visualize",
+    vis_parser = subparsers.add_parser("visualize",
             help="Generate visualization tool.")
-    vis_parser.add_argument("--out",
+    vis_parser.add_argument("--out-directory",
             required=True,
             help="Where to store the generated tool.",
             action="store")
