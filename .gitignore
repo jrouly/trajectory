@@ -4,6 +4,7 @@ env/
 .runonce
 results/
 data/
+visualize/
 
 
 # Byte-compiled / optimized / DLL files
