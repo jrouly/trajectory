@@ -22,7 +22,7 @@ class University(meta.Base):
     __tablename__ = "university"
     id = Column(Integer, primary_key=True)
     name = Column(String, unique=True, nullable=False)
-    abbreviation = Column(String, nullable=False)
+    abbreviation = Column(String, unique=True, nullable=False)
     url = Column(String)
 
     departments = relationship("Department", backref="university")
