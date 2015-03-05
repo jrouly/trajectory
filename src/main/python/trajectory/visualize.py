@@ -36,14 +36,25 @@ def generate_html(args):
             'about': os.path.join(args.vis_directory, "about.html"),
     }
 
-    # Generate static files.
-    with open(paths['index'], "w") as fp:
-        template = env.get_template("index.html")
-        fp.write(template.render())
-
+    # Generate static about page.
     with open(paths['about'], "w") as fp:
         template = env.get_template("about.html")
         fp.write(template.render())
+
+    # Generate dashboard page.
+    with open(paths['index'], "w") as fp:
+        template = env.get_template("index.html")
+
+        # number of courses offered by a university
+        num_courses_by_uni = lambda uni: \
+            sum([len(department.courses) for department in uni.departments])
+
+        # { GMU : totalNumCourses, UMD : totalNumCourses ... }
+        universities = args.session.query(University).all()
+        universities = {university : num_courses_by_uni(university)
+                            for university in universities}
+
+        fp.write(template.render(universities=universities))
 
 
 def serve(args):
