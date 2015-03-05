@@ -15,7 +15,7 @@ import os
 
 from trajectory import engines
 from trajectory import config as TRJ
-from trajectory.core import scrape, export, import_results
+from trajectory.core import scrape, export, import_results, visualize
 from trajectory.models.meta import Engine, Session
 
 def main():
@@ -58,6 +58,14 @@ def main():
             help="The stored document key file from the learn module.",
             action="store")
 
+    # Create arguments for visualization module.
+    vis_parser = subparsers.add_argument("visualize",
+            help="Generate visualization tool.")
+    vis_parser.add_argument("--out",
+            required=True,
+            help="Where to store the generated tool.",
+            action="store")
+
     # Parse command line arguments.
     args = parser.parse_args(sys.argv[1:])
 
@@ -78,8 +86,13 @@ def main():
         elif args.command == "download":
             scrape(args)
 
+        # Hand off control to the import module.
         elif args.command == "import-results":
             import_results(args)
+
+        # Hand off control to the visualize module.
+        elif args.command == "visualize":
+            generate_visualization(args)
 
         # Otherwise no command was selected
         else:

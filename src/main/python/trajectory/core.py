@@ -271,3 +271,24 @@ def import_results(args):
                 course.topics.append(association)
 
     log.info("Topic import complete.")
+
+
+def generate_visualization(args):
+    """
+    Generate the visualization web pages from the database.
+    """
+
+    from trajectory.models import Course, Topic, CourseTopicAssociation
+    from trajectory.models import University, Department
+    from trajectory import config as TRJ
+
+    from jinja2 import Environment, FileSystemLoader
+    import os
+
+
+    # Point the template loader to the templates directory.
+    env = Environment(loader=FileSystemLoader(TRJ.TEMPLATES))
+
+    template = env.get_template("index.html")
+    with open("/tmp/index.html", "w") as fp:
+        fp.write(template.render(foo="bar"))
