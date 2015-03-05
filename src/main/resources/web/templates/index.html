@@ -30,11 +30,11 @@
       <tbody>
         {% for university, count in universities.items() %}
         <tr>
-          <td>{{ loop.depth }}</td>
+          <td>{{ loop.index }}</td>
           <td>{{ university.name }}</td>
           <td>{{ count }}</td>
           <td>{% if university.url %}
-            <a href="//{{ university.url }}">{{ university.url }}</a>
+            <a target="_blank" href="//{{ university.url }}">{{ university.url }}</a>
             {% else %} - {% endif %}</td>
         </tr>
         {% else %}
