@@ -273,22 +273,35 @@ def import_results(args):
     log.info("Topic import complete.")
 
 
-def generate_visualization(args):
+def visualize(args):
     """
     Generate the visualization web pages from the database.
     """
 
-    from trajectory.models import Course, Topic, CourseTopicAssociation
-    from trajectory.models import University, Department
-    from trajectory import config as TRJ
+    from trajectory.visualize import generate_html, serve
+    import os, logging
 
-    from jinja2 import Environment, FileSystemLoader
-    import os
+    # Initialize logger.
+    log = logging.getLogger("root")
+    log.info("Begin visualization generation.")
 
+    # If the user requested to serve, and the visualization directory
+    # already exists, then serve existing data.
+    if args.serve and os.path.exists(args.vis_directory):
+        serve(args)
+        return
 
-    # Point the template loader to the templates directory.
-    env = Environment(loader=FileSystemLoader(TRJ.TEMPLATES))
+    if not os.path.exists(args.vis_directory):
+        os.mkdir(args.vis_directory)
+        log.info("Created visualization directory.")
+    else:
+        log.error("Requested directory '%s' already exists." % \
+                args.vis_directory)
+        return
 
-    template = env.get_template("index.html")
-    with open("/tmp/index.html", "w") as fp:
-        fp.write(template.render(foo="bar"))
+    # Generate the static HTML pages.
+    generate_html(args)
+
+    # If requested, serve the content.
+    if args.serve:
+        serve(args)

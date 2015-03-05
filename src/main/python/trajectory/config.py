@@ -28,3 +28,4 @@ TOPIC_MIN_WEIGHT = 0.05
 
 # Directory where templates are stored for the visualization module.
 TEMPLATES = os.path.join(__RESOURCES, "web", "templates")
+STATIC_FILES = os.path.join(__RESOURCES, "web", "static")

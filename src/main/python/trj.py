@@ -15,7 +15,7 @@ import os
 
 from trajectory import engines
 from trajectory import config as TRJ
-from trajectory.core import scrape, export, import_results, generate_visualization
+from trajectory.core import scrape, export, import_results, visualize
 from trajectory.models.meta import Engine, Session
 
 def main():
@@ -61,10 +61,14 @@ def main():
     # Create arguments for visualization module.
     vis_parser = subparsers.add_parser("visualize",
             help="Generate visualization tool.")
-    vis_parser.add_argument("--out-directory",
+    vis_parser.add_argument("--vis-directory",
             required=True,
             help="Where to store the generated tool.",
             action="store")
+    vis_parser.add_argument("--serve",
+            required=False,
+            help="Serve the tool once generated.",
+            action="store_true")
 
     # Parse command line arguments.
     args = parser.parse_args(sys.argv[1:])
@@ -92,7 +96,7 @@ def main():
 
         # Hand off control to the visualize module.
         elif args.command == "visualize":
-            generate_visualization(args)
+            visualize(args)
 
         # Otherwise no command was selected
         else:
