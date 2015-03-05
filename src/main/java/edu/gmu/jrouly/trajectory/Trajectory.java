@@ -326,24 +326,12 @@ public class Trajectory {
       String course = filename.substring(0, filename.lastIndexOf('.'));
       documentWriter.printf("%d,%s", document, course);
 
-      // Get the ranking of topics for this instance.
-      LabelSequence topicSequence = data.get(document).topicSequence;
-      LabelSequence.Iterator iter = topicSequence.iterator();
-      LabelAlphabet alphabet = topicSequence.getLabelAlphabet();
-
       // Get the proportion values for this instance.
       double[] topicProbabilities = model.getTopicProbabilities(document);
 
-      // Only print the top rank_limit topics, or however many are found.
-      int rank = 0, rank_limit = 5;
-      while(rank < rank_limit && iter.hasNext()) {
-        Label label = (Label)iter.next();
-        int index = alphabet.lookupIndex(label.toString(), false);
-
-        double proportion = topicProbabilities[index];
-        documentWriter.printf(",%d:%f", index, proportion);
-
-        rank++;
+      for(int topic = 0; topic < topicProbabilities.length; topic++) {
+        double proportion = topicProbabilities[topic];
+        documentWriter.printf(",%d:%f", topic, proportion);
       }
 
       documentWriter.println();
