@@ -4,8 +4,9 @@
     <title>{% block title %}{% endblock%} - Trajectory</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <link rel="stylesheet" href="/static/css/bootstrap.min.css" media="screen">
-    <link rel="stylesheet" href="/static/css/bootswatch.min.css" media="screen">
+    <link rel="stylesheet" href="/static/css/vendor/normalize.css" media="screen">
+    <link rel="stylesheet" href="/static/css/vendor/bootstrap.min.css" media="screen">
+    <link rel="stylesheet" href="/static/css/vendor/bootswatch.min.css" media="screen">
     <link rel="stylesheet" href="/static/css/trajectory.css" media="screen">
   </head>
 
@@ -23,13 +24,9 @@
     </div>
 
     <script src="//code.jquery.com/jquery-2.1.3.min.js"></script>
-    <script src="/static/js/bootstrap.min.js"></script>
-
-    <script>
-    $('.collapse').on('show.bs.collapse', function () {
-          $('.collapse.in').collapse('hide');
-    });
-    </script>
+    <script src="/static/js/vendor/bootstrap.min.js"></script>
+    <script src="/static/js/vendor/jquery.hideseek.min.js"></script>
+    <script src="/static/js/trajectory.js"></script>
 
   </body>
 
