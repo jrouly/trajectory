@@ -34,7 +34,8 @@ def generate_html(args):
     paths = {
             'index': os.path.join(args.vis_directory, "index.html"),
             'about': os.path.join(args.vis_directory, "about.html"),
-            'ulist': os.path.join(args.vis_directory, "university_list.html"),
+            'ulist': os.path.join(args.vis_directory, "universities.html"),
+            'topics': os.path.join(args.vis_directory, "topics.html"),
     }
 
     # Compute and create university directories.
@@ -60,7 +61,7 @@ def generate_html(args):
         num_courses_by_uni = lambda uni: \
             sum([len(department.courses) for department in uni.departments])
         uni_link = lambda uni: \
-            "university_list.html#%s" % uni.abbreviation
+            "universities.html#%s" % uni.abbreviation
 
         # { GMU : (page, totalNumCourses), UMD : (page, totalNumCourses) ... }
         uni_num_courses = {university : (uni_link(university),
@@ -93,7 +94,7 @@ def generate_html(args):
                 "departments": departments
             })
 
-        template = env.get_template("university_list.html")
+        template = env.get_template("universities.html")
         fp.write(template.render(university_list=university_list))
 
     # Generate departmental pages.
@@ -105,6 +106,12 @@ def generate_html(args):
             with open(department_path, "w") as fp:
                 template = env.get_template("department.html")
                 fp.write(template.render(department=department))
+
+    # Generate list of topics.
+    topics = args.session.query(Topic).all()
+    with open(paths['topics'], "w") as fp:
+        template = env.get_template("topics.html")
+        fp.write(template.render(topics=topics))
 
 
 
