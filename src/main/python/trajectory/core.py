@@ -269,6 +269,7 @@ def import_results(args):
                 association = CourseTopicAssociation(proportion=proportion)
                 association.topic_id = topicid
                 course.topics.append(association)
+            course.topics.sort() # sort by proportion
 
     log.info("Topic import complete.")
 
