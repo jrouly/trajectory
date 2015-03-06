@@ -73,8 +73,11 @@ Generate (and/or serve) the visualization pages. If `--serve` is present, a simp
 
 # ToDo
 
-+ Implement the "timeline" visualization tool (tracking prerequisites).
-+ Implement the "graph" visualization tool to visualize topics and courses.
-+ Fix up the search structure to allow course title searches, etc.
-+ Extract beta parameters into command line or config file.
-+ Build a more dynamic Flask application instead of the statically generated tool.
+1. Identify necessary RegExes to pull prereqs out of each existing engine.
+2. Extract alpha/beta parameters into command line or config file.
+3. Run test suite varying alpha/beta/topics parameters.
+4. Fix up the search structure to allow course title searches, etc.
+5. Implement the "timeline" visualization tool (tracking prerequisites).
+6. Implement the "graph" visualization tool to visualize topics and courses.
+7. Build a more dynamic Flask application instead of the statically generated tool.
+8. Add run/timestamp identifier on datasets in database -- allow multiple result sets to be stored at once.
