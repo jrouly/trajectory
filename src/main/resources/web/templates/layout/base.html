@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <link rel="stylesheet" href="/static/css/bootstrap.min.css" media="screen">
     <link rel="stylesheet" href="/static/css/bootswatch.min.css" media="screen">
+    <link rel="stylesheet" href="/static/css/trajectory.css" media="screen">
   </head>
 
   <body id="top">
@@ -23,6 +24,13 @@
 
     <script src="//code.jquery.com/jquery-2.1.3.min.js"></script>
     <script src="/static/js/bootstrap.min.js"></script>
+
+    <script>
+    $('.collapse').on('show.bs.collapse', function () {
+          $('.collapse.in').collapse('hide');
+    });
+    </script>
+
   </body>
 
 </html>

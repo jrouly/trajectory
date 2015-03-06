@@ -9,12 +9,74 @@
     <div class="col-lg-12">
       <h1>{{ department.university.abbreviation }}/{{ department.abbreviation }}
         {% if department.url %}
-        - <a href="//{{department.url}}">web</a>
+        - <a target="_blank" href="//{{department.url}}">web</a>
         {% endif %}</h1>
     </div>
   </div>
 </div>
 
+<div class="row">
+  <div class="col-lg-12">
 
+    <h3>Course List</h3>
+
+    <table class="table table-hover" id="accordion">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Number</th>
+          <th>Title</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for course in department.courses %}
+        {% set id = loop.index %}
+        <tr data-toggle="collapse" data-target=".collapse{{ id }}"
+          class="clickable">
+          <td>{{ id }}</td>
+          <td>{{ course.number }}</td>
+          <td>{{ course.title }}</td>
+        </tr>
+
+        <tr class="info collapse collapse{{id}}">
+          <td colspan="3">
+            <div class="collapse collapse{{id}}">
+              {{ course.description_raw }}
+            </div>
+          </td>
+        </tr>
+
+        {% for topic in course.topics %}
+        <tr class="success collapse collapse{{id}}">
+          <td colspan="3">
+            <div class="collapse collapse{{id}}">
+              {{ topic.proportion }} : {{ topic.topic.words }}
+            </div>
+          </td>
+        </tr>
+        {% else %}
+        <tr class="collapse danger collapse{{id}}">
+          <td colspan="3">
+            <div class="collapse collapse{{loop.index}}">
+              No topics inferred.
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+
+        {% else %}
+        <tr>
+          <td></td>
+          <td>No courses found.</td>
+          <td></td>
+          <td></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+
+    </table>
+
+  </div>
+</div>
 
 {% endblock %}
