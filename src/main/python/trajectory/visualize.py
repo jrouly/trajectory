@@ -15,6 +15,7 @@ def generate_html(args):
     from trajectory.models import University, Department
     from trajectory import config as TRJ
 
+    from sqlalchemy.sql.expression import func
     from jinja2 import Environment, FileSystemLoader
     import shutil, os, logging
 
@@ -107,8 +108,12 @@ def generate_html(args):
                 template = env.get_template("department.html")
                 fp.write(template.render(department=department))
 
-    # Generate list of topics.
-    topics = args.session.query(Topic).all()
+    # Generate list of topics sorted by number of documents.
+    topics = args.session.query(Topic) \
+            .join(CourseTopicAssociation) \
+            .group_by(Topic.id) \
+            .order_by(func.count().desc()) \
+            .all()
     with open(paths['topics'], "w") as fp:
         template = env.get_template("topics.html")
         fp.write(template.render(topics=topics))
