@@ -65,6 +65,14 @@
           </td>
         </tr>
 
+        <tr class="ignore warning info collapse collapse{{course.id}}">
+          <td colspan="3">
+            <div class="collapse collapse{{course.id}}">
+              {{ course.description }}
+            </div>
+          </td>
+        </tr>
+
           {% for topic in course.topics %}
           <tr class="ignore success collapse collapse{{course.id}}">
             <td colspan="3">
