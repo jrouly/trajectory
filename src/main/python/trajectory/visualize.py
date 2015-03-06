@@ -131,7 +131,7 @@ def serve(args):
     log = logging.getLogger("root")
     os.chdir(args.vis_directory)
 
-    PORT = 8000
+    PORT = int(args.port) if args.port else 8000
     Handler = http.server.SimpleHTTPRequestHandler
     httpd = socketserver.TCPServer(("", PORT), Handler)
     log.info("Serving at port %d" % PORT)

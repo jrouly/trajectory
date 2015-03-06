@@ -69,6 +69,10 @@ def main():
             required=False,
             help="Serve the tool once generated.",
             action="store_true")
+    vis_parser.add_argument("--port",
+            required=False,
+            help="Port to serve on.",
+            action="store")
 
     # Parse command line arguments.
     args = parser.parse_args(sys.argv[1:])
