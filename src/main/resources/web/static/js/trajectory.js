@@ -9,4 +9,13 @@ $(document).ready(function() {
 
   $('#search-topics').hideseek({ });
 
+  function expand_course() {
+    var hash = window.location.hash, idx = hash.indexOf("#");
+    if(idx == 0) {
+      hash = hash.substring(idx+1);
+      $(".collapse"+hash).collapse('show');
+    }
+  }
+  expand_course();
+
 });
