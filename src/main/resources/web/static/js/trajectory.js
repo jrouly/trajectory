@@ -9,6 +9,14 @@ $(document).ready(function() {
 
   $('#search-topics').hideseek({ });
 
+  $('#search-courses').hideseek({
+    ignore: '.ignore'
+  });
+
+  $('#search-courses').on('keypress', function() {
+    $('.collapse.in').collapse('hide');
+  });
+
   function expand_course() {
     var hash = window.location.hash, idx = hash.indexOf("#");
     if(idx == 0) {
