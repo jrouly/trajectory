@@ -16,7 +16,11 @@
 <div class="row">
   <div class="col-lg-12">
 
-    <h3>{{ blob.get("university").name }} - <a href="//{{ blob.get("university").url }}">{{ blob.get("university").url }}</a></h3>
+    <h3 id={{ blob.get("university").abbreviation }}>
+      {{ blob.get("university").name }}
+      {% if blob.get("university").url %}
+      - <a href="//{{ blob.get("university").url }}">{{ blob.get("university").url }}</a>
+      {% endif %}</h3>
 
     <table class="table table-striped table-hover ">
       <thead>

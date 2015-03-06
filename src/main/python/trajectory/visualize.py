@@ -59,9 +59,12 @@ def generate_html(args):
         # number of courses offered by a university
         num_courses_by_uni = lambda uni: \
             sum([len(department.courses) for department in uni.departments])
+        uni_link = lambda uni: \
+            "university_list.html#%s" % uni.abbreviation
 
-        # { GMU : totalNumCourses, UMD : totalNumCourses ... }
-        uni_num_courses = {university : num_courses_by_uni(university)
+        # { GMU : (page, totalNumCourses), UMD : (page, totalNumCourses) ... }
+        uni_num_courses = {university : (uni_link(university),
+                                        num_courses_by_uni(university))
                             for university in universities}
 
         fp.write(template.render(universities=uni_num_courses))

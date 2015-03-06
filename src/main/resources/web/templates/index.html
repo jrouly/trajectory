@@ -28,11 +28,11 @@
         </tr>
       </thead>
       <tbody>
-        {% for university, count in universities.items() %}
+        {% for university, data in universities.items() %}
         <tr>
           <td>{{ loop.index }}</td>
-          <td>{{ university.name }}</td>
-          <td>{{ count }}</td>
+          <td><a href="{{ data[0] }}">{{ university.name }}</a></td>
+          <td>{{ data[1] }}</td>
           <td>{% if university.url %}
             <a target="_blank" href="//{{ university.url }}">{{ university.url }}</a>
             {% else %} - {% endif %}</td>
