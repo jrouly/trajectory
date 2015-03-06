@@ -117,6 +117,8 @@ class CourseTopicAssociation(meta.Base):
         return "<TopicAssociation: (%s, %s, %s)>" % \
                 (self.topic_id, self.course_id, self.proportion)
 
+    def __lt__(self, other):
+        return self.proportion < other.proportion
 
 # Register models with the database ORM mapping.
 meta.Base.metadata.create_all(meta.Engine)
