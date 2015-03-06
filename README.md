@@ -34,7 +34,7 @@ To specify or change the database URI and scheme, modify the `config.py` file. S
 To scrape and process downloaded syllabus data, use the `bin/scrape` script.
 
     $ bin/scrape [-h] [--version] [--debug]
-                  {download,export,import-topics} ...
+                  {download,export,import-topics,visualize} ...
 
 To execute the learning module, use the `bin/learn` script.
 
@@ -57,3 +57,24 @@ This exports data in a format that can be read in by the `Learn` module.
                   [-out <path>] [-threads <n>] [-topics <n>]
 
 If the `-out <path>` is not specified, data will be printed to standard output. Otherwise, it will be printed to timestamped CSV files that can be read into the `Visualize` module.
+
+### Import topic modeling to database
+
+    $ bin/scrape import-results [-h] --topic-file <file> --course-file <file>
+
+Read the results of the `Learn` module (inferred topics) back into the database and pair with existing course data.
+
+### Generate static visualization tool
+
+    $ bin/scrape visualize [-h] --vis-directory <directory>
+                  [--serve] [--port <port>]
+
+Generate (and/or serve) the visualization pages. If `--serve` is present, a simple HTTP python server will start up hosting the visualization on the specified port (defaults to 8000).
+
+# ToDo
+
++ Implement the "timeline" visualization tool (tracking prerequisites).
++ Implement the "graph" visualization tool to visualize topics and courses.
++ Fix up the search structure to allow course title searches, etc.
++ Extract beta parameters into command line or config file.
++ Build a more dynamic Flask application instead of the statically generated tool.
