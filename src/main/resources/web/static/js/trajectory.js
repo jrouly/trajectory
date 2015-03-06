@@ -5,4 +5,8 @@ $(document).ready(function() {
     $('.collapse.in').collapse('hide');
   });
 
+  $('#search-universities').hideseek({
+    nodata: 'No results found.'
+  });
+
 });
