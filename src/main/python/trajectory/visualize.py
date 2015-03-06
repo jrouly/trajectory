@@ -47,28 +47,6 @@ def generate_html(args):
         paths[university.abbreviation] = uni_path
         os.makedirs(uni_path)
 
-    # Compute university information tuples.
-    # [{
-    #   'university': <University Object>,
-    #   'index-page': university.html,
-    #   'departments': [(<Department>, page), (<Department>, page)]
-    # }]
-    university_list = []
-    for university in universities:
-        uni_dir = paths[university.abbreviation]
-        uni_index = os.path.join(uni_dir, "index.html")
-        departments = [
-            (department, os.path.join(uni_dir, "%s.html" \
-                    % department.abbreviation))
-            for department in university.departments]
-
-        university_list.append({
-            "university": university,
-            "index-page": uni_index,
-            "departments": departments
-        })
-
-
     # Generate static about page.
     with open(paths['about'], "w") as fp:
         template = env.get_template("about.html")
@@ -90,9 +68,40 @@ def generate_html(args):
 
     # Generate university list page.
     with open(paths['ulist'], "w") as fp:
+
+        # Compute university information tuples.
+        # [{
+        #   'university': <University Object>,
+        #   'index-page': university.html,
+        #   'departments': [(<Department>, page), (<Department>, page)]
+        # }]
+        university_list = []
+        for university in universities:
+            uni_dir = os.path.join("universities", university.abbreviation)
+            uni_index = os.path.join(uni_dir, "index.html")
+            departments = [
+                (department, os.path.join(uni_dir, "%s.html" \
+                        % department.abbreviation))
+                for department in university.departments]
+
+            university_list.append({
+                "university": university,
+                "index-page": uni_index,
+                "departments": departments
+            })
+
         template = env.get_template("university_list.html")
         fp.write(template.render(university_list=university_list))
 
+    # Generate departmental pages.
+    for university in universities:
+        uni_dir = paths[university.abbreviation]
+        for department in university.departments:
+            department_path = os.path.join(uni_dir, "%s.html" % \
+                    department.abbreviation)
+            with open(department_path, "w") as fp:
+                template = env.get_template("department.html")
+                fp.write(template.render(department=department))
 
 
 
