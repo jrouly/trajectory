@@ -249,7 +249,7 @@ def import_results(args):
         topic_reader = csv.reader(topic_file, delimiter=",")
         next(topic_reader, None) # skip header
         for topic in topic_reader:
-            args.session.add(Topic(words=', '.join(topic[1:])))
+            args.session.add(Topic(id=topic[0], words=', '.join(topic[1:])))
 
     # Add the topics to their courses.
     courses = args.session.query(Course).all()
