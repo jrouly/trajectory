@@ -23,9 +23,6 @@ def generate_html(args):
     log = logging.getLogger("root")
     log.info("Begin visualization generation.")
 
-    # Start up Jinja2.
-    env = Environment(loader=FileSystemLoader(TRJ.TEMPLATES))
-
     # Load static files.
     shutil.copytree(
             TRJ.STATIC_FILES,
@@ -62,12 +59,25 @@ def generate_html(args):
 
     # Standardize link format.
     university_link = lambda university: \
-        "universities/%s/index.html" % university.abbreviation.lower()
+        "/universities/%s/index.html" % university.abbreviation.lower()
     department_link = lambda department: \
-        "%s.html" % (
-            #department.university.abbreviation.lower(),
+        "/universities/%s/%s.html" % (
+            department.university.abbreviation.lower(),
             department.abbreviation.lower()
         )
+    course_link = lambda course: \
+        "%s#%d" % (
+            department_link(course.department),
+            course.id
+        )
+
+    # Start up Jinja2.
+    env = Environment(loader=FileSystemLoader(TRJ.TEMPLATES))
+    env.filters['university_course_count'] = university_course_count
+    env.filters['department_course_count'] = department_course_count
+    env.filters['university_link'] = university_link
+    env.filters['department_link'] = department_link
+    env.filters['course_link'] = course_link
 
     # Generate static about page.
     with open(paths['about'], "w") as fp:
@@ -88,30 +98,14 @@ def generate_html(args):
 
     # Generate university list page.
     with open(paths['ulist'], "w") as fp:
-
-        dataset = [{
-            'university': university,
-            'link': university_link(university),
-            'course-count': university_course_count(university)
-        } for university in universities]
-
         template = env.get_template("universities.html")
-        fp.write(template.render(universities=dataset))
+        fp.write(template.render(universities=universities))
 
     # Generate university and departmental pages.
     for university in universities:
         with open(paths[university], "w") as fp:
-
-            departments = [{
-                'department': department,
-                'link': department_link(department),
-                'course-count': department_course_count(department)
-            } for department in university.departments]
-
             template = env.get_template("university.html")
-            fp.write(template.render(
-                university=university,
-                departments=departments))
+            fp.write(template.render(university=university))
 
         for department in university.departments:
             with open(paths[department], "w") as fp:
