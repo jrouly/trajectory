@@ -86,15 +86,8 @@ def generate_html(args):
 
     # Generate dashboard page.
     with open(paths['index'], "w") as fp:
-
-        dataset = [{
-            'university': university,
-            'link': university_link(university),
-            'course-count': university_course_count(university)
-        } for university in universities]
-
         template = env.get_template("index.html")
-        fp.write(template.render(universities=dataset))
+        fp.write(template.render(universities=universities))
 
     # Generate university list page.
     with open(paths['ulist'], "w") as fp:

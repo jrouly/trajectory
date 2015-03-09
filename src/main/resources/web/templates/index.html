@@ -34,11 +34,10 @@
         </tr>
       </thead>
       <tbody>
-        {% for university_data in universities %}
+        {% for university in universities %}
 
-        {% set university = university_data.get("university") %}
-        {% set link = university_data.get("link") %}
-        {% set course_count = university_data.get("course-count") %}
+        {% set link = university|university_link %}
+        {% set course_count = university|university_course_count %}
 
         <tr>
           <td>{{ loop.index }}</td>
