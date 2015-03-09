@@ -42,9 +42,16 @@ def main():
     export_parser = subparsers.add_parser("export",
             help="Export data to disk for analysis.")
     export_parser.add_argument("--data-directory",
-            required=True,
-            help="The data directory to store in.",
+            default="data",
+            help="The export directory (default: 'data').",
             action="store")
+    export_parser.add_argument("--departments",
+            nargs="+",
+            help="The departments to export.",
+            action="store")
+    export_parser.add_argument("--cs",
+            help="Shortcut for just CS departments.",
+            action="store_true")
 
     # Create arguments for importing topics.
     import_parser = subparsers.add_parser("import-results",

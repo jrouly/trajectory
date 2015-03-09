@@ -174,7 +174,7 @@ def export(args):
         os.mkdir(args.data_directory)
         log.debug("Creating folder %s." % args.data_directory)
     except FileExistsError:
-        log.warn("Data directory '%s' already exists." % args.data_directory)
+        log.error("Data directory '%s' already exists." % args.data_directory)
         return
 
     # Get access to the data.
@@ -190,6 +190,17 @@ def export(args):
 
         # Retrieve list of known university departments.
         departments = university.departments
+
+        # CS department shortcut.
+        if args.cs:
+            args.departments = ["cs", "cis", "csc", "csci"]
+
+        # Filter by the requested departments.
+        if args.departments:
+            # Lowercase everything for consistency.
+            depts_lowered = list(map(lambda a: a.lower(), args.departments))
+            departments = [d for d in departments
+                    if d.abbreviation.lower() in depts_lowered]
 
         # Dump data in folders broken down by department (prefix).
         for department in departments:
