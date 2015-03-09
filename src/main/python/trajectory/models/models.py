@@ -9,6 +9,7 @@ Define the models package.
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy import Table, UniqueConstraint, ForeignKey
 from sqlalchemy import Column, Integer, String, Float
+from sqlalchemy import desc
 
 from trajectory.models import meta
 
@@ -73,7 +74,10 @@ class Course(meta.Base):
 
     prerequisites = relationship("Course")
 
-    topics = relationship("CourseTopicAssociation", backref="course")
+    topics = relationship(
+            "CourseTopicAssociation",
+            backref="course",
+            order_by=desc("course_topic_association.proportion"))
 
     def __repr__(self):
         if self.department is None:
@@ -111,7 +115,9 @@ class CourseTopicAssociation(meta.Base):
     proportion = Column(Float)
 
     topic = relationship("Topic",
-            backref=backref("course_assocs", cascade="all, delete-orphan"))
+            backref=backref("course_assocs",
+                cascade="all, delete-orphan",
+                order_by=desc("course_topic_association.proportion")))
 
     def __repr__(self):
         return "<TopicAssociation: (%s, %s, %s)>" % \
