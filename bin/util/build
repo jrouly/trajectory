@@ -16,9 +16,36 @@ set -e
 cd $TRJ_HOME
 
 
-# Ignore errors.
-set +e
+# Build the project if it needs to be.
+if [ ! -e "target" ]
+then
+  # Compile and package using maven.
+  mvn clean compile package javadoc:javadoc
+fi
 
 
-# Compile and package using maven.
-mvn clean compile package javadoc:javadoc
+# Define python requirements installer.
+pyreq () {
+  if [ -f "requirements.txt" ]
+  then
+    pip install -r requirements.txt
+  else
+    echo "Python requirements file not found."
+    exit 1
+  fi
+}
+
+
+# Attempt to create virtual environment & install requirements.
+if [ ! -d "env" ]
+then
+  virtualenv env
+  source env/bin/activate
+  pyreq
+  touch .runonce
+elif [ ! -e ".runonce" ]
+then
+  source env/bin/activate
+  pyreq
+  touch .runonce
+fi

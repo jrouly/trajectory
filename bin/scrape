@@ -16,39 +16,12 @@ set -e
 cd $TRJ_HOME
 
 
-# Define python requirements installer.
-pyreq () {
-  if [ -f "requirements.txt" ]
-  then
-    pip install -r requirements.txt
-  else
-    echo "Python requirements file not found."
-    exit 1
-  fi
-}
-
-
-# Attempt to create virtual environment & install requirements.
-if [ ! -d "env" ]
-then
-  virtualenv env
-  source env/bin/activate
-  pyreq
-  touch .runonce
-elif [ ! -e ".runonce" ]
-then
-  source env/bin/activate
-  pyreq
-  touch .runonce
-fi
+# Run build check.
+bin/util/build
 
 
 # Ensure that the virtual environment is enabled.
 source env/bin/activate
-
-
-# Ignore further errors.
-set +e
 
 
 # Pass arguments to python trj interface.

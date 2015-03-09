@@ -16,15 +16,8 @@ set -e
 cd $TRJ_HOME
 
 
-# Ignore errors.
-set +e
-
-
-# Build the project if it needs to be.
-if [ ! -e "target" ]
-then
-  bin/util/build
-fi
+# Run build check.
+bin/util/build
 
 
 # Pass all arguments to the java command.
