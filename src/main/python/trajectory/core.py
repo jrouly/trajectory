@@ -290,37 +290,3 @@ def import_results(args):
                 course.topics.append(association)
 
     log.info("Topic import complete.")
-
-
-def visualize(args):
-    """
-    Generate the visualization web pages from the database.
-    """
-
-    from trajectory.visualize import generate_html, serve
-    import os, logging
-
-    # Initialize logger.
-    log = logging.getLogger("root")
-    log.info("Begin visualization generation.")
-
-    # If the user requested to serve, and the visualization directory
-    # already exists, then serve existing data.
-    if args.serve and os.path.exists(args.vis_directory):
-        serve(args)
-        return
-
-    if not os.path.exists(args.vis_directory):
-        os.mkdir(args.vis_directory)
-        log.info("Created visualization directory.")
-    else:
-        log.error("Requested directory '%s' already exists." % \
-                args.vis_directory)
-        return
-
-    # Generate the static HTML pages.
-    generate_html(args)
-
-    # If requested, serve the content.
-    if args.serve:
-        serve(args)

@@ -1,9 +1,21 @@
+##
+## WARNING: THIS FILE IS DEPRECATED.
+## IT LIKELY WILL NOT WORK.
+##
+
+
+
 """
 trajectory/visualize.py
 Author: Jean Michel Rouly
 
 Define functionality to generate and display collected data.
 """
+
+
+import logging
+log = logging.getLogger("root")
+log.warn("Visualize imported. Obsolete code in use.")
 
 
 def generate_html(args):
