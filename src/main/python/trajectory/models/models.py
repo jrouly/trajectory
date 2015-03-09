@@ -7,7 +7,7 @@ Define the models package.
 
 
 from sqlalchemy.orm import relationship, backref
-from sqlalchemy import Table, UniqueConstraint, ForeignKey
+from sqlalchemy import Table, UniqueConstraint, ForeignKey, ForeignKeyConstraint
 from sqlalchemy import Column, Integer, String, Float, DateTime
 from sqlalchemy import desc
 
@@ -34,6 +34,8 @@ class ResultSet(meta.Base):
     def __lt__(self, other):
         return self.timestamp < other.timestamp
 
+    def __repr__(self):
+        return "<ResultSet: %d>" % self.id
 
 class University(meta.Base):
     """
@@ -119,11 +121,16 @@ class Topic(meta.Base):
 
     __tablename__ = "topic"
     id = Column(Integer, primary_key=True)
-    result_set = Column(Integer, ForeignKey("result_set.id"), primary_key=True)
+    result_set_id = Column(Integer,
+            ForeignKey("result_set.id"),
+            primary_key=True,
+            nullable=False)
+    result_set = relationship("ResultSet", uselist=False)
+
     words = Column(String, nullable=False)
 
     def __repr__(self):
-        return "<Topic: %s>" % self.id
+        return "<Topic: %s (%d)>" % (self.id, self.result_set_id)
 
 
 class CourseTopicAssociation(meta.Base):
@@ -133,7 +140,8 @@ class CourseTopicAssociation(meta.Base):
 
     __tablename__ = "course_topic_association"
     course_id = Column(Integer, ForeignKey("course.id"), primary_key=True)
-    topic_id = Column(Integer, ForeignKey("topic.id"), primary_key=True)
+    topic_id = Column(Integer, primary_key=True)
+    result_set_id = Column(Integer, primary_key=True)
     proportion = Column(Float)
 
     topic = relationship("Topic",
@@ -141,9 +149,16 @@ class CourseTopicAssociation(meta.Base):
                 cascade="all, delete-orphan",
                 order_by=desc("course_topic_association.proportion")))
 
+    __table_args__ = (
+            ForeignKeyConstraint(
+                ['topic_id', 'result_set_id'],
+                ['topic.id', 'topic.result_set_id']
+            ),
+    )
+
     def __repr__(self):
-        return "<TopicAssociation: (%s, %s, %s)>" % \
-                (self.topic_id, self.course_id, self.proportion)
+        return "<TopicAssociation (RS %d): (Topic %s, Course %s, Weight %s)>" % \
+                (self.result_set_id, self.topic_id, self.course_id, self.proportion)
 
     def __lt__(self, other):
         return self.proportion < other.proportion

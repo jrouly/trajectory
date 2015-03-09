@@ -240,27 +240,34 @@ def import_results(args):
     """
 
     from trajectory.models import Course, Topic, CourseTopicAssociation
+    from trajectory.models import ResultSet
     from trajectory import config as TRJ
     import logging, csv
     log = logging.getLogger("root")
     log.info("Begin topic import.")
 
-    # Remove old course topics.
-    courses = args.session.query(Course).all()
-    for course in courses:
-        [args.session.delete(topic) for topic in course.topics]
-
-    # Clear out old topics.
-    topics = args.session.query(Topic).all()
-    [args.session.delete(topic) for topic in topics]
+    # Create a new result set.
+    result_set = ResultSet(
+        alpha=args.alpha,
+        beta=args.beta,
+        iterations=args.iterations
+    )
+    args.session.add(result_set)
     args.session.commit()
 
     # Add in new topic definitions.
     with open(args.topic_file, "r") as topic_file:
         topic_reader = csv.reader(topic_file, delimiter=",")
         next(topic_reader, None) # skip header
+        topic_count = 0
         for topic in topic_reader:
-            args.session.add(Topic(id=topic[0], words=', '.join(topic[1:])))
+            topic_count += 1
+            args.session.add(Topic(
+                id=topic[0],
+                result_set=result_set,
+                words=', '.join(topic[1:])
+            ))
+        result_set.num_topics = topic_count
 
     # Add the topics to their courses.
     courses = args.session.query(Course).all()
@@ -279,6 +286,7 @@ def import_results(args):
             for (topicid, proportion) in topic_list:
                 association = CourseTopicAssociation(proportion=proportion)
                 association.topic_id = topicid
+                association.result_set_id = result_set.id
                 course.topics.append(association)
 
     log.info("Topic import complete.")

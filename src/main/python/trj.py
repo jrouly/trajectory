@@ -64,6 +64,12 @@ def main():
             required=True,
             help="The stored document key file from the learn module.",
             action="store")
+    import_parser.add_argument("--alpha", required=False, action="store",
+            help="Alpha value used in this run.")
+    import_parser.add_argument("--beta", required=False, action="store",
+            help="Beta value used in this run.")
+    import_parser.add_argument("--iterations", required=False, action="store",
+            help="Number of iterations used in this run.")
 
     # Create arguments for visualization module.
     vis_parser = subparsers.add_parser("visualize",
