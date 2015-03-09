@@ -70,6 +70,8 @@ def generate_html(args):
             department_link(course.department),
             course.id
         )
+    topic_link = lambda topic: \
+        "/topics.html#%d" % topic.id
 
     # Start up Jinja2.
     env = Environment(loader=FileSystemLoader(TRJ.TEMPLATES))
@@ -78,6 +80,7 @@ def generate_html(args):
     env.filters['university_link'] = university_link
     env.filters['department_link'] = department_link
     env.filters['course_link'] = course_link
+    env.filters['topic_link'] = topic_link
 
     # Generate static about page.
     with open(paths['about'], "w") as fp:

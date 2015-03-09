@@ -13,13 +13,13 @@ $(document).ready(function() {
     $('.collapse.in').collapse('hide');
   });
 
-  function expand_course() {
+  function expand_id() {
     var hash = window.location.hash, idx = hash.indexOf("#");
     if(idx == 0) {
       hash = hash.substring(idx+1);
       $(".collapse"+hash).collapse('show');
     }
   }
-  expand_course();
+  expand_id();
 
 });

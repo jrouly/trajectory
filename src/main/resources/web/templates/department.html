@@ -82,7 +82,9 @@
           <tr class="ignore success collapse collapse{{course.id}}">
             <td colspan="3">
               <div class="collapse collapse{{course.id}}">
-                ({{ topic.proportion }}) {{ topic.topic.words }}
+                ({{ '%.3f' % topic.proportion }})
+                <a href="{{ topic.topic|topic_link }}">
+                  {{ topic.topic.words }}</a>
               </div>
             </td>
           </tr>

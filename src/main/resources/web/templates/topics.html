@@ -44,14 +44,14 @@
     <ul class="list-group" id="topic-list">
       {% for topic in topics %}
 
-      <li class="list-group-item">
+      <li class="list-group-item" id="{{ topic.id }}">
         <span class="badge">{{ topic.course_assocs|count }}</span>
 
         <i class="fa fa-caret-right"></i>&nbsp;
         <a class="clickable" data-toggle="collapse"
-          data-target="#docs{{ loop.index }}">{{ topic.words }}</a>
+          data-target=".collapse{{ topic.id }}">{{ topic.words }}</a>
 
-        <div class="collapse" id="docs{{ loop.index }}">
+        <div class="collapse collapse{{ topic.id }}">
           <p></p>
 
           {% for course_assoc in topic.course_assocs %}
