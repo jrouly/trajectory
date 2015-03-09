@@ -74,11 +74,9 @@ Generate (and/or serve) the visualization pages. If `--serve` is present, a simp
 # ToDo
 
 1. Identify necessary RegExes to pull prereqs out of each existing engine.
-2. Extract alpha/beta parameters into command line or config file.
-3. Extract ACM descriptions to an engine.
-4. Run test suite varying alpha/beta/topics parameters.
-5. Fix up the search structure to allow course title searches, etc.
-6. Implement the "timeline" visualization tool (tracking prerequisites).
-7. Implement the "graph" visualization tool to visualize topics and courses.
-8. Build a more dynamic Flask application instead of the statically generated tool.
-9. Add run/timestamp identifier on datasets in database -- allow multiple result sets to be stored at once.
+2. Extract ACM descriptions to an engine.
+3. Run test suite varying alpha/beta/topics parameters.
+4. Implement the "timeline" visualization tool (tracking prerequisites).
+5. Implement the "graph" visualization tool to visualize topics and courses.
+6. Build a more dynamic Flask application instead of the statically generated tool.
+7. Add run/timestamp identifier on datasets in database -- allow multiple result sets to be stored at once.
