@@ -33,3 +33,7 @@ STOP_WORDS = set(open(__STOP_WORDS_FILE, "r").read().splitlines())
 
 # Minimum topic weight to measure.
 TOPIC_MIN_WEIGHT = 0.1
+
+# Directory where templates are stored for the visualization module.
+TEMPLATES = os.path.join(__RESOURCES, "web", "templates")
+STATIC_FILES = os.path.join(__RESOURCES, "web", "static")

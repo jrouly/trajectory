@@ -1,6 +1,7 @@
 from flask import Flask, render_template
 from flask.ext.sqlalchemy import SQLAlchemy
-from trajectry import config as TRJ
+from jinja2 import FileSystemLoader
+from trajectory import config as TRJ
 
 app = Flask(__name__)
 app.config.from_object(dict(
@@ -8,7 +9,8 @@ app.config.from_object(dict(
     SQLALCHEMY_DATABASE_URI = TRJ.DATABASE_URI,
     THREADS_PER_PAGE = 8,
 ))
-db = SQLAlchemy(app)
+app.jinja_loader = FileSystemLoader(TRJ.TEMPLATES)
+app.db = SQLAlchemy(app)
 
 
 # Define routing.

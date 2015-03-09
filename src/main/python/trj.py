@@ -15,7 +15,7 @@ import os
 
 from trajectory import engines
 from trajectory import config as TRJ
-from trajectory.core import scrape, export, import_results
+from trajectory.core import scrape, export, import_results, start_webapp
 from trajectory.models.meta import Engine, Session
 
 def main():
@@ -71,6 +71,10 @@ def main():
     import_parser.add_argument("--iterations", required=False, action="store",
             help="Number of iterations used in this run.")
 
+    # Create arguments for web application.
+    web_parser = subparsers.add_parser("web",
+            help="Start up the web application.")
+
     # Parse command line arguments.
     args = parser.parse_args(sys.argv[1:])
 
@@ -94,6 +98,10 @@ def main():
         # Hand off control to the import module.
         elif args.command == "import-results":
             import_results(args)
+
+        # Hand off control to the web application.
+        elif args.command == "web":
+            start_webapp(args)
 
         # Otherwise no command was selected
         else:

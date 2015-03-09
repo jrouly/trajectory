@@ -290,3 +290,13 @@ def import_results(args):
                 course.topics.append(association)
 
     log.info("Topic import complete.")
+
+
+def start_webapp(args):
+    """
+    Start up the included web application.
+    TODO: Integrate with gunicorn or wsgi or similar.
+    """
+
+    from trajectory.web import app
+    app.run(debug=args.debug)
