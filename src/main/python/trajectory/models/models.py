@@ -8,10 +8,31 @@ Define the models package.
 
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy import Table, UniqueConstraint, ForeignKey
-from sqlalchemy import Column, Integer, String, Float
+from sqlalchemy import Column, Integer, String, Float, DateTime
 from sqlalchemy import desc
 
+from datetime import datetime
+
 from trajectory.models import meta
+
+
+class ResultSet(meta.Base):
+    """
+    Meta model to track different result sets and allow for multiple
+    results in a single database.
+    """
+
+    __tablename__ = "result_set"
+    id = Column(Integer, primary_key=True)
+    timestamp = Column(DateTime, nullable=False, default=datetime.now)
+
+    alpha = Column(Float, nullable=True)
+    beta = Column(Float, nullable=True)
+    iterations = Column(Float, nullable=True)
+    num_topics = Column(Integer, nullable=True)
+
+    def __lt__(self, other):
+        return self.timestamp < other.timestamp
 
 
 class University(meta.Base):
@@ -98,6 +119,7 @@ class Topic(meta.Base):
 
     __tablename__ = "topic"
     id = Column(Integer, primary_key=True)
+    result_set = Column(Integer, ForeignKey("result_set.id"), primary_key=True)
     words = Column(String, nullable=False)
 
     def __repr__(self):
