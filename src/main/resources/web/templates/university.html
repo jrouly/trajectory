@@ -1,18 +1,21 @@
 {% extends 'layout/base.html' %}
 
-{% block title %}Universities{% endblock %}
+{% block title %}{{university.name}}{% endblock %}
 
 {% block content %}
 
 <div class="page-header">
   <div class="row">
     <div class="col-lg-12">
-      <h1>Universities</h1>
+      <h1>{{ university.name }}
+        {% if university.url %}
+        - <a target="_blank" href="//{{university.url}}">web</a>
+        {% endif %}</h1>
     </div>
   </div>
 </div>
 
-{% if universities %}
+{% if departments %}
 <div class="row">
   <div class="col-lg-12">
     <div class="form-horizontal" action="" method="get">
@@ -22,8 +25,8 @@
           <div class="input-group">
             <span class="input-group-addon"><i class="fa fa-search"></i></span>
             <input type="text" class="form-control" autocomplete="off"
-            placeholder="University name" id="search"
-            data-list="#university-list">
+              placeholder="{{university.name}} departments"
+              id="search" data-list="#department-list">
           </div>
         </div>
       </div>
@@ -35,30 +38,31 @@
 <div class="row">
   <div class="col-lg-12">
 
-    <table class="table table-hover">
+    <table class="table table-hover ">
       <thead>
         <tr>
           <th>#</th>
-          <th>University</th>
+          <th>Department</th>
           <th>Course Count</th>
           <th>Web</th>
         </tr>
       </thead>
-      <tbody id="university-list">
-        {% for university_data in universities %}
+      <tbody id="department-list">
+        {% for department_data in departments %}
 
-        {% set university = university_data.get("university") %}
-        {% set link = university_data.get("link") %}
-        {% set course_count = university_data.get("course-count") %}
+        {% set department = department_data.get("department") %}
+        {% set link = department_data.get("link") %}
+        {% set course_count = department_data.get("course-count") %}
 
         <tr>
           <td>{{ loop.index }}</td>
-          <td><a href="{{ link }}">{{ university.name }}</a></td>
+          <td><a href="{{ link }}">{{ department.name }}</a></td>
           <td>{{ course_count }}</td>
-          <td>{% if university.url %}
-            <a target="_blank" href="//{{ university.url }}">{{ university.url }}</a>
+          <td>{% if department.url %}
+            <a target="_blank" href="//{{ department.url }}">{{ department.url }}</a>
             {% else %} - {% endif %}</td>
         </tr>
+
         {% endfor %}
       </tbody>
     </table>
@@ -69,7 +73,7 @@
 {% else %}
 <div class="row">
   <div class="col-lg-12">
-    <p class="warning">No universities found.<p>
+    <p class="warning">No departments defined.<p>
   </div>
 </div>
 {% endif %}

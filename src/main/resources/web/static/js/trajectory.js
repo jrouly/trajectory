@@ -5,15 +5,11 @@ $(document).ready(function() {
     $('.collapse.in').collapse('hide');
   });
 
-  $('#search-universities').hideseek({ });
-
-  $('#search-topics').hideseek({ });
-
-  $('#search-courses').hideseek({
+  $('#search').hideseek({
     ignore: '.ignore'
   });
 
-  $('#search-courses').on('keypress', function() {
+  $('#search').on('keypress', function() {
     $('.collapse.in').collapse('hide');
   });
 

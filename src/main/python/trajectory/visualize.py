@@ -39,15 +39,35 @@ def generate_html(args):
             'topics': os.path.join(args.vis_directory, "topics.html"),
     }
 
-    # Compute and create university directories.
+    # Compute and create university & department directories.
     universities = args.session.query(University).all()
     for university in universities:
-        uni_path = os.path.join(
+        university_dir = os.path.join(
                 args.vis_directory,
                 "universities",
-                university.abbreviation)
-        paths[university.abbreviation] = uni_path
-        os.makedirs(uni_path)
+                university.abbreviation.lower())
+        os.makedirs(university_dir)
+        paths[university] = os.path.join(
+                university_dir,
+                "index.html")
+        for department in university.departments:
+            paths[department] = os.path.join(
+                    university_dir,
+                    "%s.html" % department.abbreviation.lower())
+
+    # Get the number of courses per university and per department.
+    university_course_count = lambda university: \
+        sum([len(department.courses) for department in university.departments])
+    department_course_count = lambda department: len(department.courses)
+
+    # Standardize link format.
+    university_link = lambda university: \
+        "universities/%s/index.html" % university.abbreviation.lower()
+    department_link = lambda department: \
+        "%s.html" % (
+            #department.university.abbreviation.lower(),
+            department.abbreviation.lower()
+        )
 
     # Generate static about page.
     with open(paths['about'], "w") as fp:
@@ -56,55 +76,45 @@ def generate_html(args):
 
     # Generate dashboard page.
     with open(paths['index'], "w") as fp:
+
+        dataset = [{
+            'university': university,
+            'link': university_link(university),
+            'course-count': university_course_count(university)
+        } for university in universities]
+
         template = env.get_template("index.html")
-
-        # number of courses offered by a university
-        num_courses_by_uni = lambda uni: \
-            sum([len(department.courses) for department in uni.departments])
-        uni_link = lambda uni: \
-            "universities.html#%s" % uni.abbreviation
-
-        # { GMU : (page, totalNumCourses), UMD : (page, totalNumCourses) ... }
-        uni_num_courses = {university : (uni_link(university),
-                                        num_courses_by_uni(university))
-                            for university in universities}
-
-        fp.write(template.render(universities=uni_num_courses))
+        fp.write(template.render(universities=dataset))
 
     # Generate university list page.
     with open(paths['ulist'], "w") as fp:
 
-        # Compute university information tuples.
-        # [{
-        #   'university': <University Object>,
-        #   'index-page': university.html,
-        #   'departments': [(<Department>, page), (<Department>, page)]
-        # }]
-        university_list = []
-        for university in universities:
-            uni_dir = os.path.join("universities", university.abbreviation)
-            uni_index = os.path.join(uni_dir, "index.html")
-            departments = [
-                (department, os.path.join(uni_dir, "%s.html" \
-                        % department.abbreviation))
-                for department in university.departments]
-
-            university_list.append({
-                "university": university,
-                "index-page": uni_index,
-                "departments": departments
-            })
+        dataset = [{
+            'university': university,
+            'link': university_link(university),
+            'course-count': university_course_count(university)
+        } for university in universities]
 
         template = env.get_template("universities.html")
-        fp.write(template.render(university_list=university_list))
+        fp.write(template.render(universities=dataset))
 
-    # Generate departmental pages.
+    # Generate university and departmental pages.
     for university in universities:
-        uni_dir = paths[university.abbreviation]
+        with open(paths[university], "w") as fp:
+
+            departments = [{
+                'department': department,
+                'link': department_link(department),
+                'course-count': department_course_count(department)
+            } for department in university.departments]
+
+            template = env.get_template("university.html")
+            fp.write(template.render(
+                university=university,
+                departments=departments))
+
         for department in university.departments:
-            department_path = os.path.join(uni_dir, "%s.html" % \
-                    department.abbreviation)
-            with open(department_path, "w") as fp:
+            with open(paths[department], "w") as fp:
                 template = env.get_template("department.html")
                 fp.write(template.render(department=department))
 
