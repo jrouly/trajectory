@@ -74,6 +74,14 @@ public class Trajectory {
   private static final int DEFAULT_NUM_TOPICS = 50;
   private static int numTopics = DEFAULT_NUM_TOPICS;
 
+  // Alpha sum parameter.
+  private static final double DEFAULT_ALPHA_SUM = numTopics;
+  private static double alphaSum = DEFAULT_ALPHA_SUM;
+
+  // Beta parameter.
+  private static final double DEFAULT_BETA = 0.01;
+  private static double beta = DEFAULT_BETA;
+
   // Number of words to display in each topic on output.
   private static final int DEFAULT_NUM_WORDS = 10;
   private static int numWords = DEFAULT_NUM_WORDS;
@@ -155,6 +163,18 @@ public class Trajectory {
     if(argmap.containsKey("iterations")) {
       String numIterationsString = argmap.get("iterations");
       numIterations = Integer.parseInt(numIterationsString);
+    }
+
+    // If the alpha argument is present, grab its value.
+    if(argmap.containsKey("alpha")) {
+      String alphaString = argmap.get("alpha");
+      alphaSum = Double.parseDouble(alphaString);
+    }
+
+    // If the beta argument is present, grab its value.
+    if(argmap.containsKey("beta")) {
+      String betaString = argmap.get("beta");
+      beta = Double.parseDouble(betaString);
     }
 
     // If the numTopics argument is present, grab its value.
@@ -273,7 +293,8 @@ public class Trajectory {
     // 1st paremeter: number of topics
     // 2nd parameter: alpha sum, defaults to number of topics
     // 3rd parameter: beta, defaults to 0.01
-    ParallelTopicModel model = new ParallelTopicModel(numTopics);
+    ParallelTopicModel model = new ParallelTopicModel(
+        numTopics, alphaSum, beta);
 
     // Set data instances.
     model.addInstances(instances);

@@ -42,6 +42,18 @@ public class CLI {
       .withDescription("number of iterations")
       .create("iterations");
 
+    // Alpha sum value.
+    Option alphaOption = OptionBuilder.withArgName("alpha sum")
+      .hasArg()
+      .withDescription("LDA alpha sum")
+      .create("alpha");
+
+    // Beta parameter value.
+    Option betaOption = OptionBuilder.withArgName("beta")
+      .hasArg()
+      .withDescription("LDA beta parameter")
+      .create("beta");
+
     // Number of expected topics.
     Option topicOption = OptionBuilder.withArgName("num topics")
       .hasArg()
@@ -73,6 +85,8 @@ public class CLI {
     options.addOption(debugOption  );
     options.addOption(threadsOption);
     options.addOption(iterOption   );
+    options.addOption(alphaOption  );
+    options.addOption(betaOption   );
     options.addOption(wordsOption  );
     options.addOption(topicOption  );
     options.addOption(inDirOption  );
