@@ -1,3 +1,11 @@
+"""
+trajectory/config.py
+Author: Jean Michel Rouly
+
+Define globally accessible environment.
+"""
+
+
 # Program identification and versioning.
 PROGRAM_NAME = "Trajectory"
 PROGRAM_DESC = "This Python application is used to acquire (scrape, clean) a dataset."
