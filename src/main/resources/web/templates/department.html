@@ -18,7 +18,7 @@
   <div class="col-lg-12">
     <ul class="breadcrumb">
       <li></li>
-      <li><a href="/universities.html">Universities</a></li>
+      <li><a href="{{url_for('university_list')}}">Universities</a></li>
       <li><a href="{{url_for('university', u=university.abbreviation)}}">{{ university.abbreviation }}</a></li>
       <li class="active">{{ department.abbreviation }}</li>
     </ul>
@@ -83,7 +83,8 @@
           </td>
         </tr>
 
-          {% for topic_association in course.topics %}
+          {% for topic_association in course.topics
+              if topic_association.result_set_id == grs.id %}
           {% set topic = topic_association.topic %}
           {% set proportion = topic_association.proportion %}
 

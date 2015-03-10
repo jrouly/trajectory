@@ -25,40 +25,92 @@
 
 <div class="row">
   <div class="col-lg-12">
-    <h1>Dataset Overview</h1>
+    <h1>Result Set Overview</h1>
+    <h3><code>{{grs.timestamp}}</code></h3>
+  </div>
+</div>
 
-    <table class="table table-hover">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>University</th>
-          <th>Course Count</th>
-          <th>Web</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for university in universities %}
+<div class="row">
+  <div class="col-lg-12">
+    <h3>Initialization Parameters</h3>
 
-        {% set link = url_for('university', u=university.abbreviation) %}
+    <div class="table-responsive">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>Parameter</th>
+            <th>Value</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>Alpha</code></td>
+            <td>{{grs.alpha if grs.alpha is defined else "Not recorded."}}</td>
+            <td>Describes the ...</td>
+          </tr>
+          <tr>
+            <td><code>Beta</code></td>
+            <td>{{grs.beta if grs.beta is defined else "Not recorded."}}</td>
+            <td>Describes the ...</td>
+          </tr>
+          <tr>
+            <td><code>Iterations</code></td>
+            <td>{{grs.iterations if grs.iterations is defined else "Not recorded."}}</td>
+            <td>The number of iterations of
+              <abbr title="Latent Dirichlet Allocation">LDA</abbr>
+              applied.</td>
+          </tr>
+          <tr>
+            <td><code>Topics</code></td>
+            <td>{{grs.num_topics if grs.num_topics is defined else "Not recorded."}}</td>
+            <td>The number of topics inferred.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
-        <tr>
-          <td>{{ loop.index }}</td>
-          <td><a href="{{ link }}">{{ university.name }}</a></td>
-          <td>{{ university|course_count }}</td>
-          <td>{% if university.url %}
-            <a target="_blank" href="//{{ university.url }}">{{ university.url }}</a>
-            {% else %} - {% endif %}</td>
-        </tr>
-        {% else %}
-        <tr>
-          <td></td>
-          <td>No universities found.</td>
-          <td></td>
-          <td></td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-12">
+    <h3>Universities</h3>
+
+    <div class="table-responsive">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>University</th>
+            <th>Course Count</th>
+            <th>Web</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for university in universities %}
+
+          {% set link = url_for('university', u=university.abbreviation) %}
+
+          <tr>
+            <td>{{ loop.index }}</td>
+            <td><a href="{{ link }}">{{ university.name }}</a></td>
+            <td>{{ university|course_count }}</td>
+            <td>{% if university.url %}
+              <a target="_blank" href="//{{ university.url }}">{{ university.url }}</a>
+              {% else %} - {% endif %}</td>
+          </tr>
+          {% else %}
+          <tr>
+            <td></td>
+            <td>No universities found.</td>
+            <td></td>
+            <td></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
 
   </div>
 </div>

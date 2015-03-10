@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+{% set grs = unpickle(g.result_set) %}
 <html lang="en">
   <head>
     <meta charset="utf-8">
@@ -28,6 +29,7 @@
     <script src="//code.jquery.com/jquery-2.1.3.min.js"></script>
     <script src="/static/js/vendor/bootstrap.min.js"></script>
     <script src="/static/js/vendor/jquery.hideseek.min.js"></script>
+    <script src="/static/js/vendor/jquery.cookie.min.js"></script>
     <script src="/static/js/trajectory.js"></script>
 
   </body>
