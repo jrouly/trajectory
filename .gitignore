@@ -1,10 +1,11 @@
 # Project specific
 /env/
 /*.db
+/*.log
+/*.pid
 /.runonce
 /results/
 /data/
-/visualize/
 
 
 # Byte-compiled / optimized / DLL files
