@@ -74,6 +74,10 @@ def main():
     # Create arguments for web application.
     web_parser = subparsers.add_parser("web",
             help="Start up the web application.")
+    web_parser.add_argument("--port",
+            required=False,
+            help="Port to serve on.",
+            action="store")
 
     # Parse command line arguments.
     args = parser.parse_args(sys.argv[1:])

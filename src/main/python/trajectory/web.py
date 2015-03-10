@@ -13,15 +13,37 @@ app.jinja_loader = FileSystemLoader(TRJ.TEMPLATES)
 app.db = SQLAlchemy(app)
 
 
-# Define routing.
+# Manage error handling.
 @app.errorhandler(404)
 def not_found(error):
     return render_template('404.html'), 404
 
-@app.route('/', methods=['GET'])
+# Define routing for dashboard page.
+@app.route('/')
 def dashboard():
-    return "Hello, world."
+    return "Dashboard."
 
+# Define routing for university list.
+@app.route('/universities/')
+def university_list():
+    return "University list."
 
-if __name__ == '__main__':
-    app.run()
+# Define routing for university index pages.
+@app.route('/universities/<string:university_abbr>/')
+def university(university_abbr=None):
+    return "University: %s" % university_abbr
+
+# Define routing for departmental pages.
+@app.route('/universities/<string:university_abbr>/<string:dept_abbr>/')
+def department(university_abbr=None, dept_abbr=None):
+    return "Uni %s Dept %s" % (university_abbr, dept_abbr)
+
+# Define routing for topic list.
+@app.route('/topics/')
+def topics():
+    return "Topics."
+
+# Define routing for about page.
+@app.route('/about/')
+def about():
+    return render_template("about.html")
