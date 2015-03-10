@@ -57,8 +57,8 @@
       <tbody id="department-list">
         {% for department in university.departments %}
 
-        {% set link = department|department_link %}
-        {% set course_count = department|department_course_count %}
+        {% set link = url_for('department', u=university.abbreviation, d=department.abbreviation) %}
+        {% set course_count = department|course_count %}
 
         <tr>
           <td>{{ loop.index }}</td>

@@ -1,13 +1,15 @@
 {% extends 'layout/base.html' %}
 
-{% block title %}{{ department.university.abbreviation }} {{ department.abbrevation }}{% endblock %}
+{% set university = department.university %}
+
+{% block title %}{{ university.abbreviation }} {{ department.abbrevation }}{% endblock %}
 
 {% block content %}
 
 <div class="page-header">
   <div class="row">
     <div class="col-lg-12">
-      <h1>{{ department.university.abbreviation }} {{ department.name }}</h1>
+      <h1>{{ university.abbreviation }} {{ department.name }}</h1>
     </div>
   </div>
 </div>
@@ -17,7 +19,7 @@
     <ul class="breadcrumb">
       <li></li>
       <li><a href="/universities.html">Universities</a></li>
-      <li><a href="{{department.university|university_link}}">{{ department.university.abbreviation }}</a></li>
+      <li><a href="{{url_for('university', u=university.abbreviation)}}">{{ university.abbreviation }}</a></li>
       <li class="active">{{ department.abbreviation }}</li>
     </ul>
   </div>
@@ -81,13 +83,16 @@
           </td>
         </tr>
 
-          {% for topic in course.topics %}
+          {% for topic_association in course.topics %}
+          {% set topic = topic_association.topic %}
+          {% set proportion = topic_association.proportion %}
+
           <tr class="ignore success collapse collapse{{course.id}}">
             <td colspan="3">
               <div class="collapse collapse{{course.id}}">
-                ({{ '%.3f' % topic.proportion }})
-                <a href="{{ topic.topic|topic_link }}">
-                  {{ topic.topic.words }}</a>
+                ({{ '%.3f' % proportion }})
+                <a href="{{url_for('topics', _anchor=topic.id)}}">
+                  {{ topic.words }}</a>
               </div>
             </td>
           </tr>

@@ -59,10 +59,14 @@
 
           {% for course_assoc in topic.course_assocs %}
           {% set course = course_assoc.course %}
-          <p>({{ '%.3f' % course_assoc.proportion }})
-          <strong><a href="{{course|course_link}}">
-            {{ course.department.university.abbreviation }}
-            {{course.department.abbreviation}}
+          {% set department = course.department %}
+          {% set university = department.university %}
+          {% set proportion = course_assoc.proportion %}
+
+          <p>({{ '%.3f' % proportion }})
+          <strong><a href="{{url_for('department', _anchor=course.id, u=university.abbreviation, d=department.abbreviation)}}">
+            {{university.abbreviation}}
+            {{department.abbreviation}}
             {{course.number}}</a></strong>
           <em>{{course.title}}</em></p>
           {% endfor %}

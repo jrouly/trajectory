@@ -39,13 +39,12 @@
       <tbody>
         {% for university in universities %}
 
-        {% set link = university|university_link %}
-        {% set course_count = university|university_course_count %}
+        {% set link = url_for('university', u=university.abbreviation) %}
 
         <tr>
           <td>{{ loop.index }}</td>
           <td><a href="{{ link }}">{{ university.name }}</a></td>
-          <td>{{ course_count }}</td>
+          <td>{{ university|course_count }}</td>
           <td>{% if university.url %}
             <a target="_blank" href="//{{ university.url }}">{{ university.url }}</a>
             {% else %} - {% endif %}</td>
