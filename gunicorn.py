@@ -15,13 +15,13 @@ backlog = 2048
 workers = 20
 
 # Fork main process to background.
-daemon = False
+daemon = True
 
 # PID file to write to.
 pidfile = _os.path.join(_HOME, "web.gunicorn.pid")
 
 # Allow connections from any frontend proxy.
-forwarded_allow_ips = '*'
+# forwarded_allow_ips = '*'
 
 # Logging configuration.
 accesslog = _os.path.join(_HOME, "web.gunicorn.access.log")
