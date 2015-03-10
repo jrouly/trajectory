@@ -25,4 +25,4 @@ source env/bin/activate
 
 
 # Activate gunicorn server.
-gunicorn -c gunicorn.py trajectory.web:app
+gunicorn -c gunicorn.py $@ trajectory.web:app
