@@ -16,8 +16,12 @@ set -e
 cd $TRJ_HOME
 
 
-# Run build check.
-bin/util/build
+# Build the project if it needs to be.
+if [ ! -e "target" ]
+then
+  # Compile and package using maven.
+  mvn clean compile package javadoc:javadoc
+fi
 
 
 # Pass all arguments to the java command.
