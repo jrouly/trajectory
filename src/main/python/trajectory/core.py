@@ -290,20 +290,3 @@ def import_results(args):
                 course.topics.append(association)
 
     log.info("Topic import complete.")
-
-
-def start_webapp(args):
-    """
-    Start up the included web application.
-    TODO: Integrate with gunicorn or wsgi or similar.
-    """
-
-    from trajectory import config as TRJ
-    from trajectory.web import app
-
-    PORT = int(args.port) if args.port else 8000
-    app.run(
-        debug=args.debug,
-        port=PORT,
-        static_files={'/static/': TRJ.STATIC_FILES}
-    )
