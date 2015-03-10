@@ -19,8 +19,8 @@
 
             {% for data in g.result_sets %}
             {% set rs = unpickle(data) %}
-            <li>
-              <a href="#" data="{{data}}" class="result_set">
+            <li{%if rs.id==grs.id%} class="disabled"{%endif%}>
+              <a data="{{data}}" class="result_set clickable">
                 Result Set {{rs.id}}
                 {% if rs.id == grs.id %}
                   <span class="pull-right text-danger">
