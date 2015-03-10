@@ -6,7 +6,7 @@ Trajectory is a working title for my CS 390 undergraduate research project. I am
 
 ## Requirements
 
-The basic requirements are Java JDK 7 or higher, Python 3.0 or higher. Support for the database layer requires system copies of MySQL, PostGres, SQLite, or similar software.
+The basic requirements are Java JDK 7 or higher, Python 3.0 or higher, `virtualenv`, and `maven`. Support for the database layer requires system copies of MySQL, PostGres, SQLite, or similar software. Support for the visualization layer requires a proxy web server (eg. Apache, Nginx).
 
 
 ## Setup
@@ -19,57 +19,63 @@ Begin by exporting the `$TRJ_HOME` path variable.
     $ cd trajectory
     $ export TRJ_HOME=$(pwd)
 
-You will also need to build any compiled code.
-
-    $ bin/util/build
-
-If at any time you wish to clear the compiled code, execute the included clean script.
-
-    $ bin/util/clean
+Install Python dependencies by calling the `bin/util/pysetup` script. Java code will be compiled on demand.
 
 To specify or change the database URI and scheme, modify the `config.py` file. Specifically, look for `DATABASE_URI`. It defaults to a SQLite file named `data.db`.
 
+### Visualization server
+
+#### Sample nginx configuration
+
+    server {
+        listen 80;
+        location ^~ /static/  {
+            root /TRJ_HOME/src/main/resources/web/static;
+        }
+
+        location / {
+            proxy_pass         http://localhost;
+            proxy_redirect     off;
+            proxy_set_header   Host $host;
+            proxy_set_header   X-Real-IP $remote_addr;
+            proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header   X-Forwarded-Host $server_name;
+        }
+    }
+
 ## Use
 
-To scrape and process downloaded syllabus data, use the `bin/scrape` script.
-
-    $ bin/scrape [-h] [--version] [--debug]
-                  {download,export,import-topics,visualize} ...
-
-To execute the learning module, use the `bin/learn` script.
-
-    $ bin/learn -debug -in <path> [-iterations <n>]
-                  [-out <path>] [-threads <n>] [-topics <n>]
-
-### Download syllabi from a prebuilt target
+### Download data from a prebuilt target
 
     $ bin/scrape download [-h] {targets}
 
 ### Export downloaded data to disk
 
-    $ bin/scrape export [-h] --data-directory <directory>
+    $ bin/scrape export [-h] [--data-directory <directory>]
+                  [--departments <departments>] [--cs]
 
-This exports data in a format that can be read in by the `Learn` module.
+This exports data in a format that can be read in by the `Learn` module. The data directory will default to `data/`. You can selectively filter subjects exported using the `--departments` flag.
 
 ### Run Topic Modeling
 
-    $ bin/learn -debug -in <path> [-iterations <n>]
-                  [-out <path>] [-threads <n>] [-topics <n>]
+    $ bin/learn -in <path> -out <path> [-iterations <n>] [-debug]
+                  [-threads <n>] [-topics <n>] [-words <n>]
+                  [-alpha <alpha>] [-beta <beta>]
 
-If the `-out <path>` is not specified, data will be printed to standard output. Otherwise, it will be printed to timestamped CSV files that can be read into the `Visualize` module.
+The `-in` parameter must be an export location from the `Scrape` module. Results will be stored within a timestamped subdirectory of the `-out` directory. All other parameters are optional.
 
 ### Import topic modeling to database
 
     $ bin/scrape import-results [-h] --topic-file <file> --course-file <file>
+                  [--alpha <alpha>] [--beta <beta>] [--iterations <iterations>]
 
-Read the results of the `Learn` module (inferred topics) back into the database and pair with existing course data.
+Read the results of the `Learn` module (inferred topics) back into the database and pair with existing course data. Multiple imports will simply add `ResultSet`s to the existing database.
 
-### Generate static visualization tool
+### Run visualizations server
 
-    $ bin/scrape visualize [-h] --vis-directory <directory>
-                  [--serve] [--port <port>]
+    $ bin/web
 
-Generate (and/or serve) the visualization pages. If `--serve` is present, a simple HTTP python server will start up hosting the visualization on the specified port (defaults to 8000).
+Activate the visualization server. See `gunicorn.py` for configuration settings. Notice that the PID and log files are stored in the `TRJ_HOME`.
 
 # ToDo
 
@@ -78,5 +84,3 @@ Generate (and/or serve) the visualization pages. If `--serve` is present, a simp
 3. Run test suite varying alpha/beta/topics parameters.
 4. Implement the "timeline" visualization tool (tracking prerequisites).
 5. Implement the "graph" visualization tool to visualize topics and courses.
-6. Build a more dynamic Flask application instead of the statically generated tool.
-7. Add run/timestamp identifier on datasets in database -- allow multiple result sets to be stored at once.
