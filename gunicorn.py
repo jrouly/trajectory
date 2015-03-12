@@ -6,7 +6,7 @@ if _HOME is None:
 
 
 # IP and port to bind to.
-bind = ['127.0.0.1:8000']
+bind = ['127.0.0.1:8080']
 
 # Maximum number of pending connections.
 backlog = 2048
