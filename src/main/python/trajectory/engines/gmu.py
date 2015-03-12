@@ -9,6 +9,7 @@ This file is the scraping engine tooled to GMU's CS department.
 from trajectory.models import University, Department, Course
 from trajectory.core import clean
 from bs4 import BeautifulSoup
+from sqlalchemy import func
 import requests
 import re
 import os
@@ -33,6 +34,9 @@ def scrape(args):
     # Regex to select only the catid and coid.
     catid_re = re.compile("(^[^']*)|(, this.*$)|(')")
 
+    # Regex to isolate prerequisite course titles.
+    prereq_re = re.compile("([A-Za-z,]{2,4})(\s|\\\\xa0)(\d{3})")
+
     # List of prefixes from the META object.
     prefixes = [department.get("abbreviation").lower()
                     for department in META.get("departments")]
@@ -47,6 +51,7 @@ def scrape(args):
                         .filter(Department.university==university)\
                         .all()}
 
+    prereq_dict = {} # Dictionary of Course : Prereq match list
     for prefix in prefixes:
         catalog_index = requests.get(catalog_index_url % prefix)
         soup = BeautifulSoup( catalog_index.text )
@@ -57,7 +62,6 @@ def scrape(args):
                 onclick=re.compile("showCourse.*"))
 
         # Identify relevant information for each course.
-        prereqs = {}
         for course in course_list:
 
             # Generate metadata
@@ -84,16 +88,21 @@ def scrape(args):
                 pass
 
             # Identify prerequisites
-            # TODO: Match these up with their database entries.
             prereq_index = description.find("Prerequisite(s)")
+            prereq_list = None
             if prereq_index > -1:
+
+                # Grab the substring of prereqs and find matches.
                 prereq_string = description[prereq_index:]
                 description = description[:prereq_index]
+                matches = prereq_re.findall(prereq_string)
 
-                prereq_re = re.compile("\w{2,4}\s\d{3}")
-                matches = re.findall(prereq_re, prereq_string)
                 if len(matches) > 0:
-                    prereqs["%s %s" % (prefix, cnum)] = matches
+                    # Split them up as a dict and store them in a list.
+                    prereq_list = [{
+                            "d": match[0], # department
+                            "n": match[2]  # number
+                        } for match in matches]
 
             # Clean the description string
             description_raw = description
@@ -102,13 +111,63 @@ def scrape(args):
                 continue
 
             # Generate the appropriate course object.
-            departments[prefix.lower()].courses.append(Course(
+            new_course = Course(
                 number=cnum,
                 title=title,
                 description=description,
-                description_raw=description_raw))
+                description_raw=description_raw)
+            departments[prefix.lower()].courses.append(new_course)
 
-    log.info( "Completed scraping." )
+            # Add in the requested list of prereqs if found.
+            if prereq_list is not None:
+                prereq_dict[new_course] = prereq_list
+
+
+    # Iterate over the list of courses, now that they've been created, and
+    # process their list of requested prerequisites.
+    for course, prereq_list in prereq_dict.items():
+
+        # Skip any courses with a 0-length requested prereq list.
+        if len(prereq_list) == 0:
+            continue
+
+        log.debug(course)
+        log.debug(prereq_list)
+
+        # Loop over set of prereqs, if there are multiple.
+        department_stack = []
+        for prereq in prereq_list:
+            n = prereq.get("n") # prereq course number
+            d = prereq.get("d") # prereq course department abbreviation
+
+            # If this is a referential prereq, look up the last course
+            # observed and hope it's the correct department prefix.
+            try:
+                if d in ["and", "or", ","]:
+                    d = department_stack[-1]
+                department_stack.append(d)
+            except IndexError: # no previous courses
+                continue
+
+            log.debug("Searching for: %s %s" % (d, n))
+
+            # Reference the prerequisite course identified by this
+            # department abbreviation and course number.
+            prereq_course = args.session.query(Course) \
+                    .join(Department) \
+                    .filter(Department.university==university) \
+                    .filter(func.lower(Department.abbreviation)==d.lower()) \
+                    .filter(Course.number==int(n)) \
+                    .first()
+
+            # If a valid course was found, tack it onto the prereq list of
+            # the requesting course (course).
+            if prereq_course and prereq_course is not course:
+                course.prerequisites.append(prereq_course)
+            else:
+                log.debug("Failed to find course matching '%s %s'." % (d, n))
+
+    log.info("Completed scraping.")
 
 
 # Constant values.
