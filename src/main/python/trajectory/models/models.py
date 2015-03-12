@@ -77,6 +77,20 @@ class Department(meta.Base):
                  self.name)
 
 
+# Maintain a mapping of courses to courses to define the prerequisite
+# relationship structure.
+course_to_course = Table("course_to_course", meta.Base.metadata,
+    Column("parent_id",
+        Integer,
+        ForeignKey("course.id"),
+        primary_key=True),
+    Column("prerequisite_id",
+        Integer,
+        ForeignKey("course.id"),
+        primary_key=True)
+)
+
+
 class Course(meta.Base):
     """
     A course offering, which belongs to a department at a school.
@@ -84,8 +98,8 @@ class Course(meta.Base):
 
     __tablename__ = "course"
     __table_args__ = (
-            UniqueConstraint('number', 'title', 'department_id'),
-            )
+        UniqueConstraint('number', 'title', 'department_id'),
+    )
 
     id = Column(Integer, primary_key=True)
     number = Column(Integer, nullable=False)
@@ -93,9 +107,12 @@ class Course(meta.Base):
     description = Column(String, nullable=False)
     description_raw = Column(String, nullable=False)
     department_id = Column(Integer, ForeignKey("department.id"))
-    parent_id = Column(Integer, ForeignKey("course.id"))
 
-    prerequisites = relationship("Course", post_update=True)
+    prerequisites = relationship("Course",
+                        secondary=course_to_course,
+                        primaryjoin=id==course_to_course.c.parent_id,
+                        secondaryjoin=id==course_to_course.c.prerequisite_id,
+                        backref="parents")
 
     topics = relationship(
             "CourseTopicAssociation",
