@@ -84,3 +84,4 @@ Activate the visualization server. See `gunicorn.py` for configuration settings.
 3. Run test suite varying alpha/beta/topics parameters.
 4. Implement the "timeline" visualization tool (tracking prerequisites).
 5. Implement the "graph" visualization tool to visualize topics and courses.
+6. Refactor configuration objects as a module.
