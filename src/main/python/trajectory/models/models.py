@@ -95,7 +95,7 @@ class Course(meta.Base):
     department_id = Column(Integer, ForeignKey("department.id"))
     parent_id = Column(Integer, ForeignKey("course.id"))
 
-    prerequisites = relationship("Course")
+    prerequisites = relationship("Course", post_update=True)
 
     topics = relationship(
             "CourseTopicAssociation",
