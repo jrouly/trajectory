@@ -32,6 +32,11 @@ app.db = Session()
 def not_found(error):
     return render_template('404.html'), 404
 
+# Manage error handling.
+@app.errorhandler(500)
+def internal_error(error):
+    return render_template('500.html'), 500
+
 # Define routing for dashboard page.
 @app.route('/')
 def dashboard():
@@ -107,8 +112,12 @@ def course_count(data):
 @app.context_processor
 def utility_processor():
     def unpickle(data):
-        import binascii
-        return loads(binascii.unhexlify(data))
+        try:
+            import binascii
+            unhex = binascii.unhexlify(data)
+            return loads(unhex)
+        except TypeError:
+            return None
     return dict(unpickle=unpickle)
 
 
@@ -143,5 +152,6 @@ def get_result_set():
 @app.after_request
 def set_result_set(response):
     import binascii
-    response.set_cookie('result_set', g.result_set, path='/')
+    if g.result_set is not None:
+        response.set_cookie('result_set', g.result_set, path='/')
     return response

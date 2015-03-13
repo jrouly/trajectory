@@ -26,7 +26,11 @@
 <div class="row">
   <div class="col-lg-12">
     <h1>Result Set Overview</h1>
+    {% if grs %}
     <h3><code>{{grs.timestamp}}</code></h3>
+    {% else %}
+    <h3><code>No result set found.</code></h3>
+    {% endif %}
   </div>
 </div>
 
