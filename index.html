@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+
+    <title>Trajectory by jrouly</title>
+  </head>
+
+  <body>
+
+    <header>
+      <div class="container">
+        <h1>Trajectory</h1>
+        <h2>Content analysis of university course descriptions.</h2>
+
+        <section id="downloads">
+          <a href="https://github.com/jrouly/trajectory/zipball/master" class="btn">Download as .zip</a>
+          <a href="https://github.com/jrouly/trajectory/tarball/master" class="btn">Download as .tar.gz</a>
+          <a href="https://github.com/jrouly/trajectory" class="btn btn-github"><span class="icon"></span>View on GitHub</a>
+        </section>
+      </div>
+    </header>
+
+    <div class="container">
+      <section id="main_content">
+        <h1>
+<a id="trajectory" class="anchor" href="#trajectory" aria-hidden="true"><span class="octicon octicon-link"></span></a>Trajectory</h1>
+
+<p><a href="https://gitter.im/jrouly/trajectory?utm_source=badge&amp;utm_medium=badge&amp;utm_campaign=pr-badge&amp;utm_content=badge"><img src="https://badges.gitter.im/Join%20Chat.svg" alt="Join the chat at https://gitter.im/jrouly/trajectory"></a></p>
+
+<p>Trajectory is a working title for my CS 390 undergraduate research project. I am taking university course description data and applying LDA topic modeling.</p>
+
+<h2>
+<a id="requirements" class="anchor" href="#requirements" aria-hidden="true"><span class="octicon octicon-link"></span></a>Requirements</h2>
+
+<p>The basic requirements are Java JDK 7 or higher, Python 3.0 or higher, <code>virtualenv</code>, and <code>maven</code>. Support for the database layer requires system copies of MySQL, PostGres, SQLite, or similar software. Support for the visualization layer requires a proxy web server (eg. Apache, Nginx).</p>
+
+<h2>
+<a id="setup" class="anchor" href="#setup" aria-hidden="true"><span class="octicon octicon-link"></span></a>Setup</h2>
+
+<p>Note that this project contains an unholy combination of Bash scripts, Python tools, and Java code. Proceed with setup carefully.</p>
+
+<p>Begin by exporting the <code>$TRJ_HOME</code> path variable.</p>
+
+<pre><code>$ git clone http://github.com/jrouly/trajectory
+$ cd trajectory
+$ export TRJ_HOME=$(pwd)
+</code></pre>
+
+<p>Install Python dependencies by calling the <code>bin/util/pysetup</code> script. Java code will be compiled on demand.</p>
+
+<p>To specify or change the database URI and scheme, modify the <code>config.py</code> file. Specifically, look for <code>DATABASE_URI</code>. It defaults to a SQLite file named <code>data.db</code>.</p>
+
+<h3>
+<a id="visualization-server" class="anchor" href="#visualization-server" aria-hidden="true"><span class="octicon octicon-link"></span></a>Visualization server</h3>
+
+<h4>
+<a id="sample-nginx-configuration" class="anchor" href="#sample-nginx-configuration" aria-hidden="true"><span class="octicon octicon-link"></span></a>Sample nginx configuration</h4>
+
+<pre><code>server {
+    listen 80;
+    location ^~ /static/  {
+        root /TRJ_HOME/src/main/resources/web/static;
+    }
+
+    location / {
+        proxy_pass         http://localhost;
+        proxy_redirect     off;
+        proxy_set_header   Host $host;
+        proxy_set_header   X-Real-IP $remote_addr;
+        proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header   X-Forwarded-Host $server_name;
+    }
+}
+</code></pre>
+
+<h2>
+<a id="use" class="anchor" href="#use" aria-hidden="true"><span class="octicon octicon-link"></span></a>Use</h2>
+
+<h3>
+<a id="download-data-from-a-prebuilt-target" class="anchor" href="#download-data-from-a-prebuilt-target" aria-hidden="true"><span class="octicon octicon-link"></span></a>Download data from a prebuilt target</h3>
+
+<pre><code>$ bin/scrape download [-h] {targets}
+</code></pre>
+
+<h3>
+<a id="export-downloaded-data-to-disk" class="anchor" href="#export-downloaded-data-to-disk" aria-hidden="true"><span class="octicon octicon-link"></span></a>Export downloaded data to disk</h3>
+
+<pre><code>$ bin/scrape export [-h] [--data-directory &lt;directory&gt;]
+              [--departments &lt;departments&gt;] [--cs]
+</code></pre>
+
+<p>This exports data in a format that can be read in by the <code>Learn</code> module. The data directory will default to <code>data/</code>. You can selectively filter subjects exported using the <code>--departments</code> flag.</p>
+
+<h3>
+<a id="run-topic-modeling" class="anchor" href="#run-topic-modeling" aria-hidden="true"><span class="octicon octicon-link"></span></a>Run Topic Modeling</h3>
+
+<pre><code>$ bin/learn -in &lt;path&gt; -out &lt;path&gt; [-iterations &lt;n&gt;] [-debug]
+              [-threads &lt;n&gt;] [-topics &lt;n&gt;] [-words &lt;n&gt;]
+              [-alpha &lt;alpha&gt;] [-beta &lt;beta&gt;]
+</code></pre>
+
+<p>The <code>-in</code> parameter must be an export location from the <code>Scrape</code> module. Results will be stored within a timestamped subdirectory of the <code>-out</code> directory. All other parameters are optional.</p>
+
+<h3>
+<a id="import-topic-modeling-to-database" class="anchor" href="#import-topic-modeling-to-database" aria-hidden="true"><span class="octicon octicon-link"></span></a>Import topic modeling to database</h3>
+
+<pre><code>$ bin/scrape import-results [-h] --topic-file &lt;file&gt; --course-file &lt;file&gt;
+              [--alpha &lt;alpha&gt;] [--beta &lt;beta&gt;] [--iterations &lt;iterations&gt;]
+</code></pre>
+
+<p>Read the results of the <code>Learn</code> module (inferred topics) back into the database and pair with existing course data. Multiple imports will simply add <code>ResultSet</code>s to the existing database.</p>
+
+<h3>
+<a id="run-visualizations-server" class="anchor" href="#run-visualizations-server" aria-hidden="true"><span class="octicon octicon-link"></span></a>Run visualizations server</h3>
+
+<pre><code>$ bin/web
+</code></pre>
+
+<p>Activate the visualization server. See <code>gunicorn.py</code> for configuration settings. Notice that the PID and log files are stored in the <code>TRJ_HOME</code>.</p>
+
+<h1>
+<a id="todo" class="anchor" href="#todo" aria-hidden="true"><span class="octicon octicon-link"></span></a>ToDo</h1>
+
+<ol>
+<li>Identify necessary RegExes to pull prereqs out of each existing engine.</li>
+<li>Extract ACM descriptions to an engine.</li>
+<li>Run test suite varying alpha/beta/topics parameters.</li>
+<li>Implement the "timeline" visualization tool (tracking prerequisites).</li>
+<li>Implement the "graph" visualization tool to visualize topics and courses.</li>
+<li>Refactor configuration objects as a module.</li>
+</ol>
+      </section>
+    </div>
+
+    
+  </body>
+</html>
