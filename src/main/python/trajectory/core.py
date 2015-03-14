@@ -13,6 +13,7 @@ def scrape(args):
     """
 
     from trajectory.models import University, Department, Course
+    from trajectory.models.meta import session
 
     import logging
     import os
@@ -39,7 +40,7 @@ def scrape(args):
             metadata = scraper.META
 
             university = metadata.get("school")
-            university_query = args.session.query(University)\
+            university_query = session.query(University)\
                     .filter(University.name==university.get("name"))
 
             # If the university has already been registered, alert the user
@@ -60,12 +61,12 @@ def scrape(args):
                         url=university.get("url"))
 
                 # Add the university to the session.
-                args.session.add(university)
+                session.add(university)
 
             # Loop over the departments defined in the metadata.
             departments = metadata.get("departments")
             for department in departments:
-                department_query = args.session.query(Department)\
+                department_query = session.query(Department)\
                         .join(University)\
                         .filter(Department.name==department.get("name"))\
                         .filter(Department.university_id==university.id)
@@ -97,7 +98,7 @@ def scrape(args):
             # Check if there are already courses defined for any
             # departments within this university. If there are, skip
             # this target.
-            if args.session.query(Course).join(Department) \
+            if session.query(Course).join(Department) \
                     .filter(Course.department_id==Department.id)\
                     .filter(Department.university==university)\
                     .count() > 0:
@@ -114,7 +115,7 @@ def scrape(args):
         log.info("Disengaging scraper engine.")
 
 
-def clean(args, string):
+def clean(string):
     """
     Perform a standard cleaning procedure on a course description. Includes
     stop word removal, non-English character removal, digit removal, etc.
@@ -162,6 +163,7 @@ def export(args):
     """
 
     from trajectory.models import Course, Department, University
+    from trajectory.models.meta import session
     import os
 
     import logging, re
@@ -178,7 +180,7 @@ def export(args):
         return
 
     # Get access to the data.
-    universities = args.session.query(University).all()
+    universities = session.query(University).all()
 
     # Dump data in folders broken down by university.
     for university in universities:
@@ -241,6 +243,7 @@ def import_results(args):
 
     from trajectory.models import Course, Topic, CourseTopicAssociation
     from trajectory.models import ResultSet
+    from trajectory.models.meta import session
     from trajectory import config as TRJ
     import logging, csv
     log = logging.getLogger("root")
@@ -252,8 +255,8 @@ def import_results(args):
         beta=args.beta,
         iterations=args.iterations
     )
-    args.session.add(result_set)
-    args.session.commit()
+    session.add(result_set)
+    session.commit()
 
     # Add in new topic definitions.
     with open(args.topic_file, "r") as topic_file:
@@ -262,7 +265,7 @@ def import_results(args):
         topic_count = 0
         for topic in topic_reader:
             topic_count += 1
-            args.session.add(Topic(
+            session.add(Topic(
                 id=topic[0],
                 result_set=result_set,
                 words=', '.join(topic[1:])
@@ -270,8 +273,8 @@ def import_results(args):
         result_set.num_topics = topic_count
 
     # Add the topics to their courses.
-    courses = args.session.query(Course).all()
-    course_query = args.session.query(Course)
+    courses = session.query(Course).all()
+    course_query = session.query(Course)
     course_by_id = lambda c: course_query.get(c)
     with open(args.course_file, "r") as course_file:
         course_reader = csv.reader(course_file, delimiter=",")

@@ -7,7 +7,7 @@ from pickle import dumps, loads
 from trajectory import config as TRJ
 from trajectory.models import University, Department, Course, ResultSet
 from trajectory.models import Topic, CourseTopicAssociation
-from trajectory.models.meta import Session
+from trajectory.models.meta import session
 
 
 #####################
@@ -20,7 +20,7 @@ app.config.from_object(dict(
     THREADS_PER_PAGE = 8,
 ))
 app.jinja_loader = FileSystemLoader(TRJ.TEMPLATES)
-app.db = Session()
+app.db = session
 
 
 ###################

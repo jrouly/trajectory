@@ -15,4 +15,6 @@ from sqlalchemy import create_engine
 
 Engine = create_engine(TRJ.DATABASE_URI)
 Base = declarative_base()
-Session = sessionmaker(bind=Engine)
+_Session = sessionmaker(bind=Engine)
+
+session = _Session()

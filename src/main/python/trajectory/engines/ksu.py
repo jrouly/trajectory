@@ -7,6 +7,7 @@ This file is the scraping engine tooled to Kansas State's CS department.
 
 
 from trajectory.models import University, Department, Course
+from trajectory.models.meta import session
 from trajectory.core import clean
 from trajectory import config as TRJ
 from bs4 import BeautifulSoup
@@ -44,11 +45,11 @@ def scrape(args):
 
     # Fetch existing metadata objects from database.
     university = META.get("school").get("name")
-    university = args.session.query(University)\
+    university = session.query(University)\
             .filter(University.name==university)\
             .first()
     departments = {department.abbreviation.lower() : department
-                    for department in args.session.query(Department)\
+                    for department in session.query(Department)\
                         .filter(Department.university==university)\
                         .all()}
 
@@ -83,7 +84,7 @@ def scrape(args):
 
         # Clean the description string
         description_raw = content.text
-        description = clean(args, content.text)
+        description = clean(content.text)
         if description is None:
             continue
 
