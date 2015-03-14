@@ -8,27 +8,9 @@ This file is the scraping engine tooled to Kansas State's CS department.
 
 from trajectory.models import University, Department, Course
 from trajectory.core import clean
+from trajectory import config as TRJ
 from bs4 import BeautifulSoup
-import requests
-import re
-import os
-
-
-# Constant values.
-META = {
-    'school': {
-        'name': "Kansas State University",
-        'abbreviation': "KSU",
-        'url': "ksu.edu",
-    },
-    'departments': [
-        {
-            'name': "Computer Science",
-            'abbreviation': "CIS",
-            'url': "cis.ksu.edu",
-        },
-    ]
-}
+import requests, re, os, json
 
 
 def scrape(args):
@@ -113,4 +95,11 @@ def scrape(args):
             description_raw=description_raw))
 
     log.info( "Completed scraping." )
+
+
+# Constant values.
+_json = open(os.path.join(TRJ.ENGINE_METADATA, "ksu.json"))
+META = json.load(_json)
+_json.close()
+
 

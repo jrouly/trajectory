@@ -1,0 +1,14 @@
+{
+  "school":{
+    "name":"Louisiana State University",
+    "abbreviation":"LSU",
+    "url":"lsu.edu"
+  },
+  "departments":[
+    {
+      "name":"Computer Science",
+      "abbreviation":"CSC",
+      "url":"cse.lsu.edu"
+    }
+  ]
+}

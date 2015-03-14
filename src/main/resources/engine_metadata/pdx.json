@@ -1,0 +1,24 @@
+{
+  "school":{
+    "name":"Portland State University",
+    "abbreviation":"PDX",
+    "url":"pdx.edu"
+  },
+  "departments":[
+    {
+      "name":"Computer Science",
+      "abbreviation":"CS",
+      "url":"pdx.edu/computer-science"
+    },
+    {
+      "name":"Systems Science",
+      "abbreviation":"SYSC",
+      "url":"pdx.edu/sysc"
+    },
+    {
+      "name":"Electrical and Computer Engineering",
+      "abbreviation":"ECE",
+      "url":"pdx.edu/ece"
+    }
+  ]
+}

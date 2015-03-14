@@ -1,0 +1,14 @@
+{
+  "school":{
+    "name":"Kansas State University",
+    "abbreviation":"KSU",
+    "url":"ksu.edu"
+  },
+  "departments":[
+    {
+      "name":"Computer Science",
+      "abbreviation":"CIS",
+      "url":"cis.ksu.edu"
+    }
+  ]
+}

@@ -8,27 +8,9 @@ This file is the scraping engine tooled to Stanford's CS department.
 
 from trajectory.models import University, Department, Course
 from trajectory.core import clean
+from trajectory import config as TRJ
 from bs4 import BeautifulSoup
-import requests
-import re
-import os
-
-
-# Constant values.
-META = {
-    'school': {
-        'name': "Stanford University",
-        'abbreviation': "Stanford",
-        'url': "stanford.edu",
-    },
-    'departments': [
-        {
-            'name': "Computer Science",
-            'abbreviation': "CS",
-            'url': "cs.stanford.edu",
-        },
-    ]
-}
+import requests, re, os, json
 
 
 def scrape(args):
@@ -119,4 +101,11 @@ def scrape(args):
 
 
     log.info( "Completed scraping." )
+
+
+# Constant values.
+_json = open(os.path.join(TRJ.ENGINE_METADATA, "stanford.json"))
+META = json.load(_json)
+_json.close()
+
 

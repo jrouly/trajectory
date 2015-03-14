@@ -1,0 +1,14 @@
+{
+  "school":{
+    "name":"Stanford University",
+    "abbreviation":"Stanford",
+    "url":"stanford.edu"
+  },
+  "departments":[
+    {
+      "name":"Computer Science",
+      "abbreviation":"CS",
+      "url":"cs.stanford.edu"
+    }
+  ]
+}

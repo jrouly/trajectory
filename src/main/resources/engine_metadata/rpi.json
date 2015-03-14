@@ -1,0 +1,14 @@
+{
+  "school":{
+    "name":"Rensselaer Polytechnic Institute",
+    "abbreviation":"RPI",
+    "url":"rpi.edu"
+  },
+  "departments":[
+    {
+      "name":"Computer Science",
+      "abbreviation":"CSCI",
+      "url":"cs.rpi.edu"
+    }
+  ]
+}

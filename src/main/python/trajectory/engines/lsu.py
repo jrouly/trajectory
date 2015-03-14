@@ -8,27 +8,9 @@ This file is the scraping engine tooled to LSU's CS department.
 
 from trajectory.models import University, Course, Department
 from trajectory.core import clean
+from trajectory import config as TRJ
 from bs4 import BeautifulSoup
-import requests
-import re
-import os
-
-
-# Constant values.
-META = {
-    'school': {
-        'name': "Louisiana State University",
-        'abbreviation': "LSU",
-        'url': "lsu.edu",
-    },
-    'departments': [
-        {
-            'name': "Computer Science",
-            'abbreviation': "CSC",
-            'url': "cse.lsu.edu",
-        },
-    ]
-}
+import requests, re, os, json
 
 
 def scrape(args):
@@ -109,4 +91,11 @@ def scrape(args):
             description=description))
 
     log.info( "Completed scraping." )
+
+
+# Constant values.
+_json = open(os.path.join(TRJ.ENGINE_METADATA, "lsu.json"))
+META = json.load(_json)
+_json.close()
+
 
