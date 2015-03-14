@@ -6,9 +6,480 @@
   },
   "departments":[
     {
-      "name":"Computer Science",
-      "abbreviation":"CIS",
-      "url":"cis.ksu.edu"
+      "name":"Accounting",
+      "abbreviation":"ACCTG"
+    },
+    {
+      "name":"Aerospace Studies",
+      "abbreviation":"AERO"
+    },
+    {
+      "name":"African American Studies",
+      "abbreviation":"AFRI"
+    },
+    {
+      "name":"Agricultural communications",
+      "abbreviation":"AGCOM"
+    },
+    {
+      "name":"Agricultural Economics",
+      "abbreviation":"AGEC"
+    },
+    {
+      "name":"Agricultural Education",
+      "abbreviation":"AGED"
+    },
+    {
+      "name":"Agronomy",
+      "abbreviation":"AGRON"
+    },
+    {
+      "name":"American Ethnic Studies",
+      "abbreviation":"AMETH"
+    },
+    {
+      "name":"Anthropology",
+      "abbreviation":"ANTH"
+    },
+    {
+      "name":"Anatomy and Physiology",
+      "abbreviation":"AP"
+    },
+    {
+      "name":"Arabic",
+      "abbreviation":"ARAB"
+    },
+    {
+      "name":"Architecture",
+      "abbreviation":"ARCH"
+    },
+    {
+      "name":"Architectural Engineering",
+      "abbreviation":"ARE"
+    },
+    {
+      "name":"Art",
+      "abbreviation":"ART"
+    },
+    {
+      "name":"Animal Science and Industry",
+      "abbreviation":"ASI"
+    },
+    {
+      "name":"Apparel and Textile Industry",
+      "abbreviation":"AT"
+    },
+    {
+      "name":"Biological and Agricultural Engineering and Technology",
+      "abbreviation":"ATM"
+    },
+    {
+      "name":"Aircraft Vehicle Maintenance",
+      "abbreviation":"AVM"
+    },
+    {
+      "name":"Aviation",
+      "abbreviation":"AVT"
+    },
+    {
+      "name":"Biological and Agricultural Engineering",
+      "abbreviation":"BAE"
+    },
+    {
+      "name":"Biochemistry",
+      "abbreviation":"BIOCH"
+    },
+    {
+      "name":"Biology",
+      "abbreviation":"BIOL"
+    },
+    {
+      "name":"Business",
+      "abbreviation":"BUS"
+    },
+    {
+      "name":"Community Development and Planning",
+      "abbreviation":"CDPLN"
+    },
+    {
+      "name":"Civil Engineering",
+      "abbreviation":"CE"
+    },
+    {
+      "name":"Construction Engineering Technology",
+      "abbreviation":"CET"
+    },
+    {
+      "name":"Chemical Engineering",
+      "abbreviation":"CHE"
+    },
+    {
+      "name":"Chinese",
+      "abbreviation":"CHINE"
+    },
+    {
+      "name":"Chemistry",
+      "abbreviation":"CHM"
+    },
+    {
+      "name":"Computer and Information Science",
+      "abbreviation":"CIS"
+    },
+    {
+      "name":"Classics",
+      "abbreviation":"CLSCS"
+    },
+    {
+      "name":"Computer Systems and Technology",
+      "abbreviation":"CMST"
+    },
+    {
+      "name":"Construction",
+      "abbreviation":"CNS"
+    },
+    {
+      "name":"Communication",
+      "abbreviation":"COMM"
+    },
+    {
+      "name":"College of Technology and Aviation",
+      "abbreviation":"COT"
+    },
+    {
+      "name":"Clinical Science",
+      "abbreviation":"CS"
+    },
+    {
+      "name":"Czech",
+      "abbreviation":"CZECH"
+    },
+    {
+      "name":"Dance",
+      "abbreviation":"DANCE"
+    },
+    {
+      "name":"Unknown",
+      "abbreviation":"DAS"
+    },
+    {
+      "name":"Unknown",
+      "abbreviation":"DED"
+    },
+    {
+      "name":"Unknown",
+      "abbreviation":"DEN"
+    },
+    {
+      "name":"Unknown",
+      "abbreviation":"DHE"
+    },
+    {
+      "name":"Diagnostic Medicine/Pathobiology",
+      "abbreviation":"DMP"
+    },
+    {
+      "name":"Electrical and Computer Engineering",
+      "abbreviation":"ECE"
+    },
+    {
+      "name":"Electronic and Computer Engineering Technology",
+      "abbreviation":"ECET"
+    },
+    {
+      "name":"Economics",
+      "abbreviation":"ECON"
+    },
+    {
+      "name":"Adult and Continuing Education",
+      "abbreviation":"EDACE"
+    },
+    {
+      "name":"Counseling and Educational Psychology",
+      "abbreviation":"EDCEP"
+    },
+    {
+      "name":"Department of Curriculum and Instruction",
+      "abbreviation":"EDCI"
+    },
+    {
+      "name":"Elementary Education",
+      "abbreviation":"EDEL"
+    },
+    {
+      "name":"Department of Educational Leadership",
+      "abbreviation":"EDLEA"
+    },
+    {
+      "name":"Bachelor of Science in Education",
+      "abbreviation":"EDSEC"
+    },
+    {
+      "name":"Special Education",
+      "abbreviation":"EDSP"
+    },
+    {
+      "name":"English",
+      "abbreviation":"ENGL"
+    },
+    {
+      "name":"Entomology",
+      "abbreviation":"ENTOM"
+    },
+    {
+      "name":"Entrepreneurship",
+      "abbreviation":"ENTRP"
+    },
+    {
+      "name":"Environmental Design",
+      "abbreviation":"ENVD"
+    },
+    {
+      "name":"Energy Technology",
+      "abbreviation":"ET"
+    },
+    {
+      "name":"Engineering Technology",
+      "abbreviation":"ETA"
+    },
+    {
+      "name":"Engineering Technology",
+      "abbreviation":"ETB"
+    },
+    {
+      "name":"Food Sciences",
+      "abbreviation":"FDSCI"
+    },
+    {
+      "name":"Finance",
+      "abbreviation":"FINAN"
+    },
+    {
+      "name":"Forestry",
+      "abbreviation":"FOR"
+    },
+    {
+      "name":"French",
+      "abbreviation":"FREN"
+    },
+    {
+      "name":"Family Studies and Human Services",
+      "abbreviation":"FSHS"
+    },
+    {
+      "name":"College of Agriculture",
+      "abbreviation":"GENAG"
+    },
+    {
+      "name":"College of Business Administration",
+      "abbreviation":"GENBA"
+    },
+    {
+      "name":"Geography",
+      "abbreviation":"GEOG"
+    },
+    {
+      "name":"Geology",
+      "abbreviation":"GEOL"
+    },
+    {
+      "name":"Gerontology",
+      "abbreviation":"GERON"
+    },
+    {
+      "name":"General Human Ecology",
+      "abbreviation":"GNHE"
+    },
+    {
+      "name":"Graduate",
+      "abbreviation":"GRAD"
+    },
+    {
+      "name":"German",
+      "abbreviation":"GRMN"
+    },
+    {
+      "name":"Grain Sciences",
+      "abbreviation":"GRSC"
+    },
+    {
+      "name":"Hindi",
+      "abbreviation":"HINDI"
+    },
+    {
+      "name":"History",
+      "abbreviation":"HIST"
+    },
+    {
+      "name":"Hospitality Management",
+      "abbreviation":"HMD"
+    },
+    {
+      "name":"Human Nutrition",
+      "abbreviation":"HN"
+    },
+    {
+      "name":"Horticulture",
+      "abbreviation":"HORT"
+    },
+    {
+      "name":"Interior Architecture and Product/Industrial Design",
+      "abbreviation":"IAPD"
+    },
+    {
+      "name":"Interior Design",
+      "abbreviation":"ID"
+    },
+    {
+      "name":"Industrial Manufacturing and Engineering",
+      "abbreviation":"IMSE"
+    },
+    {
+      "name":"Italian",
+      "abbreviation":"ITAL"
+    },
+    {
+      "name":"Japanese",
+      "abbreviation":"JAPAN"
+    },
+    {
+      "name":"Kinesiology",
+      "abbreviation":"KIN"
+    },
+    {
+      "name":"Landscape Architecture",
+      "abbreviation":"LAR"
+    },
+    {
+      "name":"Latin",
+      "abbreviation":"LATIN"
+    },
+    {
+      "name":"Leadership",
+      "abbreviation":"LEAD"
+    },
+    {
+      "name":"Linguistics",
+      "abbreviation":"LG"
+    },
+    {
+      "name":"Linguistics",
+      "abbreviation":"LING"
+    },
+    {
+      "name":"Management",
+      "abbreviation":"MANGT"
+    },
+    {
+      "name":"Mathematics",
+      "abbreviation":"MATH"
+    },
+    {
+      "name":"Mass Communication",
+      "abbreviation":"MC"
+    },
+    {
+      "name":"Mechanical Engineering",
+      "abbreviation":"ME"
+    },
+    {
+      "name":"Mechanical Engineering Technology",
+      "abbreviation":"MET"
+    },
+    {
+      "name":"Marketing",
+      "abbreviation":"MKTG"
+    },
+    {
+      "name":"Modern Languages",
+      "abbreviation":"MLANG"
+    },
+    {
+      "name":"Military Science",
+      "abbreviation":"MSCI"
+    },
+    {
+      "name":"Music",
+      "abbreviation":"MUSIC"
+    },
+    {
+      "name":"Nuclear Engineering",
+      "abbreviation":"NE"
+    },
+    {
+      "name":"Philosophy",
+      "abbreviation":"PHILO"
+    },
+    {
+      "name":"Physics",
+      "abbreviation":"PHYS"
+    },
+    {
+      "name":"City Planning",
+      "abbreviation":"PLAN"
+    },
+    {
+      "name":"Plant Pathology",
+      "abbreviation":"PLPTH"
+    },
+    {
+      "name":"Parks and Management Certification",
+      "abbreviation":"PMC"
+    },
+    {
+      "name":"Political Science",
+      "abbreviation":"POLSC"
+    },
+    {
+      "name":"Portuguese",
+      "abbreviation":"PORT"
+    },
+    {
+      "name":"Professional Pilot",
+      "abbreviation":"PPIL"
+    },
+    {
+      "name":"Psychology",
+      "abbreviation":"PSYCH"
+    },
+    {
+      "name":"Recreation Administration",
+      "abbreviation":"RRES"
+    },
+    {
+      "name":"Russian",
+      "abbreviation":"RUSSN"
+    },
+    {
+      "name":"Sociology",
+      "abbreviation":"SOCIO"
+    },
+    {
+      "name":"Social Work",
+      "abbreviation":"SOCWK"
+    },
+    {
+      "name":"Spanish",
+      "abbreviation":"SPAN"
+    },
+    {
+      "name":"Statistics",
+      "abbreviation":"STAT"
+    },
+    {
+      "name":"Swahili",
+      "abbreviation":"SWAH"
+    },
+    {
+      "name":"Theater",
+      "abbreviation":"THTRE"
+    },
+    {
+      "name":"Wildlife and Outdoor Enterprise Management",
+      "abbreviation":"WOEM"
+    },
+    {
+      "name":"Women's Studies",
+      "abbreviation":"WOMST"
     }
   ]
 }
