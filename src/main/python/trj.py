@@ -16,7 +16,7 @@ import os
 from trajectory import engines
 from trajectory import config as TRJ
 from trajectory.core import scrape, export, import_results
-from trajectory.models.meta import Engine, Session
+from trajectory.models.meta import Engine, session
 
 def main():
     """
@@ -34,7 +34,7 @@ def main():
     # Create arguments for scraping.
     download_parser = subparsers.add_parser("download",
             help="Download data from the Web.")
-    download_parser.add_argument("targets", choices=engines.list(),
+    download_parser.add_argument("targets", choices=engines.targets,
             nargs="+",
             help="Scraping targets, select one or more.")
 
@@ -77,8 +77,6 @@ def main():
     # Start up the program.
     log = trajectory.log.global_logger("root", debug=args.debug)
     log.info("Beginning trj-scrape.")
-    log.info("Initializing database connection.")
-    args.session = Session()
 
     # Wrap main control flow in a try/catch for safety.
     try:
@@ -100,7 +98,7 @@ def main():
             log.info("No command specified.")
 
         # Store any modifications to the database.
-        args.session.commit()
+        session.commit()
 
     # Handle any unknown errors gracefully.
     except Exception as error:
@@ -115,7 +113,7 @@ def main():
 
         # Exit the program.
         log.info("Exiting.")
-        args.session.close()
+        session.close()
         sys.exit(0)
 
 if __name__ == '__main__':
