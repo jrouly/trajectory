@@ -24,7 +24,7 @@ def scrape(args):
 
     import logging
     log = logging.getLogger("root")
-    log.info( "Scraping GMU CS data." )
+    log.info( "Scraping GMU data." )
 
 
     # Constant values.
@@ -54,7 +54,7 @@ def scrape(args):
     prereq_dict = {} # Dictionary of Course : Prereq match list
     for prefix in prefixes:
         catalog_index = requests.get(catalog_index_url % prefix)
-        soup = BeautifulSoup( catalog_index.text )
+        soup = BeautifulSoup(catalog_index.text)
 
         # Identify the list of courses.
         course_list = soup.find_all(
