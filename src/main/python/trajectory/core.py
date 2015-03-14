@@ -12,7 +12,9 @@ def scrape(args):
     Routes scraping to the appropriate scraper module.
     """
 
+    from trajectory import engines
     from trajectory.models import University, Department, Course
+    from trajectory.models.meta import session
 
     import logging
     import os
@@ -26,69 +28,12 @@ def scrape(args):
 
         log.info("Engaging scraper engine: %s" % target)
 
-        # Prepend the target name with a dot for importing.
+        # Attempt to import the scraper engine.
         try:
-            target_module = ".%s" % target
-            scraper = import_module( target_module, "trajectory.engines" )
-        except ImportError:
+            # Activate the scraper.
+            scraper = engines.targets.get(target)()
+        except:
             log.warn("No engine named '%s'." % target)
-            continue
-
-        # Register the target with the database, if not already present.
-        try:
-            metadata = scraper.META
-
-            university = metadata.get("school")
-            university_query = args.session.query(University)\
-                    .filter(University.name==university.get("name"))
-
-            # If the university has already been registered, alert the user
-            # but grab a reference to it for the Departments.
-            if(university_query.count() > 0):
-                university = university_query.first()
-                log.warn("University '%s' already registered." % \
-                        university.name)
-
-            # If the university has not been registered, register a new
-            # one.
-            else:
-                log.info("Registering university '%s' with database." % \
-                        university.get("name"))
-                university = University(
-                        name=university.get("name"),
-                        abbreviation=university.get("abbreviation"),
-                        url=university.get("url"))
-
-                # Add the university to the session.
-                args.session.add(university)
-
-            # Loop over the departments defined in the metadata.
-            departments = metadata.get("departments")
-            for department in departments:
-                department_query = args.session.query(Department)\
-                        .join(University)\
-                        .filter(Department.name==department.get("name"))\
-                        .filter(Department.university_id==university.id)
-
-                # If the department has been registered, alert the user.
-                if department_query.count() > 0:
-                    log.warn("Department '%s' already registered." % \
-                            department.get("name"))
-                    continue
-
-                # Otherwise register a new one.
-                else:
-                    university.departments.append(Department(
-                            name=department.get("name"),
-                            abbreviation=department.get("abbreviation"),
-                            url=department.get("url")))
-                    log.info("Registering department '%s' with database." % \
-                            department.get("name"))
-
-        except AttributeError as e:
-            log.warn("Target %s metadata not defined." % target)
-            log.warn("Terminating engine.")
-            log.debug(e)
             continue
 
         # Begin downloading course data.
@@ -97,9 +42,9 @@ def scrape(args):
             # Check if there are already courses defined for any
             # departments within this university. If there are, skip
             # this target.
-            if args.session.query(Course).join(Department) \
+            if session.query(Course).join(Department) \
                     .filter(Course.department_id==Department.id)\
-                    .filter(Department.university==university)\
+                    .filter(Department.university==scraper.university)\
                     .count() > 0:
                 log.warn("Target %s already has courses defined." % target)
 
@@ -114,7 +59,7 @@ def scrape(args):
         log.info("Disengaging scraper engine.")
 
 
-def clean(args, string):
+def clean(string):
     """
     Perform a standard cleaning procedure on a course description. Includes
     stop word removal, non-English character removal, digit removal, etc.
@@ -162,6 +107,7 @@ def export(args):
     """
 
     from trajectory.models import Course, Department, University
+    from trajectory.models.meta import session
     import os
 
     import logging, re
@@ -178,7 +124,7 @@ def export(args):
         return
 
     # Get access to the data.
-    universities = args.session.query(University).all()
+    universities = session.query(University).all()
 
     # Dump data in folders broken down by university.
     for university in universities:
@@ -241,6 +187,7 @@ def import_results(args):
 
     from trajectory.models import Course, Topic, CourseTopicAssociation
     from trajectory.models import ResultSet
+    from trajectory.models.meta import session
     from trajectory import config as TRJ
     import logging, csv
     log = logging.getLogger("root")
@@ -252,8 +199,8 @@ def import_results(args):
         beta=args.beta,
         iterations=args.iterations
     )
-    args.session.add(result_set)
-    args.session.commit()
+    session.add(result_set)
+    session.commit()
 
     # Add in new topic definitions.
     with open(args.topic_file, "r") as topic_file:
@@ -262,7 +209,7 @@ def import_results(args):
         topic_count = 0
         for topic in topic_reader:
             topic_count += 1
-            args.session.add(Topic(
+            session.add(Topic(
                 id=topic[0],
                 result_set=result_set,
                 words=', '.join(topic[1:])
@@ -270,8 +217,8 @@ def import_results(args):
         result_set.num_topics = topic_count
 
     # Add the topics to their courses.
-    courses = args.session.query(Course).all()
-    course_query = args.session.query(Course)
+    courses = session.query(Course).all()
+    course_query = session.query(Course)
     course_by_id = lambda c: course_query.get(c)
     with open(args.course_file, "r") as course_file:
         course_reader = csv.reader(course_file, delimiter=",")
