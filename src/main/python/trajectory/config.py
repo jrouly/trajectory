@@ -26,10 +26,13 @@ DATABASE_URI = "sqlite:///%s" % os.path.join(HOME, "data.db")
 
 # Resource locations.
 __RESOURCES = os.path.join(HOME, "src", "main", "resources")
-__STOP_WORDS_FILE = os.path.join(HOME, __RESOURCES, "stoplists", "en.txt")
 
 # Stop words cache.
+__STOP_WORDS_FILE = os.path.join(HOME, __RESOURCES, "stoplists", "en.txt")
 STOP_WORDS = set(open(__STOP_WORDS_FILE, "r").read().splitlines())
+
+# Engine metadata cache.
+ENGINE_METADATA = os.path.join(__RESOURCES, "engine_metadata")
 
 # Minimum topic weight to measure.
 TOPIC_MIN_WEIGHT = 0.1
