@@ -126,4 +126,38 @@
   </div>
 </div>
 
+<div class="row">
+  <div class="col-lg-12">
+
+    <h3><a class="clickable" data-toggle="collapse"
+    data-target="#prereq-trees">Prerequisite Trees [show/hide]</a></h3>
+
+  </div>
+</div>
+
+<div class="row in" id="prereq-trees">
+  <div class="col-lg-12">
+    <style>
+      #sigma-container {
+        max-width: 400px;
+        height: 400px;
+        margin: auto;
+      }
+    </style>
+    <div id="sigma-container"></div>
+  </div>
+</div>
+
+
+<script>
+  sigma.parsers.gexf('/prereqs/{{department.id}}', {
+      container: 'sigma-container'
+    },
+    function(s) {
+      console.log("success message");
+    }
+  );
+</script>
+
+
 {% endblock %}
