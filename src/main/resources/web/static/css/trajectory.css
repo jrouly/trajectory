@@ -1,7 +1,11 @@
 .clickable {
   cursor: pointer;
 }
-#sigma-container {
-  width: 400px;
-  height: 400px;
+.graph.node {
+  stroke: #fff;
+  stroke-width: 1.5px;
+}
+.graph.link {
+  stroke: #999;
+  stroke-opacity: .6;
 }

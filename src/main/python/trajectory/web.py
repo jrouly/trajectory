@@ -2,9 +2,9 @@ from flask import Flask, g, render_template, url_for, abort
 from flask import make_response, request
 from jinja2 import FileSystemLoader
 from sqlalchemy.sql.expression import func
-from pickle import dumps, loads
-from tempfile import TemporaryFile
-from networkx.readwrite.gexf import write_gexf
+from networkx.readwrite.json_graph import node_link_data
+import pickle
+import json
 
 from trajectory import config as TRJ
 from trajectory.utils import get_prereq_graph
@@ -102,14 +102,10 @@ def prereq_trees(did):
     G = get_prereq_graph(did, layout=True)
     if G is None:
         abort(404)
-    with TemporaryFile() as fp:
-        write_gexf(G, fp)
-        fp.seek(0)
-        gexf = fp.read()
-    #return Response(gexf, mimetype='text/xml')
-    response = make_response(gexf)
+    data = json.dumps(node_link_data(G))
+    response = make_response(data)
     response.headers["Content-Disposition"] = \
-            "attachment; filename=prereqs.gexf"
+            "attachment; filename=prereqs.json"
     return response
 
 
@@ -134,7 +130,7 @@ def utility_processor():
         try:
             import binascii
             unhex = binascii.unhexlify(data)
-            return loads(unhex)
+            return pickle.loads(unhex)
         except TypeError:
             return None
     return dict(unpickle=unpickle)
@@ -153,7 +149,7 @@ def get_result_set():
     # Warning: do NOT call loads on the requested data.
     import binascii
     result_set = request.cookies.get('result_set')
-    legal_result_sets = [binascii.hexlify(dumps(rs)).decode('utf-8')
+    legal_result_sets = [binascii.hexlify(pickle.dumps(rs)).decode('utf-8')
             for rs in app.db.query(ResultSet).all()]
 
     # Check if the requested id is legal. If not, default it.
