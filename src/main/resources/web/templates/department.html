@@ -25,7 +25,6 @@
   </div>
 </div>
 
-{% if department.courses %}
 <div class="row">
   <div class="col-lg-12">
     <div class="form-horizontal" action="" method="get">
@@ -36,6 +35,7 @@
             <span class="input-group-addon"><i class="fa fa-search"></i></span>
             <input type="text" class="form-control" autocomplete="off"
             placeholder="Course title" id="search"
+            {% if not department.courses %}disabled{% endif %}
             data-list="#course-list">
           </div>
         </div>
@@ -48,81 +48,82 @@
 <div class="row">
   <div class="col-lg-12">
 
-    <h3>Course List</h3>
+    <h3><a class="clickable" data-toggle="collapse"
+    data-target="#course-list-table">Course List [show/hide]</a></h3>
 
-    <table class="table table-hover">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Number</th>
-          <th>Title</th>
-        </tr>
-      </thead>
-      <tbody id="course-list">
-        {% for course in department.courses %}
-        <tr data-toggle="collapse" data-target=".collapse{{course.id}}"
-          class="clickable" id="{{course.id}}">
-          <td>{{loop.index}}</td>
-          <td>{{ course.number }}</td>
-          <td>{{ course.title }}</td>
-        </tr>
+    <div class="in" id="course-list-table">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Number</th>
+            <th>Title</th>
+          </tr>
+        </thead>
+        <tbody id="course-list">
+          {% for course in department.courses %}
+          <tr data-toggle="collapse" data-target=".collapse{{course.id}}"
+            class="clickable" id="{{course.id}}">
+            <td>{{loop.index}}</td>
+            <td>{{ course.number }}</td>
+            <td>{{ course.title }}</td>
+          </tr>
 
-        <tr class="ignore info collapse collapse{{course.id}}">
-          <td colspan="3">
-            <div class="collapse collapse{{course.id}}">
-              {{ course.description_raw }}
-            </div>
-          </td>
-        </tr>
-
-        <tr class="ignore warning info collapse collapse{{course.id}}">
-          <td colspan="3">
-            <div class="collapse collapse{{course.id}}">
-              {{ course.description }}
-            </div>
-          </td>
-        </tr>
-
-          {% for topic_association in course.topics
-              if topic_association.result_set_id == grs.id %}
-          {% set topic = topic_association.topic %}
-          {% set proportion = topic_association.proportion %}
-
-          <tr class="ignore success collapse collapse{{course.id}}">
+          <tr class="ignore info collapse collapse{{course.id}}">
             <td colspan="3">
               <div class="collapse collapse{{course.id}}">
-                ({{ '%.3f' % proportion }})
-                <a href="{{url_for('topics', _anchor=topic.id)}}">
-                  {{ topic.words }}</a>
+                {{ course.description_raw }}
               </div>
             </td>
           </tr>
-          {% else %}
-          <tr class="ignore collapse danger collapse{{course.id}}">
+
+          <tr class="ignore warning info collapse collapse{{course.id}}">
             <td colspan="3">
               <div class="collapse collapse{{course.id}}">
-                No topics inferred.
+                {{ course.description }}
               </div>
             </td>
+          </tr>
+
+            {% for topic_association in course.topics
+                if topic_association.result_set_id == grs.id %}
+            {% set topic = topic_association.topic %}
+            {% set proportion = topic_association.proportion %}
+
+            <tr class="ignore success collapse collapse{{course.id}}">
+              <td colspan="3">
+                <div class="collapse collapse{{course.id}}">
+                  ({{ '%.3f' % proportion }})
+                  <a href="{{url_for('topics', _anchor=topic.id)}}">
+                    {{ topic.words }}</a>
+                </div>
+              </td>
+            </tr>
+            {% else %}
+            <tr class="ignore collapse danger collapse{{course.id}}">
+              <td colspan="3">
+                <div class="collapse collapse{{course.id}}">
+                  No topics inferred.
+                </div>
+              </td>
+            </tr>
+            {% endfor %}
+
+          {% else %}
+          <tr>
+            <td></td>
+            <td>No courses found.</td>
+            <td></td>
+            <td></td>
           </tr>
           {% endfor %}
 
-        {% endfor %}
-      </tbody>
+        </tbody>
 
-    </table>
+      </table>
+    </div>
 
   </div>
 </div>
-
-{% else %}
-<tr>
-  <td></td>
-  <td>No courses found.</td>
-  <td></td>
-  <td></td>
-</tr>
-{% endif %}
-
 
 {% endblock %}

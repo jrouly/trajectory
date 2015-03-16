@@ -21,7 +21,6 @@
   </div>
 </div>
 
-{% if universities %}
 <div class="row">
   <div class="col-lg-12">
     <div class="form-horizontal" action="" method="get">
@@ -32,6 +31,7 @@
             <span class="input-group-addon"><i class="fa fa-search"></i></span>
             <input type="text" class="form-control" autocomplete="off"
             placeholder="University name" id="search"
+            {% if not universities %}disabled{% endif %}
             data-list="#university-list">
           </div>
         </div>
@@ -66,19 +66,20 @@
             <a target="_blank" href="//{{ university.url }}">{{ university.url }}</a>
             {% else %} - {% endif %}</td>
         </tr>
+
+        {% else %}
+        <tr>
+          <td></td>
+          <td>No universities found.</td>
+          <td></td>
+          <td></td>
+        </tr>
         {% endfor %}
+
       </tbody>
     </table>
 
   </div>
 </div>
-
-{% else %}
-<div class="row">
-  <div class="col-lg-12">
-    <p class="warning">No universities found.<p>
-  </div>
-</div>
-{% endif %}
 
 {% endblock %}

@@ -21,7 +21,6 @@
   </div>
 </div>
 
-{% if topics %}
 <div class="row">
   <div class="col-lg-12">
     <div class="form-horizontal" action="" method="get">
@@ -32,6 +31,7 @@
             <span class="input-group-addon"><i class="fa fa-search"></i></span>
             <input type="text" class="form-control" autocomplete="off"
             placeholder="Topic words" id="search-topics"
+            {% if not topics %}disabled{% endif %}
             data-list="#topic-list">
           </div>
         </div>
@@ -74,17 +74,16 @@
 
       </li>
 
+      {% else %}
+      <div class="row">
+        <div class="col-lg-12">
+          <p class="warning">No topics inferred.<p>
+        </div>
+      </div>
       {% endfor %}
+
     </ul>
   </div>
 </div>
-
-{% else %}
-<div class="row">
-  <div class="col-lg-12">
-    <p class="warning">No topics inferred.<p>
-  </div>
-</div>
-{% endif %}
 
 {% endblock %}
