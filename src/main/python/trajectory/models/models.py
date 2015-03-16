@@ -97,9 +97,6 @@ class Course(meta.Base):
     """
 
     __tablename__ = "course"
-    __table_args__ = (
-        UniqueConstraint('number', 'title', 'department_id'),
-    )
 
     id = Column(Integer, primary_key=True)
     number = Column(Integer, nullable=False)
