@@ -1,11 +1,11 @@
 .clickable {
   cursor: pointer;
 }
-.graph.node {
+#graph-container .node {
   stroke: #fff;
   stroke-width: 1.5px;
 }
-.graph.link {
+#graph-container .link {
   stroke: #999;
   stroke-opacity: .6;
 }
