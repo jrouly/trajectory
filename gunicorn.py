@@ -12,7 +12,7 @@ bind = ['127.0.0.1:8080']
 backlog = 2048
 
 # Number of worker processes to handle connections.
-workers = 20
+workers = 2
 
 # Fork main process to background.
 daemon = True
