@@ -1,5 +1,5 @@
 from flask import Flask, g, render_template, url_for, abort
-from flask import make_response, request, Response
+from flask import make_response, request
 from jinja2 import FileSystemLoader
 from sqlalchemy.sql.expression import func
 from pickle import dumps, loads
@@ -97,16 +97,20 @@ def about():
     return render_template("about.html")
 
 # Define routing for department prerequisite tree API endpoint.
-@app.route('/prereqs/<string:departmentID>')
-def prereq_trees(departmentID):
-    G = get_prereq_graph(departmentID)
+@app.route('/prereqs/<string:did>')
+def prereq_trees(did):
+    G = get_prereq_graph(did)
     if G is None:
         abort(404)
     with TemporaryFile() as fp:
         write_gexf(G, fp)
         fp.seek(0)
         gexf = fp.read()
-    return Response(gexf, mimetype='text/xml')
+    #return Response(gexf, mimetype='text/xml')
+    response = make_response(gexf)
+    response.headers["Content-Disposition"] = \
+            "attachment; filename=prereqs.gexf"
+    return response
 
 
 ################################
