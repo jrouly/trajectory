@@ -1,10 +1,13 @@
 from flask import Flask, g, render_template, url_for, abort
-from flask import make_response, request
+from flask import make_response, request, Response
 from jinja2 import FileSystemLoader
 from sqlalchemy.sql.expression import func
 from pickle import dumps, loads
+from tempfile import TemporaryFile
+from networkx.readwrite.gexf import write_gexf
 
 from trajectory import config as TRJ
+from trajectory.utils import get_prereq_graph
 from trajectory.models import University, Department, Course, ResultSet
 from trajectory.models import Topic, CourseTopicAssociation
 from trajectory.models.meta import session
@@ -92,6 +95,18 @@ def topics():
 @app.route('/about/')
 def about():
     return render_template("about.html")
+
+# Define routing for department prerequisite tree API endpoint.
+@app.route('/prereqs/<string:departmentID>')
+def prereq_trees(departmentID):
+    G = get_prereq_graph(departmentID)
+    if G is None:
+        abort(404)
+    with TemporaryFile() as fp:
+        write_gexf(G, fp)
+        fp.seek(0)
+        gexf = fp.read()
+    return Response(gexf, mimetype='text/xml')
 
 
 ################################

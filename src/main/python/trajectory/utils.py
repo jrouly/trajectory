@@ -21,7 +21,7 @@ def get_prereq_graph(department_id):
     # Attempt to look up the requested department.
     department = session.query(Department).get(department_id)
     if department is None:
-        return G
+        return None
 
     # Look up the list of all parents to generate trees for.
     course_ids = [c.id for c in department.courses]
@@ -30,19 +30,18 @@ def get_prereq_graph(department_id):
     # This is inefficient and duplicates data. TODO: make it not so.
     prereq_forest = [get_prereq_tree(cid) for cid in course_ids]
 
-    print_cid = lambda cid: print(session.query(Course).get(cid))
-
     # Recursively add course ids in a subtree to the graph.
     def add_subtree(G, tree, parent=None):
-        course = tree[0]   # unpack information
+        cid = tree[0]   # unpack information
         prereqs = tree[1]  # unpack information
-        G.add_node(course) # add this course
+        course = session.query(Course).get(cid)
+        G.add_node(cid, row2dict(course)) # add this course
         # add an edge from the parent to this course
         if parent is not None:
-            G.add_edge(parent, course)
+            G.add_edge(parent, cid, label="prerequisite")
         # loop over prereq trees and recursively add them in
         for prereq in prereqs:
-            add_subtree(G, prereq, course)
+            add_subtree(G, prereq, cid)
 
     # Navigate the prerequisite forest and add the course ids as nodes, and
     # prerequisite relationships as unweighted edges.
@@ -51,14 +50,11 @@ def get_prereq_graph(department_id):
 
     return G
 
-def get_prereq_tree(course_id, depth=1):
+def get_prereq_tree(course_id, parents=set()):
     """
-    Recursively identify the prerequisite chain of a course. Maximum depth
-    of 50 prerequisites in a chain, and error out if this limit is
-    exceeded.
-
-    This tree is rooted at the requested parent course and is structured as
-    a tuple of tuples.
+    Recursively identify the prerequisite chain of a course.  This tree is
+    rooted at the requested parent course and is structured as a tuple of
+    tuples.
 
     Ex:
     (a [
@@ -70,9 +66,6 @@ def get_prereq_tree(course_id, depth=1):
     ])
     """
 
-    if depth > 50:
-        raise RuntimeError("Maximum recursive depth exceeded.")
-
     from trajectory.models import Course
     from trajectory.models.meta import session
 
@@ -81,6 +74,12 @@ def get_prereq_tree(course_id, depth=1):
     if course is None:
         return None
 
+    # Recursive depth base case.
+    if course_id in parents:
+        return None
+    else:
+        parents = parents | {course_id}
+
     # Base case.
     if len(course.prerequisites) == 0:
         return (course.id, [])
@@ -88,14 +87,15 @@ def get_prereq_tree(course_id, depth=1):
     # Recursive call.
     builder = []
     for prerequisite in course.prerequisites:
-        sub_prereqs = get_prereq_tree(prerequisite.id, depth+1)
-        builder.append(sub_prereqs)
+        sub_prereqs = get_prereq_tree(prerequisite.id, parents)
+        if sub_prereqs is not None:
+            builder.append(sub_prereqs)
 
     # Add recursively determined list.
     return (course.id, builder)
 
 
-def get_prereq_set(course_id, depth=1):
+def get_prereq_set(course_id):
     """
     Get the set of prerequisite courses for a requested course. That is, a
     flat set with no repeats. This set does not contain the requested
@@ -103,7 +103,7 @@ def get_prereq_set(course_id, depth=1):
     """
 
     # Attempt to identify a reference to the requested course.
-    prereq_tree = get_prereq_tree(course_id, depth=depth)
+    prereq_tree = get_prereq_tree(course_id)
     if prereq_tree is None:
         return set()
 
@@ -118,3 +118,14 @@ def get_prereq_set(course_id, depth=1):
 
     # Remove duplicates.
     return set(flatten(prereq_tree)) - {course_id}
+
+
+def row2dict(row):
+    """
+    Convert a SQLAlchemy row to a dictionary.
+    """
+    return {
+        col.name: str(getattr(row, col.name))
+        for col in row.__table__.columns
+    }
+
