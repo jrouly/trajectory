@@ -36,10 +36,6 @@ def scrape(args):
     coid_re = re.compile("(?<=coid=)\d+")
     prereq_re = re.compile("([A-Za-z,]{2,5})(\s|\\\\xa0)(\d{3})")
 
-    # List of prefixes from the META object.
-    prefixes = [department.get("abbreviation").lower()
-                    for department in META.get("departments")]
-
     # Fetch existing metadata objects from database.
     university = META.get("school").get("name")
     university = session.query(University)\
@@ -51,7 +47,7 @@ def scrape(args):
                         .all()}
 
     prereq_dict = {} # Dictionary of Course : Prereq match list
-    for prefix in prefixes:
+    for prefix in departments.keys():
         catalog_index = requests.get(catalog_index_url % prefix)
         soup = BeautifulSoup(catalog_index.text)
 
@@ -66,7 +62,7 @@ def scrape(args):
             # Generate metadata
             log.debug(course.text)
             full_title = re.compile("\s+").split(course.text)
-            prefix = full_title[0]
+            #prefix = full_title[0]
             cnum = full_title[1]
             title = ' '.join(full_title[3:])
             title = title.replace("'", "")
@@ -136,7 +132,7 @@ def scrape(args):
                 title=title,
                 description=description,
                 description_raw=description_raw)
-            departments[prefix.lower()].courses.append(new_course)
+            departments[prefix].courses.append(new_course)
 
             # Add in the requested list of prereqs if found.
             if prereq_list is not None:
