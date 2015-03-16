@@ -6,7 +6,7 @@ Define a collection of useful utility functions for performing analysis.
 """
 
 
-def get_prereq_graph(department_id):
+def get_prereq_graph(department_id, layout=False):
     """
     Generate a graph of prerequisites within a department.
     """
@@ -47,6 +47,17 @@ def get_prereq_graph(department_id):
     # prerequisite relationships as unweighted edges.
     for tree in prereq_forest:
         add_subtree(G, tree)
+
+    # If a layout is requested, then calculate and apply it.
+    if layout:
+        pos = nx.spring_layout(G)
+        for node in G.nodes():
+            G.node[node]["viz"] = {
+                'position': {
+                    'x': pos[node][0],
+                    'y': pos[node][1]
+                }
+            }
 
     return G
 

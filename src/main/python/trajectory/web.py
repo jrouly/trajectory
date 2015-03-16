@@ -99,7 +99,7 @@ def about():
 # Define routing for department prerequisite tree API endpoint.
 @app.route('/prereqs/<string:did>')
 def prereq_trees(did):
-    G = get_prereq_graph(did)
+    G = get_prereq_graph(did, layout=True)
     if G is None:
         abort(404)
     with TemporaryFile() as fp:
