@@ -125,7 +125,7 @@ def row2dict(row):
     Convert a SQLAlchemy row to a dictionary.
     """
     return {
-        col.name: str(getattr(row, col.name))
+        col.name: getattr(row, col.name)
         for col in row.__table__.columns
     }
 
