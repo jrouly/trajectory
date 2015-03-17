@@ -35,7 +35,7 @@ STOP_WORDS = set(open(__STOP_WORDS_FILE, "r").read().splitlines())
 ENGINE_METADATA = os.path.join(__RESOURCES, "engine_metadata")
 
 # Minimum topic weight to measure.
-TOPIC_MIN_WEIGHT = 0.1
+TOPIC_MIN_WEIGHT = 0.15
 
 # Directory where templates are stored for the visualization module.
 TEMPLATES = os.path.join(__RESOURCES, "web", "templates")
