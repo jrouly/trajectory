@@ -6,29 +6,39 @@ Define a collection of useful utility functions for performing analysis.
 """
 
 
-def get_prereq_graph(department_id, layout=False):
+def get_prereq_graph(course_id, layout=False, format=None, root=None):
     """
-    Generate a graph of prerequisites within a department.
+    Generate a graph of prerequisites within a course.
+
+    layout -- whether or not to apply a layout to this graph.
+    format -- what formatting to apply to the output
+                None: return a NetworkX graph
+                node: json formatted as node-link style
+                adjacency: json formatted as adjacency style
+                tree: json formatted as tree style
+    root -- if tree formatting is requested, root of the tree
     """
 
     from trajectory.models import Department, Course
     from trajectory.models.meta import session
+
+    from networkx.readwrite import json_graph
     import networkx as nx
+    import json
+
+    if format not in [None, "node", "adjacency", "tree"]:
+        raise RuntimeError("Unknown requested data format %s" % format)
 
     # Initialize a new NetworkX graph.
     G = nx.DiGraph()
 
-    # Attempt to look up the requested department.
-    department = session.query(Department).get(department_id)
-    if department is None:
+    # Attempt to look up the requested course.
+    course = session.query(Course).get(course_id)
+    if course is None:
         return None
 
-    # Look up the list of all parents to generate trees for.
-    course_ids = [c.id for c in department.courses]
-
-    # Generate the prereq trees for each course in the department.
-    # This is inefficient and duplicates data. TODO: make it not so.
-    prereq_forest = [get_prereq_tree(cid) for cid in course_ids]
+    # Generate the prereq tree for the requested course.
+    prereq_tree = get_prereq_tree(course_id)
 
     # Recursively add course ids in a subtree to the graph.
     def add_subtree(G, tree, parent=None):
@@ -43,10 +53,9 @@ def get_prereq_graph(department_id, layout=False):
         for prereq in prereqs:
             add_subtree(G, prereq, cid)
 
-    # Navigate the prerequisite forest and add the course ids as nodes, and
+    # Navigate the prerequisite tree and add the course ids as nodes, and
     # prerequisite relationships as unweighted edges.
-    for tree in prereq_forest:
-        add_subtree(G, tree)
+    add_subtree(G, prereq_tree)
 
     # If a layout is requested, then calculate and apply it.
     if layout:
@@ -59,7 +68,21 @@ def get_prereq_graph(department_id, layout=False):
                 }
             }
 
-    return G
+    if G is None:
+        return G
+
+    # Apply any requested data output formatting.
+
+    if format == "node":
+        return json.dumps(json_graph.node_link_data(G))
+    elif format == "adjacency":
+        return json.dumps(json_graph.adjacency_data(G))
+    elif format == "tree":
+        if root is None: # Ensure a root is specified.
+            raise RuntimeError("No root specified in a tree formatted request.")
+        return json.dumps(json_graph.tree_data(G, int(root)))
+    else:
+        return G
 
 def get_prereq_tree(course_id, parents=set()):
     """

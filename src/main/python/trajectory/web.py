@@ -2,9 +2,7 @@ from flask import Flask, g, render_template, url_for, abort
 from flask import make_response, request
 from jinja2 import FileSystemLoader
 from sqlalchemy.sql.expression import func
-from networkx.readwrite.json_graph import node_link_data
 import pickle
-import json
 
 from trajectory import config as TRJ
 from trajectory.utils import get_prereq_graph
@@ -79,6 +77,18 @@ def department(u=None, d=None):
     return render_template("department.html",
             department=department)
 
+# Define routing for a course.
+@app.route('/universities/<string:u>/<string:d>/id<string:cid>/')
+def course(u=None, d=None, cid=None):
+    course = app.db.query(Course).join(Department).join(University) \
+            .filter(University.abbreviation==u) \
+            .filter(Department.abbreviation==d) \
+            .filter(Course.id==cid).first()
+    if course is None:
+        abort(404)
+    return render_template("course.html",
+            course=course)
+
 # Define routing for topic list.
 @app.route('/topics/')
 def topics():
@@ -96,16 +106,15 @@ def topics():
 def about():
     return render_template("about.html")
 
-# Define routing for department prerequisite tree API endpoint.
-@app.route('/prereqs/<string:did>')
-def prereq_trees(did):
-    G = get_prereq_graph(did, layout=True)
-    if G is None:
+# Define routing for course prerequisite tree API endpoint.
+@app.route('/prereqs/<string:cid>')
+def prereq_tree(cid):
+    data = get_prereq_graph(cid, layout=True, format="node")
+    if data is None:
         abort(404)
-    data = json.dumps(node_link_data(G))
     response = make_response(data)
     response.headers["Content-Disposition"] = \
-            "attachment; filename=prereqs.json"
+            "attachment; filename=course-%s-prereqs.json" % cid
     return response
 
 

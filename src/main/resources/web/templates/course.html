@@ -1,0 +1,104 @@
+{% extends 'layout/base.html' %}
+
+{% set department = course.department %}
+{% set university = department.university %}
+
+{% block title %}
+{{ university.abbreviation }}
+{{ department.abbrevation }}
+{{ course.number }}
+{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+  <div class="row">
+    <div class="col-lg-12">
+      <h1>
+        {{ university.abbreviation }}
+        {{ department.abbreviation }}
+        {{ course.number }}
+      </h1>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-12">
+    <ul class="breadcrumb">
+      <li></li>
+      <li><a href="{{url_for('university_list')}}">Universities</a></li>
+      <li><a href="{{url_for('university', u=university.abbreviation)}}">{{ university.abbreviation }}</a></li>
+      <li><a href="{{url_for('department', u=university.abbreviation, d=department.abbreviation)}}">{{ department.abbreviation }}</a></li>
+      <li class="active">{{ course.number }}</li>
+    </ul>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-12">
+
+    <h3>Prerequisite Tree</h3>
+
+  </div>
+</div>
+
+<div class="row in" id="prereq-tree">
+  <div class="col-lg-12">
+    <div id="graph-container"></div>
+  </div>
+</div>
+
+<script>
+
+var width = 960,
+    height = 500;
+
+var color = d3.scale.category20();
+
+var force = d3.layout.force()
+    .charge(-120)
+    .linkDistance(30)
+    .size([width, height]);
+
+var svg = d3.select("#graph-container").append("svg")
+    .attr("width", width)
+    .attr("height", height);
+
+d3.json("{{ url_for('prereq_tree', cid=course.id) }}", function(error, graph) {
+  force
+      .nodes(graph.nodes)
+      .links(graph.links)
+      .start();
+
+  var link = svg.selectAll(".link")
+      .data(graph.links)
+    .enter().append("line")
+      .attr("class", "link")
+      .style("stroke-width", function(d) { return Math.sqrt(d.value); });
+
+  var node = svg.selectAll(".node")
+      .data(graph.nodes)
+    .enter().append("circle")
+      .attr("class", "node")
+      .attr("r", 5)
+      .style("fill", function(d) { return color(d.group); })
+      .call(force.drag);
+
+  node.append("title")
+      .text(function(d) { return d.name; });
+
+  force.on("tick", function() {
+    link.attr("x1", function(d) { return d.source.x; })
+        .attr("y1", function(d) { return d.source.y; })
+        .attr("x2", function(d) { return d.target.x; })
+        .attr("y2", function(d) { return d.target.y; });
+
+    node.attr("cx", function(d) { return d.x; })
+        .attr("cy", function(d) { return d.y; });
+  });
+});
+
+</script>
+
+{% endblock %}

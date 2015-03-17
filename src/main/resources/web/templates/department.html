@@ -48,8 +48,7 @@
 <div class="row">
   <div class="col-lg-12">
 
-    <h3><a class="clickable" data-toggle="collapse" id="courses"
-    data-target="#course-list-table">Course List [show/hide]</a></h3>
+    <h3>Course List</h3>
 
     <div class="in" id="course-list-table">
       <table class="table table-hover">
@@ -62,11 +61,18 @@
         </thead>
         <tbody id="course-list">
           {% for course in department.courses %}
+
+          {% set u = department.university.abbreviation %}
+          {% set d = department.abbreviation %}
+          {% set cid = course.id %}
+
           <tr data-toggle="collapse" data-target=".collapse{{course.id}}"
             class="clickable" id="{{course.id}}">
             <td>{{loop.index}}</td>
             <td>{{ course.number }}</td>
-            <td>{{ course.title }}</td>
+            <td><a href="{{ url_for('course', u=u, d=d, cid=cid) }}">
+              {{ course.title }}
+              </a></td>
           </tr>
 
           <tr class="ignore info collapse collapse{{course.id}}">
@@ -125,72 +131,5 @@
 
   </div>
 </div>
-
-<div class="row">
-  <div class="col-lg-12">
-
-    <h3><a class="clickable" data-toggle="collapse" id="prereq"
-    data-target="#prereq-trees">Prerequisite Trees [show/hide]</a></h3>
-
-  </div>
-</div>
-
-<div class="row in" id="prereq-trees">
-  <div class="col-lg-12">
-    <div id="graph-container"></div>
-  </div>
-</div>
-
-<script>
-
-var width = 960,
-    height = 500;
-
-var color = d3.scale.category20();
-
-var force = d3.layout.force()
-    .charge(-120)
-    .linkDistance(30)
-    .size([width, height]);
-
-var svg = d3.select("#graph-container").append("svg")
-    .attr("width", width)
-    .attr("height", height);
-
-d3.json("{{ url_for('prereq_trees', did=department.id) }}", function(error, graph) {
-  force
-      .nodes(graph.nodes)
-      .links(graph.links)
-      .start();
-
-  var link = svg.selectAll(".link")
-      .data(graph.links)
-    .enter().append("line")
-      .attr("class", "link")
-      .style("stroke-width", function(d) { return Math.sqrt(d.value); });
-
-  var node = svg.selectAll(".node")
-      .data(graph.nodes)
-    .enter().append("circle")
-      .attr("class", "node")
-      .attr("r", 5)
-      .style("fill", function(d) { return color(d.group); })
-      .call(force.drag);
-
-  node.append("title")
-      .text(function(d) { return d.name; });
-
-  force.on("tick", function() {
-    link.attr("x1", function(d) { return d.source.x; })
-        .attr("y1", function(d) { return d.source.y; })
-        .attr("x2", function(d) { return d.target.x; })
-        .attr("y2", function(d) { return d.target.y; });
-
-    node.attr("cx", function(d) { return d.x; })
-        .attr("cy", function(d) { return d.y; });
-  });
-});
-
-</script>
 
 {% endblock %}
