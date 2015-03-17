@@ -13,3 +13,8 @@
   color: #999;
   stroke-opacity: .6;
 }
+#graph-container .label.prime {
+  fill: #f00;
+  fill-opacity: 1;
+  stroke-width: 0;
+}

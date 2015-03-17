@@ -49,10 +49,16 @@ def get_prereq_graph(course_id, layout=False, format=None, root=None):
         course = session.query(Course).get(cid)
 
         # Insert all known data, including department abbreviation.
-        edge_data = row2dict(course)
-        edge_data['dept'] = course.department.abbreviation
+        node_data = row2dict(course)
+        node_data['dept'] = course.department.abbreviation
 
-        G.add_node(cid, edge_data) # add this course
+        # Identify the primary course in the graph (the requested).
+        if str(cid) == str(course_id):
+            node_data['prime'] = True
+        else:
+            node_data['prime'] = False
+
+        G.add_node(cid, node_data) # add this course
         # add an edge from the parent to this course
         if parent is not None:
             G.add_edge(parent, cid, label="prerequisite")

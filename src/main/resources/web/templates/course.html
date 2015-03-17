@@ -38,7 +38,63 @@
 <div class="row">
   <div class="col-lg-12">
 
-    <h3>Prerequisite Tree</h3>
+    <h3>Inferred Topics</h3>
+
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-12">
+
+    <ul class="list-group" id="topic-list">
+      {% for assoc in course.topics if assoc.topic.result_set.id == grs.id %}
+      {% set topic = assoc.topic %}
+
+      <li class="list-group-item" id="{{ topic.id }}">
+        <span class="badge">{{ topic.course_assocs|count }}</span>
+
+        <i class="fa fa-caret-right"></i>&nbsp;
+        <a class="clickable" data-toggle="collapse" data-target=".collapse{{ topic.id }}">
+          ({{ assoc.proportion }}) {{ topic.words }}
+        </a>
+
+        <div class="collapse collapse{{ topic.id }}">
+          <p></p>
+
+          {% for course_assoc in topic.course_assocs %}
+          {% set course = course_assoc.course %}
+          {% set department = course.department %}
+          {% set university = department.university %}
+          {% set proportion = course_assoc.proportion %}
+
+          <p>({{ '%.3f' % proportion }})
+          <strong><a href="{{url_for('department', _anchor=course.id, u=university.abbreviation, d=department.abbreviation)}}">
+            {{university.abbreviation}}
+            {{department.abbreviation}}
+            {{course.number}}</a></strong>
+          <em>{{course.title}}</em></p>
+          {% endfor %}
+        </div>
+
+      </li>
+
+      {% else %}
+      <div class="row">
+        <div class="col-lg-12">
+          <p class="warning">No topics inferred.<p>
+        </div>
+      </div>
+      {% endfor %}
+
+    </ul>
+  </div>
+</div>
+
+
+<div class="row">
+  <div class="col-lg-12">
+
+    <h3>Prerequisite Graph</h3>
 
   </div>
 </div>
@@ -91,7 +147,9 @@ d3.json("{{ url_for('prereq_tree', cid=course.id) }}", function(error, json) {
   node.append("text")
       .attr("dx", 12)
       .attr("dy", ".35em")
-      .attr("class", "label")
+      .attr("class", function(d) {
+        return d.prime ? "label prime" : "label";
+      })
       .text(function(d) {
         return d.dept + " " + d.number
       });
