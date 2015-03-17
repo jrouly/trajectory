@@ -9,3 +9,7 @@
   stroke: #999;
   stroke-opacity: .6;
 }
+#graph-container .label {
+  color: #999;
+  stroke-opacity: .6;
+}
