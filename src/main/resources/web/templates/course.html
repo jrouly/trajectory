@@ -86,7 +86,7 @@ d3.json("{{ url_for('prereq_tree', cid=course.id) }}", function(error, json) {
   node.append("circle")
       .attr("class", "node")
       .attr("r", 5)
-      .style("fill", function(d) { return color(d.group); })
+      .style("fill", function(d) { return color(d.dept); })
 
   node.append("text")
       .attr("dx", 12)
