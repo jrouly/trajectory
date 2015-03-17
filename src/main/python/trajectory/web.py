@@ -5,7 +5,7 @@ from sqlalchemy.sql.expression import func
 import pickle
 
 from trajectory import config as TRJ
-from trajectory.utils import get_prereq_graph
+from trajectory.utils.prereqs import get_prereq_graph
 from trajectory.models import University, Department, Course, ResultSet
 from trajectory.models import Topic, CourseTopicAssociation
 from trajectory.models.meta import session

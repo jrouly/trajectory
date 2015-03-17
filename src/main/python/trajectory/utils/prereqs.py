@@ -1,8 +1,9 @@
 """
-trajectory/utils.py
+trajectory/utils/prereqs.py
 Author: Jean Michel Rouly
 
-Define a collection of useful utility functions for performing analysis.
+Define a collection of useful utility functions for analyzing course and
+departmental prerequisite structures.
 """
 
 
@@ -21,6 +22,7 @@ def get_prereq_graph(course_id, layout=False, format=None, root=None):
 
     from trajectory.models import Department, Course
     from trajectory.models.meta import session
+    from trajectory.utils.common import row2dict
 
     from networkx.readwrite import json_graph
     import networkx as nx
@@ -45,7 +47,12 @@ def get_prereq_graph(course_id, layout=False, format=None, root=None):
         cid = tree[0]   # unpack information
         prereqs = tree[1]  # unpack information
         course = session.query(Course).get(cid)
-        G.add_node(cid, row2dict(course)) # add this course
+
+        # Insert all known data, including department abbreviation.
+        edge_data = row2dict(course)
+        edge_data['dept'] = course.department.abbreviation
+
+        G.add_node(cid, edge_data) # add this course
         # add an edge from the parent to this course
         if parent is not None:
             G.add_edge(parent, cid, label="prerequisite")
@@ -152,14 +159,3 @@ def get_prereq_set(course_id):
 
     # Remove duplicates.
     return set(flatten(prereq_tree)) - {course_id}
-
-
-def row2dict(row):
-    """
-    Convert a SQLAlchemy row to a dictionary.
-    """
-    return {
-        col.name: getattr(row, col.name)
-        for col in row.__table__.columns
-    }
-
