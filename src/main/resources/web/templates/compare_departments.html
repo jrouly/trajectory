@@ -26,12 +26,27 @@
 
 <div class="row">
   <div class="col-md-12">
-    <div class="panel panel-default">
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <h3 class="panel-title">Statistics</h3>
+      </div>
       <div class="panel-body">
-        <h4>
+        <p>
           <abbr title="Jaccard Index">Department Similarity</abbr>:
           {{ '%.3f' % jaccard }}
-        </h4>
+        </p>
+        <p>Courses in
+          <a href="{{url_for('department', u=dau.abbreviation, d=da.abbreviation)}}">
+            {{dau.abbreviation}} {{ da.name }}
+          </a>:
+          {{num_courses_a}}
+        </p>
+        <p>Courses in
+          <a href="{{url_for('department', u=dbu.abbreviation, d=db.abbreviation)}}">
+            {{dbu.abbreviation}} {{ db.name }}
+          </a>:
+          {{num_courses_b}}
+        </p>
       </div>
     </div>
   </div>

@@ -145,6 +145,12 @@ def compare_departments(daid=1, dbid=1): #TODO: set more reasonable defaults
     department_a_topics = department_a_topics - intersection
     department_b_topics = department_b_topics - intersection
 
+    # Number of courses in each department.
+    num_courses_a = session.query(Course).join(Department) \
+            .filter(Department.id==daid).count()
+    num_courses_b = session.query(Course).join(Department) \
+            .filter(Department.id==dbid).count()
+
     # Global list of departments for switching over.
     departments = session.query(Department).all()
 
@@ -153,6 +159,8 @@ def compare_departments(daid=1, dbid=1): #TODO: set more reasonable defaults
             db=department_b,
             da_topics=department_a_topics,
             db_topics=department_b_topics,
+            num_courses_a=num_courses_a,
+            num_courses_b=num_courses_b,
             common_topics=intersection,
             departments=departments,
             jaccard=j_index)
