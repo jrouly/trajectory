@@ -127,15 +127,17 @@ def compare_departments(daid=1, dbid=1): #TODO: set more reasonable defaults
     # Look up requested departments.
     department_a = session.query(Department).get(daid)
     department_b = session.query(Department).get(dbid)
-    if department_a is None or department_b is None:
+    if department_a is None or department_b is None or g.result_set_raw is None:
         abort(404)
 
     # Identify list of topics for each department, calculate Jaccard
     # coefficient.
     department_a_topics = set(itertools.chain.from_iterable(
-        [[t.topic for t in c.topics] for c in department_a.courses]))
+        [[t.topic for t in c.topics if t.result_set == g.result_set_raw]
+            for c in department_a.courses]))
     department_b_topics = set(itertools.chain.from_iterable(
-        [[t.topic for t in c.topics] for c in department_b.courses]))
+        [[t.topic for t in c.topics if t.result_set == g.result_set_raw]
+            for c in department_b.courses]))
     j_index = jaccard(department_a_topics, department_b_topics)
 
     # Identify the topics unique to each course.
@@ -195,8 +197,9 @@ def get_result_set():
     # Warning: do NOT call loads on the requested data.
     import binascii
     result_set = request.cookies.get('result_set')
+    result_sets = app.db.query(ResultSet).all()
     legal_result_sets = [binascii.hexlify(pickle.dumps(rs)).decode('utf-8')
-            for rs in app.db.query(ResultSet).all()]
+            for rs in result_sets]
 
     # Check if the requested id is legal. If not, default it.
     if result_set is None or result_set not in legal_result_sets:
@@ -205,8 +208,16 @@ def get_result_set():
         else:
             result_set = None
 
+    # Look up the raw result set for server-side storage.
+    if result_set is not None:
+        result_set_index = legal_result_sets.index(result_set)
+        result_set_raw = result_sets[result_set_index]
+    else:
+        result_set_raw = None
+
     # Set the global current- and legal- resultsets.
     g.result_set = result_set
+    g.result_set_raw = result_set_raw
     g.result_sets = legal_result_sets
 
 # Set the resultset cookie after this request.
