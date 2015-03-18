@@ -45,42 +45,44 @@
 <div class="row">
   <div class="col-lg-12">
 
-    <table class="table table-hover ">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Department</th>
-          <th>Course Count</th>
-          <th>Web</th>
-        </tr>
-      </thead>
-      <tbody id="department-list">
-        {% for department in university.departments %}
+    <div class="table-responsive">
+      <table class="table table-hover ">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Department</th>
+            <th>Course Count</th>
+            <th>Web</th>
+          </tr>
+        </thead>
+        <tbody id="department-list">
+          {% for department in university.departments %}
 
-        {% set link = url_for('department', u=university.abbreviation, d=department.abbreviation) %}
-        {% set course_count = department|course_count %}
+          {% set link = url_for('department', u=university.abbreviation, d=department.abbreviation) %}
+          {% set course_count = department|course_count %}
 
-        <tr>
-          <td>{{ loop.index }}</td>
-          <td><a href="{{ link }}">{{ department.name }}</a></td>
-          <td>{{ course_count }}</td>
-          <td>{% if department.url %}
-            <a target="_blank" href="//{{ department.url }}">{{ department.url }}</a>
-            {% else %} - {% endif %}</td>
-        </tr>
+          <tr>
+            <td>{{ loop.index }}</td>
+            <td><a href="{{ link }}">{{ department.name }}</a></td>
+            <td>{{ course_count }}</td>
+            <td>{% if department.url %}
+              <a target="_blank" href="//{{ department.url }}">{{ department.url }}</a>
+              {% else %} - {% endif %}</td>
+          </tr>
 
 
-        {% else %}
-        <tr>
-          <td></td>
-          <td>No departments found.</td>
-          <td></td>
-          <td></td>
-        </tr>
-        {% endfor %}
+          {% else %}
+          <tr>
+            <td></td>
+            <td>No departments found.</td>
+            <td></td>
+            <td></td>
+          </tr>
+          {% endfor %}
 
-      </tbody>
-    </table>
+        </tbody>
+      </table>
+    </div>
 
   </div>
 </div>
