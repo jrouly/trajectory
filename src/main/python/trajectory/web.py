@@ -133,10 +133,10 @@ def compare_departments(daid=1, dbid=1): #TODO: set more reasonable defaults
     # Identify list of topics for each department, calculate Jaccard
     # coefficient.
     department_a_topics = set(itertools.chain.from_iterable(
-        [[t.topic for t in c.topics if t.result_set == g.result_set_raw]
+        [[t.topic for t in c.topics if t.result_set_id == g.result_set_raw.id]
             for c in department_a.courses]))
     department_b_topics = set(itertools.chain.from_iterable(
-        [[t.topic for t in c.topics if t.result_set == g.result_set_raw]
+        [[t.topic for t in c.topics if t.result_set_id == g.result_set_raw.id]
             for c in department_b.courses]))
     j_index = jaccard(department_a_topics, department_b_topics)
 
