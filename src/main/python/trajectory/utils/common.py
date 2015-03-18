@@ -28,3 +28,10 @@ def jaccard(a, b):
     return n / d
 
 
+def topic_vector(item):
+    """
+    Generate a vector indicating which topics are represented by the given
+    item.
+    """
+
+    pass
