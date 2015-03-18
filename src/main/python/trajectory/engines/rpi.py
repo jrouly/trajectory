@@ -105,7 +105,7 @@ def scrape(args):
         departments[prefix.lower()].courses.append(Course(
             number=cnum,
             title=title,
-            description_raw=description,
+            description_raw=description_raw,
             description=description))
 
     log.info( "Completed scraping." )
