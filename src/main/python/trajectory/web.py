@@ -2,10 +2,12 @@ from flask import Flask, g, render_template, url_for, abort
 from flask import make_response, request
 from jinja2 import FileSystemLoader
 from sqlalchemy.sql.expression import func
+import itertools
 import pickle
 
 from trajectory import config as TRJ
 from trajectory.utils.prereqs import get_prereq_graph
+from trajectory.utils.common import jaccard
 from trajectory.models import University, Department, Course, ResultSet
 from trajectory.models import Topic, CourseTopicAssociation
 from trajectory.models.meta import session
@@ -117,6 +119,44 @@ def prereq_tree(cid):
             "attachment; filename=course-%s-prereqs.json" % cid
     return response
 
+# Define routing for department comparison page.
+@app.route('/compare/departments/')
+@app.route('/compare/departments/<string:daid>/<string:dbid>/')
+def compare_departments(daid=None, dbid=None):
+
+    if daid is None or dbid is None:
+        return render_template("compare_departments.html", no_depts=True)
+
+    # Look up requested departments.
+    department_a = session.query(Department).get(daid)
+    department_b = session.query(Department).get(dbid)
+    if department_a is None or department_b is None:
+        abort(404)
+
+    # Identify list of topics for each department, calculate Jaccard
+    # coefficient.
+    department_a_topics = set(itertools.chain.from_iterable(
+        [[t.topic for t in c.topics] for c in department_a.courses]))
+    department_b_topics = set(itertools.chain.from_iterable(
+        [[t.topic for t in c.topics] for c in department_b.courses]))
+    j_index = jaccard(department_a_topics, department_b_topics)
+
+    # Identify the topics unique to each course.
+    intersection = department_a_topics.intersection(department_b_topics)
+    department_a_topics = department_a_topics - intersection
+    department_b_topics = department_b_topics - intersection
+
+    # Global list of departments for switching over.
+    departments = session.query(Department).all()
+
+    return render_template("compare_departments.html",
+            da=department_a,
+            db=department_b,
+            da_topics=department_a_topics,
+            db_topics=department_b_topics,
+            common_topics=intersection,
+            departments=departments,
+            jaccard=j_index)
 
 ################################
 # Custom Filters and Functions #

@@ -1,0 +1,177 @@
+{% extends 'layout/base.html' %}
+
+{% set dau = da.university %}
+{% set dbu = db.university %}
+
+{% block title %}Compare Departments{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+  <div class="row">
+    <div class="col-lg-12">
+      <h1>Compare Departments</h1>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-12">
+    <ul class="breadcrumb">
+      <li></li>
+      <li class="active">Compare Departments</li>
+    </ul>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <p><abbr title="Similarity metric. Higher is more similar.">Jaccard Coefficient</abbr>:
+        {{ '%.3f' % jaccard }}</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+
+  <div class="col-md-4">
+    <div class="form-horizontal">
+      <div class="form-group">
+        <div class="col-lg-12">
+          {% if departments %}
+          <label for="da-select" class="control-label">Department A</label>
+          <select class="form-control d-select" id="da-select">
+            {% for department in departments %}
+              <option value="{{department.id}}"{% if department.id == da.id %}
+              selected="selected"
+              {% endif %}>
+
+              {{department.university.abbreviation}}
+              {{department.abbreviation}}
+
+              </option>
+            {% endfor %}
+          </select>
+          {% else %}
+          <p class="text-center text-danger">No departments found.</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-4"></div>
+
+  <div class="col-md-4">
+    <div class="form-horizontal">
+      <div class="form-group">
+        <div class="col-lg-12">
+          {% if departments %}
+          <label for="db-select" class="control-label">Department B</label>
+          <select class="form-control d-select" id="db-select">
+            {% for department in departments %}
+              <option value="{{department.id}}"{% if department.id == db.id %}
+              selected="selected"
+              {% endif %}>
+
+              {{department.university.abbreviation}}
+              {{department.abbreviation}}
+
+              </option>
+            {% endfor %}
+          </select>
+          {% else %}
+          <p class="text-center text-danger">No departments found.</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="row">
+
+  <div class="col-md-4">
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <h3 class="panel-title">
+          Topics in <a href="{{ url_for('department', u=dau.abbreviation, d=da.abbreviation) }}">
+            {{ dau.abbreviation }} {{ da.name }}
+          </a> ({{da_topics|length}})
+        </h3>
+      </div>
+      <div class="panel-body">
+        {% for topic in da_topics %}
+        <p>{{ topic.words }}
+        (<a href="{{url_for('topics', _anchor=topic.id)}}">link</a>)</p>
+          {% if not loop.last %}
+          <hr/>
+          {% endif %}
+        {% else %}
+        No unique topics.
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-4">
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <h3 class="panel-title">Common Topics ({{common_topics|length}})</h3>
+      </div>
+      <div class="panel-body">
+        {% for topic in common_topics %}
+        <p>{{ topic.words }}
+        (<a href="{{url_for('topics', _anchor=topic.id)}}">link</a>)</p>
+          {% if not loop.last %}
+          <hr/>
+          {% endif %}
+        {% else %}
+        No common topics.
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+
+  <div class="col-md-4">
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <h3 class="panel-title">
+          Topics in <a href="{{ url_for('department', u=dbu.abbreviation, d=db.abbreviation) }}">
+            {{ dbu.abbreviation }} {{ db.name }}
+          </a> ({{db_topics|length}})
+        </h3>
+      </div>
+      <div class="panel-body">
+        {% for topic in db_topics %}
+        <p>{{ topic.words }}
+        (<a href="{{url_for('topics', _anchor=topic.id)}}">link</a>)</p>
+          {% if not loop.last %}
+          <hr/>
+          {% endif %}
+        {% else %}
+        No unique topics.
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+$('.d-select').change(function() {
+  var da = $('#da-select').val(),
+      db = $('#db-select').val(),
+      url = "{{url_for('compare_departments', daid='DA', dbid='DB')}}";
+
+  window.location = url.replace("DA", da)
+                       .replace("DB", db);
+});
+</script>
+
+{% endblock %}

@@ -14,3 +14,17 @@ def row2dict(row):
         col.name: getattr(row, col.name)
         for col in row.__table__.columns
     }
+
+
+def jaccard(a, b):
+    """
+    Calculate the jaccard coefficient of two lists.
+    """
+
+    n = len(a.intersection(b))
+    d = float(len(a) + len(b) - n)
+    if d == 0:
+        return 1
+    return n / d
+
+
