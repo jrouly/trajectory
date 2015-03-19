@@ -121,7 +121,7 @@ def scrape(args):
                 pass
 
             # Clean the description string
-            description_raw = content
+            description_raw = description
             description = clean(description_raw)
             if description is None:
                 continue
