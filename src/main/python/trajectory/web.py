@@ -132,12 +132,20 @@ def compare_departments(daid=1, dbid=1): #TODO: set more reasonable defaults
 
     # Identify list of topics for each department, calculate Jaccard
     # coefficient.
-    department_a_topics = set(itertools.chain.from_iterable(
-        [[t.topic for t in c.topics if t.result_set_id == g.result_set_raw.id]
-            for c in department_a.courses]))
-    department_b_topics = set(itertools.chain.from_iterable(
-        [[t.topic for t in c.topics if t.result_set_id == g.result_set_raw.id]
-            for c in department_b.courses]))
+    department_a_topics = set(session.query(Topic) \
+            .filter(Topic.result_set_id==g.result_set_raw.id) \
+            .join(CourseTopicAssociation) \
+            .join(Course) \
+            .join(Department) \
+            .filter(Department.id==department_a.id) \
+            .all())
+    department_b_topics = set(session.query(Topic) \
+            .filter(Topic.result_set_id==g.result_set_raw.id) \
+            .join(CourseTopicAssociation) \
+            .join(Course) \
+            .join(Department) \
+            .filter(Department.id==department_b.id) \
+            .all())
     j_index = jaccard(department_a_topics, department_b_topics)
 
     # Identify the topics unique to each course.
@@ -172,8 +180,8 @@ def compare_departments(daid=1, dbid=1): #TODO: set more reasonable defaults
 @app.template_filter('course_count')
 def course_count(data):
     if type(data) == University:
-        return sum([len(department.courses)
-            for department in data.departments])
+        return session.query(Course).join(Department).join(University) \
+                .filter(University.id==data.id).count()
     elif type(data) == Department:
         return len(data.courses)
     else:
