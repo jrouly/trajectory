@@ -7,7 +7,8 @@ import pickle
 
 from trajectory import config as TRJ
 from trajectory.utils.prereqs import get_prereq_graph
-from trajectory.utils.common import jaccard
+from trajectory.utils.common import jaccard, topic_vector
+from trajectory.utils.common import cosine_similarity, euclidean_distance
 from trajectory.models import University, Department, Course, ResultSet
 from trajectory.models import Topic, CourseTopicAssociation
 from trajectory.models.meta import session
@@ -130,8 +131,8 @@ def compare_departments(daid=1, dbid=1): #TODO: set more reasonable defaults
     if department_a is None or department_b is None or g.result_set_raw is None:
         abort(404)
 
-    # Identify list of topics for each department, calculate Jaccard
-    # coefficient.
+    # Identify list of topics for each department, calculate similarity
+    # coefficients.
     department_a_topics = set(session.query(Topic) \
             .filter(Topic.result_set_id==g.result_set_raw.id) \
             .join(CourseTopicAssociation) \
@@ -146,7 +147,12 @@ def compare_departments(daid=1, dbid=1): #TODO: set more reasonable defaults
             .join(Department) \
             .filter(Department.id==department_b.id) \
             .all())
+    a_vector = topic_vector(department_a, g.result_set_raw)
+    b_vector = topic_vector(department_b, g.result_set_raw)
+
     j_index = jaccard(department_a_topics, department_b_topics)
+    cosine = cosine_similarity(a_vector, b_vector)
+    euclidean = euclidean_distance(a_vector, b_vector)
 
     # Identify the topics unique to each course.
     intersection = department_a_topics.intersection(department_b_topics)
@@ -171,7 +177,11 @@ def compare_departments(daid=1, dbid=1): #TODO: set more reasonable defaults
             num_courses_b=num_courses_b,
             common_topics=intersection,
             departments=departments,
-            jaccard=j_index)
+            jaccard=j_index,
+            cosine=cosine,
+            euclidean=euclidean,
+            da_vector=a_vector.unpack(one=b'1', zero=b'0').decode('utf-8'),
+            db_vector=b_vector.unpack(one=b'1', zero=b'0').decode('utf-8'))
 
 ################################
 # Custom Filters and Functions #

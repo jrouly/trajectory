@@ -83,3 +83,27 @@ def topic_vector(item, result_set=None):
             vector[global_topics.index(it)] = True
 
     return vector
+
+
+def euclidean_distance(a,b):
+    """
+    Calculate the euclidean distance between two vectors.
+    """
+
+    import numpy
+    a = numpy.array(list(a), dtype=int)
+    b = numpy.array(list(b), dtype=int)
+    return numpy.linalg.norm(a-b)
+
+
+def cosine_similarity(a,b):
+    """
+    Calculate the cosine similarity between two vectors.
+    """
+
+    import numpy
+    a = numpy.array(list(a), dtype=int)
+    b = numpy.array(list(b), dtype=int)
+    n = numpy.dot(a,b)
+    d = numpy.linalg.norm(a,ord=2) * numpy.linalg.norm(b,ord=2)
+    return 1.0 - n/d

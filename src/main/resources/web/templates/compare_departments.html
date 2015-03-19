@@ -31,10 +31,20 @@
         <h3 class="panel-title">Statistics</h3>
       </div>
       <div class="panel-body">
+        <h4>Similarity</h4>
         <p>
-          <abbr title="Jaccard Index">Department Similarity</abbr>:
+          Jaccard Index [0, 1]:
           {{ '%.3f' % jaccard }}
         </p>
+        <p>
+          Cosine Similarity [0, 1]:
+          {{ '%.3f' % cosine }}
+        </p>
+        <p>
+          Euclidean Distance:
+          {{ '%.3f' % euclidean }}
+        </p>
+        <h4>Sizes</h4>
         <p>Courses in
           <a href="{{url_for('department', u=dau.abbreviation, d=da.abbreviation)}}">
             {{dau.abbreviation}} {{ da.name }}
@@ -47,6 +57,9 @@
           </a>:
           {{num_courses_b}}
         </p>
+        <h4>Topic Vectors</h4>
+        <p>Department A: <pre>{{ da_vector }}</pre></p>
+        <p>Department B: <pre>{{ db_vector }}</pre></p>
       </div>
     </div>
   </div>
