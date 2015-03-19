@@ -1,220 +1,149 @@
+\section{Methods}
+\label{sec:methods}
+
+%------------------------------------------------
+
+The structure of this work is threefold.
+First, a dataset of university course descriptions is generated using publicly available data from a number of North American universities.
+This process is discussed in \sref{sec:data-acquisition}.
+Second, \ac{lda} is applied to the collected data and topics are inferred.
+This step is discussed in \sref{sec:topic-modeling}.
+Finally, the collected data and inferred topics are presented in a user-facing web application, described in \sref{sec:visualization}.
+
+%------------------------------------------------
+
 \subsection{Data Acquisition}
+\label{sec:data-acquisition}
 
-The primary data manipulated in this study are university catalog course
-descriptions. The current experimental data sources are described in
-\tref{table:data-sources}. Simple web scrapers were written using Python
-and BeautifulSoup to download publicly available descriptions from
-university catalogs. Descriptions and catalog webpages appear in a vast
-variety of different formats, structures, and HTML correctness, so a parser
-was written for each university to acquire the unstructured text. This text
-was then passed through a cleaning procedure to remove abbreviations and
-non-English characters, as well as common English stop words. Finally the
-text was passed through a stemmer to strip morphology from the words and
-eliminate duplicate terms.
+%------------------------------------------------
 
-The Python scraping framework employed is structured to allow pluggable web
-scrapers tooled to specific syllabus repositories. There are a number of
-existing web scrapers in place pointing to different university course
-catalogs.
+The primary data manipulated in this study are university catalog course descriptions.
+The current experimental data sources are described in \sref{app:datasets}.
+Simple web scrapers were written using Python and BeautifulSoup to download publicly available descriptions from university catalogs.
+Descriptions and catalog webpages appear in a vast variety of different formats, structures, and HTML correctness, so a parser was written for each university to acquire the unstructured text.
+This text was then passed through a cleaning procedure to remove abbreviations and non-English characters, as well as common English stop words.
+Finally the text was passed through a stemmer to strip morphology from the words and eliminate duplicate terms.
+At the same time, departmental course prerequisite data is collected from the catalog as well.
+Prerequisites are limited to courses in the database, meaning that references older courses that are no longer present in the catalog are ignored.
+Non-specific prerequisite references (eg.\ \texttt{400-level}) are ignored as well.
 
-\begin{table}[ht]
-\centering
-\begin{tabular}{lll}
-\toprule
-University & Department & Address \\
-\midrule
-George Mason University & Computer Science & \url{catalog.gmu.edu} \\
-Portland State University & Computer Science & \url{pdx.edu/computer-science} \\
-Kansas State University & Computer Science & \url{catalog.k-state.edu} \\
-Louisiana State University & Computer Science & \url{catalog.lsu.edu} \\
-Rensselaer Polytechnic Institute & Computer Science & \url{catalog.rpi.edu} \\
-Stanford University & Computer Science & \url{explorecourses.stanford.edu} \\
-\bottomrule
-\end{tabular}
-\caption{Current data input sources\label{table:data-sources}}
-\end{table}
+%------------------------------------------------
+
+The Python scraping framework developed is structured to allow pluggable web scrapers tooled to specific syllabus repositories.
+There are a number of existing web scrapers in place pointing to different university course catalogs, but the code can be easily extended in the future to grow the data set.
+Integrated in the scraping framework is a lightweight relational database layer to store both course description data and university metadata, including names, URLs, and prerequisite information.
+The database layer also stores inferred topics.
 
 %------------------------------------------------
 
 \subsection{Preliminary Data Exploration}
+\label{sec:data-exploration}
 
-Preliminary exploratory results are promising. We applied K-Means
-clustering to a sample dataset of syllabi scraped from the GMU Computer
-Science online archive of syllabi. Using course sections across semesters
-as ground-truth labels, we obtained results summarized in
-\tref{table:cluster-metrics} and \tref{table:cluster-results}. A
-distributed implementation of K-Means available in the Python toolkit
-\texttt{scikit-learn} was used to perform the clustering.
+%------------------------------------------------
 
-The high completeness values are promising: this indicates that many of the
-same course are assigned under the same cluster prototype. The low value of
-homogeneity is unsurprising given the initialization parameters used:
-K-Means was forced to detect only 20 clusters, a far smaller number than
-the magnitude of distinct course sections available. The number 20 was
-chosen arbitrarily as a smaller count than the true number of distinct
-course sections in order to increase cluster size. Cursory visual
-inspection of the most common frequencies in the first few clusters
-(\tref{table:cluster-results}) also supports the structured nature of the
-dataset with semantically related terms grouped together in a logical
-fashion corresponding with an obvious, known GMU course.
+In addition to \ac{lda}, other unsupervised machine learning tools can be applied to the same data set.
+Simple clustering algorithms (eg. K-Means) when given the same bag of words corpus as input act to identify groupings of similar documents according to their term frequency vector Euclidean distance. \cite{lloyd1982}
+Additional, similar clustering algorithms can be applied in a similar manner.
+
+%------------------------------------------------
+
+Preliminary exploratory results are promising.
+We applied K-Means clustering to a sample dataset of syllabi scraped just from the GMU Computer Science online archive of syllabi.
+Using course sections across semesters as ground-truth labels, we obtained metrics summarized in \tref{table:cluster-metrics}.
+A distributed implementation of K-Means available in the Python toolkit \texttt{scikit-learn} was used to perform the clustering.
+
+%------------------------------------------------
+
+The high completeness values are promising: this indicates that many of the same course are assigned under the same cluster prototype.
+The low value of homogeneity is unsurprising given the initialization parameters used: K-Means was forced to detect only 20 clusters, a far smaller number than the magnitude of distinct course sections available.
+The number 20 was chosen arbitrarily as a smaller count than the true number of distinct course sections in order to increase cluster size.
+Cursory visual inspection of the most common frequencies in the first few clusters also supports the structured nature of the dataset with semantically related terms grouped together in a logical fashion corresponding with an obvious, known GMU course.
+
+%------------------------------------------------
 
 \begin{table}[ht]
 \centering
-\makebox[0pt][c]{\parbox{1.2\textwidth}{%
-  \begin{minipage}[ht]{0.40\hsize}\centering
-    \begin{tabular}{ll}
-    \toprule
-    Execution time & 0.144568s \\
-    Homogeneity & 0.415 \\
-    Completeness & 0.877 \\
-    V-measure & 0.563 \\
-    \bottomrule
-    \end{tabular}
-    \caption{Preliminary clustering metrics\label{table:cluster-metrics}}
-  \end{minipage}
-  \hfill
-  \begin{minipage}[ht]{0.56\hsize}\centering
-    \begin{tabular}{lll}
-    \toprule
-    Cluster 1 &
-    Cluster 2 &
-    Cluster 3 \\
-    \midrule
-    intelligence & chapter      & software \\
-    artificial   & project      & swe \\
-    agents       & sipser       & testing \\
-    learning     & networks     & web \\
-    tecuci       & layer        & interfaces \\
-    expert       & savitch      & construction \\
-    knowledge    & data         & design \\
-    reasoning    & dlc          & constructing \\
-    semantic     & experimental & professor \\
-    intelligent  & design       & quality \\
-    \bottomrule
-    \end{tabular}
-    \caption{Structure of clustering results\label{table:cluster-results}}
-  \end{minipage}
-}}
+\begin{tabular}{ll}
+\toprule
+Execution time & 0.144568s \\
+Homogeneity & 0.415 \\
+Completeness & 0.877 \\
+V-measure & 0.563 \\
+\bottomrule
+\end{tabular}
+\caption{Preliminary clustering metrics\label{table:cluster-metrics}}
 \end{table}
 
 %------------------------------------------------
 
 \subsection{Topic Modeling}
+\label{sec:topic-modeling}
 
-After the exploratory clustering process, we passed cleaned data into a
-topic modeling framework. The Java MALLET library is used to perform
-\acf{lda} on the combined syllabus data set. A data pipeline is
-constructed using the MALLET API that reads input data, tokenizes it,
-and trains an \ac{lda} topic model. Initial topic modeling results are
-later piped into a simple, interactive user interface.
+After the exploratory clustering process, we passed cleaned data into a topic modeling framework by exporting from the database layer to a common \ac{csv} format.
+The Java MALLET library is used to perform \acf{lda} on the combined syllabus data set.
+A data pipeline is constructed using the MALLET API that reads input data, tokenizes it, and trains an \ac{lda} topic model.
+The inferred topics are then read back into the database layer and applied to existing courses.
+Independent runs of \ac{lda} with distinct parameterization are segregated in the database, allowing sets of inferred topics to sit side by side without interfering.
 
-Sample preliminary results are illustrated in \tref{table:ldadocs}, showing
-the breakdown of documents into component topics, and
-\tref{table:ldatopics}, showing topic definition.  Further study is needed
-to evaluate the success of this method and its application to the data set.
-Additionally, further work is needed to construct labels for the data set.
-That is, each course syllabus is currently an anonymous, independent data
-point. No metadata is considered, specifically semester or section name.
+%------------------------------------------------
 
+The initialization parameters of MALLET's \ac{lda} implementation are covered in \tref{table:lda-parameters}.
+Experiments were run varying parameters throughout the experimental range, including the MALLET default values.
+However, as the number of topics increased greatly beyond 750, and as $\beta$ decreased greatly below 0.0001, the MALLET framework began to encounter instability and errors.
 
-\begin{table}[ht]
+%------------------------------------------------
+
+\begin{table*}[ht]
 \centering
-\begin{tabular}{lllll}
+\begin{tabular}{llll}
 \toprule
-Doc & Topic & Proportion & Topic & Proportion \\
+Parameter  & Description & Experimental Range & Default \\
 \midrule
-0 & 33 & 0.7666641741676518 & 62 & 0.230550274742815 \\
-1 & 44 & 0.5776374037067855 & 8  & 0.3152509716025131 \\
-2 & 86 & 0.8143297134325639 & 62 & 0.18015768047706127 \\
-3 & 9  & 0.9491106700671812 & 5  & 0.034876914241398584 \\
-4 & 82 & 0.5736690412365056 & 53 & 0.39539480434234386 \\
+$\alpha$   & Dirichlet concentration parameter. & [1, Iterations] & Iterations \\
+$\beta$    & Dirichlet concentration parameter. & [0.0001, 0.5] & 0.01 \\
+Iterations & The number of \ac{lda} iterations. & --- & 3000 \\
+Topics     & The number of topics to infer. & [100, 1000] & --- \\
 \bottomrule
 \end{tabular}
-\caption{Structure of per-document topic breakdown\label{table:ldadocs}}
-\end{table}
-
-
-\begin{table}[ht]
-\centering
-\begin{tabular}{lllll}
-\toprule
-Topic & Term & Term & Term & Term \\
-\midrule
-0 & lisp (98)          & june (57)        & prolog (46)    & http (45) \\
-1 & systems (154)      & operating (119)  & system (101)   & programming (92) \\
-2 & systems (304)      & operating (252)  & students (189) & projects (146) \\
-3 & randomization (66) & trials (57)      & clinical (57)  & outcome (30) \\
-4 & database (389)     & relational (151) & design (133)   & model (124) \\
-\bottomrule
-\end{tabular}
-\caption{Structure of topic term-frequency definition\label{table:ldatopics}}
-\end{table}
-
+\caption{LDA Initialization Parameters\label{table:lda-parameters}}
+\end{table*}
 
 %------------------------------------------------
 
 \subsection{Visualization}
+\label{sec:visualization}
 
-A basic, interactive user visualization of syllabus topics has been
-prototyped. Output data is piped from the topic model and stored a simple
-relational database to store topic definitions and document composition
-information. This data is then combinatorially expanded into two
-cross-referenced HTML documents using a simple Python script. Images of the
-visualization are included for reference, see \fref{fig:vis-docs} and
-\fref{fig:vis-topics}. It will be a subject of future work to create a
-richer browsing experience to investigate learned document topics.
+%------------------------------------------------
 
-\begin{figure}[ht]
-\centering
-\includegraphics[width=0.98\textwidth]{figures/vis-docs.png}
-\caption{Per-document topic breakdown\label{fig:vis-docs}}
-\end{figure}
-
-\begin{figure}[ht]
-\centering
-\includegraphics[width=0.98\textwidth]{figures/vis-topics.png}
-\caption{Topic-word definitions\label{fig:vis-topics}}
-\end{figure}
+An interactive, dynamic user visualization of course description topics has been prototyped.
+The visualization is a web-based application built upon the Python Flask library.
+The tool interfaces with the same database layer used by the rest of the application framework to provide an aesthetically pleasing user-facing interface with several primary modules.
+First, the web application presents the user with a ``dashboarded'' higher level overview of the dataset and available result sets, where a result set is the topics inferred after a single run of the \ac{lda} module with a distinct initialization set.
+After selecting a result set, the user can browse the data by course, department, or university.
+On selecting a course, the inferred topics are listed in order of their proportion in the course's description.
+An interactive graph of the course's prerequisites is displayed as well.
+The user may also compare two university departments.
+Topics inferred from every course in the department are collected and displayed side by side, along with the intersection set of common topics.
+Similarity metrics describing the relationship between the two departments are given as well --- the Jaccard index, cosine similarity, and euclidean distance.
+The first metric is based solely on topic set cardinalities, while the second two sets are based on a ``topic-vector'' representation of the department.
+The topic-vector is a binary vector where each feature indicates whether a particular topic was inferred for the given department.
 
 %------------------------------------------------
 
 \subsection{Evaluation}
-
-Results evaluation will require two components: the generation of predicted
-topics and a set of known-good, reliable benchmark topics. The benchmark
-topics can be classified ``known-good'' if they encode domain expertise, a
-characteristic which is fundamentally lacking from the unsupervised topic
-modeling process. Once a set of proposed topics is obtained from the
-description data set, the known-good categorization of concepts with labels
-will be used to propose a second set of topics.  Overlap between these two
-groups of topics will be used to share labels from the known-good set to
-the experimentally proposed group with some value of confidence. Those
-common topics will be strongly endorsed or validated, while outliers may be
-trimmed if under a certain confidence threshold.
-
-External parties occasionally maintain detailed descriptions of
-expectations for specific hypothetical courses. For example the ACM
-maintains an annual writeup of guidelines for undergraduate education.
-\cite{CS2013} These course descriptions could be employed as the secondary
-corpus to include implicit expert knowledge.
+\label{sec:evaluation}
 
 %------------------------------------------------
 
-\subsection{Resources}
+The \ac{acm} maintains an annual writeup of guidelines for undergraduate computer science education. \cite{CS2013}
+These course descriptions will be employed as a benchmark corpus introducing implicit expert knowledge.
+The tools developed to measure similarity between courses and departments based on inferred topics will allow comparison of these benchmark course descriptions against real university data.
 
-The primary software libraries employed to support this project are the
-Python machine learning toolkit
-\texttt{scikit-learn}\footnote{\url{http://scikit-learn.org}}, the Java
-toolkit \texttt{Mallet}\footnote{\url{http://mallet.cs.umass.edu}}, the
-Python web scraping library
-BeautifulSoup\footnote{\url{http://www.crummy.com/software/BeautifulSoup/}},
-and the Python database abstraction toolkit
-SQLAlchemy\footnote{\url{http://www.sqlalchemy.org}}.
-Other libraries may be incorporated as needed.
 
 %------------------------------------------------
 
 \subsection{Timeline}
+\label{sec:timeline}
 
 \begin{itemize}
   \item {\color{green}Complete CS 390}
@@ -227,3 +156,4 @@ Other libraries may be incorporated as needed.
 \end{itemize}
 
 %------------------------------------------------
+

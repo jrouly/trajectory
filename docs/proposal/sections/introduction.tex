@@ -1,23 +1,29 @@
-Programs of study at institutions of higher education are a chain composed
-of the courses required to complete a degree. These component courses in
-turn are composed of the topics or concepts they are intended to cover.
-Evaluation of the courses within a particular program is a key process in
-the evaluation of an overall academic curriculum. Analyzing the structure
-of a program's prerequisite chain, for example, requires an understanding
-of each constituent course and the overlap, if present, of covered topics
-between courses and their prerequisites. Additionally, inter-institutional
-curricular comparison requires an aggregate evaluation of the courses
-within each institution's relevant program. However, comparing and
-evaluating different courses requires expert knowledge in the relevant
-field. Placing, for example, two courses, one in data mining and one in
-database theory, under evaluation may not yield any inherent similarity
-unless a domain expert can identify the concepts expected from each class.
+\section{Introduction}
+\label{sec:introduction}
 
-Automating the information retrieval process to identify core concepts
-covered in any particular course removes the need for a domain expert. By
-analyzing course descriptions from a corpus spanning fields and institutions,
-topic modeling can provide a method to generate a semantic representation
-of core course concepts. Specifically, unsupervised latent variable models
-present a method of identifying the core concepts (ie.\ topics) covered in
-a course. This introduces the possibility of applications in automated
-course and program evaluation methods.
+%------------------------------------------------
+
+Programs of study at institutions of higher education can be represented as
+a chain composed of the courses required to complete a degree.
+These component courses in turn are composed of the topics or concepts they are intended to cover.
+Evaluation of the courses within a particular program is necessary to the evaluation of an overall academic curriculum.
+Analyzing the structure of a program's prerequisite chain, for example, requires an understanding of each constituent course and any overlap of covered topics between courses and their prerequisites.
+Additionally, inter-institutional curricular comparison requires an aggregate evaluation of the courses within each institution's relevant program.
+However, comparing and evaluating different courses requires expert knowledge in the relevant field.
+No two courses can be measured for similarity based only on inherent, measurable properties.
+A domain expert is required to inspect the description of the courses and determine their conceptual overlap.
+
+%------------------------------------------------
+
+Automating the information retrieval process to identify core concepts covered in any particular course removes the need for a domain expert.
+By analyzing course descriptions from a corpus spanning fields and institutions, topic modeling can provide a method to generate a statistical representation of core course concepts.
+Specifically, unsupervised latent variable models present a method of identifying the core concepts (ie.\ topics) covered in a course.
+This introduces the possibility of applications in automated course and program evaluation methods.
+The form of topic modeling employed in this work is \acf{lda}.
+
+%------------------------------------------------
+
+The overall goal of this work is the development of a system to digest large quantities of university course information, specifically academic course descriptions, and to process and ultimately generate interactive descriptions of the core concepts covered within institutional programs as illustrated by inferred topics.
+
+%------------------------------------------------
+
