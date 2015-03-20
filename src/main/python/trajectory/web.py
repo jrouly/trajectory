@@ -146,9 +146,23 @@ def compare_departments(daid=1, dbid=1): #TODO: set more reasonable defaults
 
     # Run similarity metrics.
     similarity = dict()
-    similarity['jaccard']   = jaccard(department_a_topics, department_b_topics)
-    similarity['cosine']    = cosine_similarity(a_vector, b_vector)
-    similarity['euclidean'] = euclidean_distance(a_vector, b_vector)
+    similarity['jaccard'] = {
+            'name': 'Jaccard Index',
+            'range': '[0, 1]',
+            'description': 'Comparative set cardinality.',
+            'value': jaccard(department_a_topics, department_b_topics),
+    }
+    similarity['cosine'] = {
+            'name': 'Cosine Similarity',
+            'range': '[-1, 1]',
+            'description': 'Geometric cosine distance.',
+            'value': cosine_similarity(a_vector, b_vector),
+    }
+    similarity['euclidean'] = {
+            'name': 'Euclidean Distance',
+            'description': 'Geometric vector distance.',
+            'value': euclidean_distance(a_vector, b_vector),
+    }
 
     # Remove common topics from the topic sets.
     intersection = department_a_topics.intersection(department_b_topics)
@@ -178,9 +192,7 @@ def compare_departments(daid=1, dbid=1): #TODO: set more reasonable defaults
 
             departments=departments,
 
-            jaccard=similarity['jaccard'],
-            cosine=similarity['cosine'],
-            euclidean=similarity['euclidean'],
+            similarity_metrics=similarity,
 
             da_vector=a_vector_string,
             db_vector=b_vector_string,
