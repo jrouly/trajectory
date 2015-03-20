@@ -25,6 +25,71 @@
 </div>
 
 <div class="row">
+
+  <form class="form-horizontal" id="d-select">
+
+    <div class="col-md-4">
+      <div class="form-group">
+        <div class="col-lg-12">
+          {% if departments %}
+          <label for="da-select" class="control-label">Department A</label>
+          <select class="form-control" id="da-select">
+            {% for department in departments %}
+              <option value="{{department.id}}"{% if department.id == da.id %}
+              selected="selected"
+              {% endif %}>
+
+              {{department.university.abbreviation}}
+              {{department.abbreviation}}
+
+              </option>
+            {% endfor %}
+          </select>
+          {% else %}
+          <p class="text-center text-danger">No departments found.</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="form-group">
+        <div class="col-lg-12">
+          {% if departments %}
+          <label for="db-select" class="control-label">Department B</label>
+          <select class="form-control" id="db-select">
+            {% for department in departments %}
+              <option value="{{department.id}}"{% if department.id == db.id %}
+              selected="selected"
+              {% endif %}>
+
+              {{department.university.abbreviation}}
+              {{department.abbreviation}}
+
+              </option>
+            {% endfor %}
+          </select>
+          {% else %}
+          <p class="text-center text-danger">No departments found.</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="form-group">
+        <div class="col-lg-12">
+          <label class="control-label visible-lg-block visible-md-block">&nbsp;</label>
+          <input type="submit" value="Compare" class="form-control btn btn-default">
+        </div>
+      </div>
+    </div>
+
+  </form>
+
+</div>
+
+<div class="row">
   <div class="col-md-12">
     <div class="panel panel-primary">
       <div class="panel-heading">
@@ -87,73 +152,15 @@
 <div class="row">
 
   <div class="col-md-4">
-    <div class="form-horizontal">
-      <div class="form-group">
-        <div class="col-lg-12">
-          {% if departments %}
-          <label for="da-select" class="control-label">Department A</label>
-          <select class="form-control d-select" id="da-select">
-            {% for department in departments %}
-              <option value="{{department.id}}"{% if department.id == da.id %}
-              selected="selected"
-              {% endif %}>
-
-              {{department.university.abbreviation}}
-              {{department.abbreviation}}
-
-              </option>
-            {% endfor %}
-          </select>
-          {% else %}
-          <p class="text-center text-danger">No departments found.</p>
-          {% endif %}
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="col-md-4"></div>
-
-  <div class="col-md-4">
-    <div class="form-horizontal">
-      <div class="form-group">
-        <div class="col-lg-12">
-          {% if departments %}
-          <label for="db-select" class="control-label">Department B</label>
-          <select class="form-control d-select" id="db-select">
-            {% for department in departments %}
-              <option value="{{department.id}}"{% if department.id == db.id %}
-              selected="selected"
-              {% endif %}>
-
-              {{department.university.abbreviation}}
-              {{department.abbreviation}}
-
-              </option>
-            {% endfor %}
-          </select>
-          {% else %}
-          <p class="text-center text-danger">No departments found.</p>
-          {% endif %}
-        </div>
-      </div>
-    </div>
-  </div>
-
-</div>
-
-<div class="row">
-
-  <div class="col-md-4">
     <div class="panel panel-primary">
       <div class="panel-heading">
         <h3 class="panel-title">
           Topics in <a href="{{ url_for('department', u=dau.abbreviation, d=da.abbreviation) }}">
-            {{ dau.abbreviation }} {{ da.name }}
+            {{ dau.abbreviation }} {{ da.abbreviation }}
           </a> ({{da_topics|length}})
         </h3>
       </div>
-      <div class="panel-body">
+      <div class="panel-body tall-scroll">
         {% for topic in da_topics %}
         <p>{{ topic.words }}
         (<a href="{{url_for('topics', _anchor=topic.id)}}">link</a>)</p>
@@ -172,7 +179,7 @@
       <div class="panel-heading">
         <h3 class="panel-title">Common Topics ({{common_topics|length}})</h3>
       </div>
-      <div class="panel-body">
+      <div class="panel-body tall-scroll">
         {% for topic in common_topics %}
         <p>{{ topic.words }}
         (<a href="{{url_for('topics', _anchor=topic.id)}}">link</a>)</p>
@@ -192,11 +199,11 @@
       <div class="panel-heading">
         <h3 class="panel-title">
           Topics in <a href="{{ url_for('department', u=dbu.abbreviation, d=db.abbreviation) }}">
-            {{ dbu.abbreviation }} {{ db.name }}
+            {{ dbu.abbreviation }} {{ db.abbreviation }}
           </a> ({{db_topics|length}})
         </h3>
       </div>
-      <div class="panel-body">
+      <div class="panel-body tall-scroll">
         {% for topic in db_topics %}
         <p>{{ topic.words }}
         (<a href="{{url_for('topics', _anchor=topic.id)}}">link</a>)</p>
@@ -213,13 +220,15 @@
 </div>
 
 <script>
-$('.d-select').change(function() {
+$('#d-select').submit(function() {
   var da = $('#da-select').val(),
       db = $('#db-select').val(),
       url = "{{url_for('compare_departments', daid='DA', dbid='DB')}}";
 
   window.location = url.replace("DA", da)
                        .replace("DB", db);
+
+  return false;
 });
 </script>
 

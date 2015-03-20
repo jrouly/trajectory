@@ -1,6 +1,10 @@
 .clickable {
   cursor: pointer;
 }
+.tall-scroll {
+  max-height: 85vh;
+  overflow-y: auto;
+}
 #graph-container .node {
   stroke: #fff;
   stroke-width: 1.5px;
