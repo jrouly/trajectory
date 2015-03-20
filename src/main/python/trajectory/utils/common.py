@@ -139,4 +139,8 @@ def cosine_similarity(a,b):
     b = numpy.array(list(b), dtype=int)
     n = numpy.dot(a,b)
     d = numpy.linalg.norm(a,ord=2) * numpy.linalg.norm(b,ord=2)
+    # If one of the vectors is the null vector, the dot product is going to
+    # be 0 since it's defined as perpendicular.
+    if d == 0:
+        return None
     return 1.0 - n/d

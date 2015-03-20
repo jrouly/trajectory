@@ -46,6 +46,7 @@
         {% set range=metric.get('range') %}
         {% set value=metric.get('value') %}
 
+        {% if value != None %}
         <p>
           {% if description %}
             <abbr title="{{ description }}">
@@ -56,6 +57,8 @@
           #}{% if not range and not description %}:{% endif %}
           {{ '%.3f' % value }}
         </p>
+        {% endif %}
+
         {% else %}
         <p>
           No metrics calculated.
