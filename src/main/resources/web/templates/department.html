@@ -47,6 +47,33 @@
 
 <div class="row">
   <div class="col-lg-12">
+    <div class="form-horizontal">
+      <div class="form-group">
+        <div class="col-lg-12">
+          {% if departments %}
+          <label for="d-select" class="control-label">Compare Against</label>
+          <select class="form-control d-select" id="d-select">
+            {% for d in departments %}
+              <option value="{{d.id}}"
+                {% if d.id == department.id %}selected="selected"{% endif %}>
+
+              {{d.university.abbreviation}}
+              {{d.abbreviation}}
+
+              </option>
+            {% endfor %}
+          </select>
+          {% else %}
+          <p class="text-danger">No departments found.</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-12">
 
     <h3>Course List</h3>
 
@@ -133,5 +160,15 @@
 
   </div>
 </div>
+
+<script>
+$('.d-select').change(function() {
+  var d = $('#d-select').val(),
+      url = "{{url_for('compare_departments', daid='DA', dbid='DB')}}";
+
+  window.location = url.replace("DA", {{department.id}})
+                       .replace("DB", d);
+});
+</script>
 
 {% endblock %}

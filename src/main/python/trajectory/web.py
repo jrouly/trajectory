@@ -77,8 +77,10 @@ def department(u=None, d=None):
             .first()
     if department is None:
         abort(404) # department not found
+    departments = app.db.query(Department).all()
     return render_template("department.html",
-            department=department)
+            department=department,
+            departments=departments)
 
 # Define routing for a course.
 @app.route('/universities/<string:u>/<string:d>/id<string:cid>/')
