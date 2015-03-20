@@ -137,8 +137,8 @@ def compare_departments(daid=1, dbid=1): #TODO: set more reasonable defaults
         abort(404)
 
     # Identify a set of topics for each department.
-    department_a_topics = set(topic_list(department_a))
-    department_b_topics = set(topic_list(department_b))
+    department_a_topics = set(topic_list(department_a, g.result_set_raw))
+    department_b_topics = set(topic_list(department_b, g.result_set_raw))
 
     # Generate topic vectors for the two departments.
     a_vector = topic_vector(department_a, g.result_set_raw)
