@@ -21,85 +21,69 @@
 
   \include{slides/research-goal}
 
-  \include{slides/background-domain}
+  \include{slides/motivation}
 
   \include{slides/background-ml}
 
-  \include{slides/lda}
+%  \include{slides/lda}
 
-  \begin{frame}{Project outline}
+  \begin{frame}{Progress so far}
     \begin{itemize}
-      \item {\color<2>{green} Collect preliminary syllabus dataset.}
-      \item {\color<2>{green} Perform exploratory clustering.}
-      \item {\color<2>{green} Expand initial prototype to include wider
-      spread data sources, including multiple departments and
-      universities.}
-      \item {\color<2>{green} Expand initial prototype to include exploratory
-      LDA computation.}
-      \item {\color<2>{green}Complete exploratory results.}
-      \item {\color<2>{green}Visualize exploratory results}.
-      \item {\color<2>{red}Build formal syllabus data set from data
-      collected online.}
-      \item Complete topic modeling analysis of big data set.
-      \item Begin looking into analysis of topics to consider automatic
-      labeling.
+      \item Collect preliminary course description dataset.
+      \item Perform exploratory clustering.
+      \item Expand initial prototype to include LDA computation.
+      \item Build preliminary visualization tool.
+      \item Run LDA experiments varying initialization parameters.
+      \item Construct course prerequisite trees.
+      \item Implement metrics for department/course comparison.
     \end{itemize}
   \end{frame}
 
-  \include{slides/resources}
-
   \include{slides/framework}
 
-  \include{slides/preliminary-results}
+  \include{slides/resources}
 
-  \begin{frame}{Preliminary visualization tool}
+%  \include{slides/preliminary-results}
 
-    \only<1>{
-      Simple combinatorially generated, cross-referenced HTML documents that
-      display per-document topic breakdown (top n topics) as well as a
-      definition of topics by frequent words (top n most frequent words).
-    }
+  \begin{frame}{Visualization tool}
 
-    \only<2>{
-      \begin{figure}
-        \includegraphics[width=0.8\framewidth]{figs/vis-docs.png}
-        \caption{Per-document topic breakdown}
-      \end{figure}
-    }
-
-    \only<3>{
-      \begin{figure}
-        \includegraphics[width=0.8\framewidth]{figs/vis-topics.png}
-        \caption{Topic-word definitions}
-      \end{figure}
-    }
-
+    \begin{itemize}
+      \item Interactive browser-based application.
+      \item Allows both high level overview of dataset and low level view of per-course topic inferences.
+      \item Provides view of
+        \begin{itemize}
+          \item topics
+          \item departmental comparison
+          \item prerequisite chains
+          \item dataset dashboard
+        \end{itemize}
+    \end{itemize}
   \end{frame}
 
-  \begin{frame}{Proposed visualization tool}
+%  \begin{frame}{Proposed visualization tool}
+%
+%    \only<1>{
+%      \begin{itemize}
+%        \item Import results of the LDA function back into the database
+%          layer, possibly with pedigree data (ie.\ knowledge of which run
+%          what data came from) Link it all up back to the existing scraped
+%          meta information.
+%        \item Host the database as a backend to a simple responsive
+%          user-facing browser-based web application.
+%        \item Feature: visualization of data, possibly graph-based.
+%        \item Feature: query interface allowing user to search through
+%          mined and inferred data sources.
+%      \end{itemize}
+%    }
+%
+%  \end{frame}
 
-    \only<1>{
-      \begin{itemize}
-        \item Import results of the LDA function back into the database
-          layer, possibly with pedigree data (ie.\ knowledge of which run
-          what data came from) Link it all up back to the existing scraped
-          meta information.
-        \item Host the database as a backend to a simple responsive
-          user-facing browser-based web application.
-        \item Feature: visualization of data, possibly graph-based.
-        \item Feature: query interface allowing user to search through
-          mined and inferred data sources.
-      \end{itemize}
-    }
+%  \include{slides/goals}
 
-  \end{frame}
-
-  \include{slides/goals}
-
-  \begin{frame}
-  \begin{center}
-  \Huge Questions?
-  \end{center}
-  \end{frame}
+%  \begin{frame}
+%  \begin{center}
+%  \Huge Questions?
+%  \end{center}
+%  \end{frame}
 
 \end{document}
