@@ -7,7 +7,7 @@ import pickle
 
 from trajectory import config as TRJ
 from trajectory.utils.prereqs import get_prereq_graph
-from trajectory.utils.common import jaccard, topic_vector
+from trajectory.utils.common import jaccard, topic_list, topic_vector
 from trajectory.utils.common import cosine_similarity, euclidean_distance
 from trajectory.models import University, Department, Course, ResultSet
 from trajectory.models import Topic, CourseTopicAssociation
@@ -125,36 +125,32 @@ def prereq_tree(cid):
 @app.route('/compare/departments/<string:daid>/<string:dbid>/')
 def compare_departments(daid=1, dbid=1): #TODO: set more reasonable defaults
 
-    # Look up requested departments.
+    # Look up references to requested departments.
     department_a = session.query(Department).get(daid)
     department_b = session.query(Department).get(dbid)
+
+    # If either department isn't found, or if there is no result set
+    # (meaning no topics to infer) then simply 404.
     if department_a is None or department_b is None or g.result_set_raw is None:
         abort(404)
 
-    # Identify list of topics for each department, calculate similarity
-    # coefficients.
-    department_a_topics = set(session.query(Topic) \
-            .filter(Topic.result_set_id==g.result_set_raw.id) \
-            .join(CourseTopicAssociation) \
-            .join(Course) \
-            .join(Department) \
-            .filter(Department.id==department_a.id) \
-            .all())
-    department_b_topics = set(session.query(Topic) \
-            .filter(Topic.result_set_id==g.result_set_raw.id) \
-            .join(CourseTopicAssociation) \
-            .join(Course) \
-            .join(Department) \
-            .filter(Department.id==department_b.id) \
-            .all())
+    # Identify a set of topics for each department.
+    department_a_topics = set(topic_list(department_a))
+    department_b_topics = set(topic_list(department_b))
+
+    # Generate topic vectors for the two departments.
     a_vector = topic_vector(department_a, g.result_set_raw)
     b_vector = topic_vector(department_b, g.result_set_raw)
+    a_vector_string = a_vector.unpack(one=b'1', zero=b'0').decode('utf-8')
+    b_vector_string = b_vector.unpack(one=b'1', zero=b'0').decode('utf-8')
 
-    j_index = jaccard(department_a_topics, department_b_topics)
-    cosine = cosine_similarity(a_vector, b_vector)
-    euclidean = euclidean_distance(a_vector, b_vector)
+    # Run similarity metrics.
+    similarity = dict()
+    similarity['jaccard']   = jaccard(department_a_topics, department_b_topics)
+    similarity['cosine']    = cosine_similarity(a_vector, b_vector)
+    similarity['euclidean'] = euclidean_distance(a_vector, b_vector)
 
-    # Identify the topics unique to each course.
+    # Remove common topics from the topic sets.
     intersection = department_a_topics.intersection(department_b_topics)
     department_a_topics = department_a_topics - intersection
     department_b_topics = department_b_topics - intersection
@@ -171,17 +167,24 @@ def compare_departments(daid=1, dbid=1): #TODO: set more reasonable defaults
     return render_template("compare_departments.html",
             da=department_a,
             db=department_b,
+
             da_topics=department_a_topics,
             db_topics=department_b_topics,
+
             num_courses_a=num_courses_a,
             num_courses_b=num_courses_b,
+
             common_topics=intersection,
+
             departments=departments,
-            jaccard=j_index,
-            cosine=cosine,
-            euclidean=euclidean,
-            da_vector=a_vector.unpack(one=b'1', zero=b'0').decode('utf-8'),
-            db_vector=b_vector.unpack(one=b'1', zero=b'0').decode('utf-8'))
+
+            jaccard=similarity['jaccard'],
+            cosine=similarity['cosine'],
+            euclidean=similarity['euclidean'],
+
+            da_vector=a_vector_string,
+            db_vector=b_vector_string,
+    )
 
 ################################
 # Custom Filters and Functions #

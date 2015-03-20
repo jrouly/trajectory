@@ -28,10 +28,11 @@ def jaccard(a, b):
     return n / d
 
 
-def topic_vector(item, result_set=None):
+def topic_list(item=None, result_set=None):
     """
-    Generate a vector indicating which topics are represented by the given
-    item.
+    Retrieve the ordered list of all topics represented by some item. If no
+    item is requested, return the global list of topics. Optional filter by
+    a result set.
 
     item can be a University, Department, or Course.
     """
@@ -39,14 +40,17 @@ def topic_vector(item, result_set=None):
     from trajectory.models import University, Department, Course, Topic
     from trajectory.models import CourseTopicAssociation
     from trajectory.models.meta import session
-    from bitarray import bitarray
 
     # Generate the initial query. Note that if a result_set instance is
     # passed in, it will be used to filter the global topics.
     topics_query = session.query(Topic).order_by(Topic.id)
     if result_set is not None:
         topics_query = topics_query.filter(Topic.result_set_id==result_set.id)
-    global_topics = topics_query.all()
+
+    # If there was no item specifically requested, just return the global
+    # topic set.
+    if item is None:
+        return topics_query.all()
 
     # Start constructing the per-item topic list.
     item_topics = topics_query.join(CourseTopicAssociation).join(Course)
@@ -71,11 +75,40 @@ def topic_vector(item, result_set=None):
                 .all()
 
     else:
-        raise RuntimeError("Unknown item type for topic vector.")
+        raise RuntimeError("Unknown item type requested.")
+
+    return item_topics
+
+def topic_vector(item=None, result_set=None):
+    """
+    Generate a vector indicating which topics are represented by the given
+    item. If item is None, return a topic vector representing the global
+    topic set (all 1s).
+
+    item can be a University, Department, or Course.
+    """
+
+    from trajectory.models import University, Department, Course, Topic
+    from trajectory.models import CourseTopicAssociation
+    from trajectory.models.meta import session
+    from bitarray import bitarray
+
+    # Grab a reference to the list of all topics (in this result set, if
+    # one was requested).
+    global_topics = topic_list(result_set=result_set)
 
     # Construct the vector.
     vector = bitarray(len(global_topics))
     vector.setall(False)
+
+    # If no item wsa specifically requested, return a bitarray of all True.
+    if item is None:
+        vector.setall(True)
+        return vector
+
+    # Grab a reference to the list of topics represented in the requested
+    # item.
+    item_topics = topic_list(item, result_set)
 
     # Set the bits where the topic is found.
     for it in item_topics:
