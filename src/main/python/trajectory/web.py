@@ -128,8 +128,8 @@ def prereq_tree(cid):
 def compare_departments(daid=1, dbid=1): #TODO: set more reasonable defaults
 
     # Look up references to requested departments.
-    department_a = session.query(Department).get(daid)
-    department_b = session.query(Department).get(dbid)
+    department_a = app.db.query(Department).get(daid)
+    department_b = app.db.query(Department).get(dbid)
 
     # If either department isn't found, or if there is no result set
     # (meaning no topics to infer) then simply 404.
@@ -172,13 +172,13 @@ def compare_departments(daid=1, dbid=1): #TODO: set more reasonable defaults
     department_b_topics = department_b_topics - intersection
 
     # Number of courses in each department.
-    num_courses_a = session.query(Course).join(Department) \
+    num_courses_a = app.db.query(Course).join(Department) \
             .filter(Department.id==daid).count()
-    num_courses_b = session.query(Course).join(Department) \
+    num_courses_b = app.db.query(Course).join(Department) \
             .filter(Department.id==dbid).count()
 
     # Global list of departments for switching over.
-    departments = session.query(Department).all()
+    departments = app.db.query(Department).all()
 
     return render_template("compare_departments.html",
             da=department_a,
@@ -207,7 +207,7 @@ def compare_departments(daid=1, dbid=1): #TODO: set more reasonable defaults
 @app.template_filter('course_count')
 def course_count(data):
     if type(data) == University:
-        return session.query(Course).join(Department).join(University) \
+        return app.db.query(Course).join(Department).join(University) \
                 .filter(University.id==data.id).count()
     elif type(data) == Department:
         return len(data.courses)
