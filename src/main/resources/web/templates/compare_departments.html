@@ -46,24 +46,21 @@
         {% set range=metric.get('range') %}
         {% set value=metric.get('value') %}
 
-        {%if value%}
-
         <p>
-          {%if description%}
-            <abbr title="{{description}}">
-              {{name}}{%if not range%}:{%endif%}</abbr>
-          {% else %}{{name}}{% endif %}{#
+          {% if description %}
+            <abbr title="{{ description }}">
+              {{ name }}{% if not range %}:{% endif %}</abbr>
+          {% else %}{{ name }}{% endif %}{#
 
-          #}{%if range%}{{range}}:{%endif%}{#
-          #}{%if not range and not description%}:{%endif%}
+          #}{% if range %}{{ range }}:{% endif %}{#
+          #}{% if not range and not description %}:{% endif %}
           {{ '%.3f' % value }}
         </p>
-        {%endif%}
-        {%else%}
+        {% else %}
         <p>
           No metrics calculated.
         </p>
-        {%endfor%}
+        {% endfor %}
 
         <h4>Sizes</h4>
         <p>Courses in
