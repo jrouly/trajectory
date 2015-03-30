@@ -5,19 +5,29 @@
   max-height: 85vh;
   overflow-y: auto;
 }
-#graph-container .node {
-  stroke: #fff;
+
+/* D3 Tree Styles */
+#tree-container .node {
+  cursor: pointer;
+}
+
+#tree-container .node circle {
+  fill: #fff;
+  stroke: steelblue;
   stroke-width: 1.5px;
 }
-#graph-container .link {
-  stroke: #999;
-  stroke-opacity: .6;
+
+#tree-container .node text {
+  font: 10px sans-serif;
 }
-#graph-container .label {
-  color: #999;
-  stroke-opacity: .6;
+
+#tree-container .link {
+  fill: none;
+  stroke: #ccc;
+  stroke-width: 1.5px;
 }
-#graph-container .label.prime {
+
+#tree-container .label.prime {
   fill: #f00;
   fill-opacity: 1;
   stroke-width: 0;
