@@ -112,14 +112,17 @@ def about():
     return render_template("about.html")
 
 # Define routing for course prerequisite tree API endpoint.
-@app.route('/prereqs/<string:cid>')
-def prereq_tree(cid):
-    data = get_prereq_graph(cid, layout=True, format="node")
+@app.route('/prereqs/<string:cid>/<string:format>')
+def prereq_tree(cid, format="node"):
+    # Attempt to retreive data in the requested format.
+    try:
+        data = get_prereq_graph(cid, format=format)
+    except RuntimeError:
+        abort(404)
     if data is None:
         abort(404)
     response = make_response(data)
-    response.headers["Content-Disposition"] = \
-            "attachment; filename=course-%s-prereqs.json" % cid
+    response.headers["Content-Type"] = "text/plain"
     return response
 
 # Define routing for department comparison page.

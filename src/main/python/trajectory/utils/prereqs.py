@@ -7,16 +7,16 @@ departmental prerequisite structures.
 """
 
 
-def get_prereq_graph(course_id, layout=False, format=None):
+def get_prereq_graph(course_id, format=None):
     """
-    Generate a graph of prerequisites within a course.
+    Generate a graph of prerequisites within a course. If format is not
+    requested, simply return a NetworkX graph object.
 
-    layout -- whether or not to apply a layout to this graph.
-    format -- what formatting to apply to the output
-                None: return a NetworkX graph
-                node: json formatted as node-link style
-                adjacency: json formatted as adjacency style
-                tree: json formatted as tree style
+    couse_id: the ID of the requested course
+    format:   what format to return in (optional)
+                  node: json formatted as node-link style
+                  adjacency: json formatted as adjacency style
+                  tree: json formatted as tree style
     """
 
     from trajectory.models import Department, Course
@@ -38,11 +38,8 @@ def get_prereq_graph(course_id, layout=False, format=None):
     if course is None:
         return None
 
-    # Generate the prereq tree for the requested course.
-    prereq_tree = get_prereq_tree(course_id)
-
     # Recursively add course ids in a subtree to the graph.
-    def add_subtree(G, tree, parent=None):
+    def add_tree(G, tree, parent=None):
         cid = tree[0]   # unpack information
         prereqs = tree[1]  # unpack information
         course = session.query(Course).get(cid)
@@ -63,28 +60,27 @@ def get_prereq_graph(course_id, layout=False, format=None):
             G.add_edge(parent, cid, label="prerequisite")
         # loop over prereq trees and recursively add them in
         for prereq in prereqs:
-            add_subtree(G, prereq, cid)
+            add_tree(G, prereq, cid)
 
     # Navigate the prerequisite tree and add the course ids as nodes, and
     # prerequisite relationships as unweighted edges.
-    add_subtree(G, prereq_tree)
-
-    # If a layout is requested, then calculate and apply it.
-    if layout:
-        pos = nx.spring_layout(G)
-        for node in G.nodes():
-            G.node[node]["viz"] = {
-                'position': {
-                    'x': pos[node][0],
-                    'y': pos[node][1]
-                }
-            }
+    prereq_tree = get_prereq_tree(course_id)
+    add_tree(G, prereq_tree)
 
     if G is None:
         return G
 
-    # Apply any requested data output formatting.
+    # Calculate and apply a basic layout.
+    pos = nx.spring_layout(G)
+    for node in G.nodes():
+        G.node[node]["viz"] = {
+            'position': {
+                'x': pos[node][0],
+                'y': pos[node][1]
+            }
+        }
 
+    # Apply any requested data output formatting.
     if format == "node":
         return json.dumps(json_graph.node_link_data(G))
     elif format == "adjacency":
@@ -93,6 +89,7 @@ def get_prereq_graph(course_id, layout=False, format=None):
         return json.dumps(json_graph.tree_data(G, int(course_id)))
     else:
         return G
+
 
 def get_prereq_tree(course_id, parents=set()):
     """
