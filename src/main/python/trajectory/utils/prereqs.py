@@ -7,7 +7,7 @@ departmental prerequisite structures.
 """
 
 
-def get_prereq_graph(course_id, layout=False, format=None, root=None):
+def get_prereq_graph(course_id, layout=False, format=None):
     """
     Generate a graph of prerequisites within a course.
 
@@ -17,7 +17,6 @@ def get_prereq_graph(course_id, layout=False, format=None, root=None):
                 node: json formatted as node-link style
                 adjacency: json formatted as adjacency style
                 tree: json formatted as tree style
-    root -- if tree formatting is requested, root of the tree
     """
 
     from trajectory.models import Department, Course
@@ -91,9 +90,7 @@ def get_prereq_graph(course_id, layout=False, format=None, root=None):
     elif format == "adjacency":
         return json.dumps(json_graph.adjacency_data(G))
     elif format == "tree":
-        if root is None: # Ensure a root is specified.
-            raise RuntimeError("No root specified in a tree formatted request.")
-        return json.dumps(json_graph.tree_data(G, int(root)))
+        return json.dumps(json_graph.tree_data(G, int(course_id)))
     else:
         return G
 
