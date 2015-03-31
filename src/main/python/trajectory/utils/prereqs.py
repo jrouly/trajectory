@@ -44,6 +44,11 @@ def get_prereq_graph(course_id, format=None):
         prereqs = tree[1]  # unpack information
         course = session.query(Course).get(cid)
 
+        # Uniquely identify nodes based on their relationship with their
+        # parent. This creates a true tree.
+        if parent is not None:
+            cid = str(parent) + "-" + str(cid)
+
         # Insert all known data, including department abbreviation.
         node_data = row2dict(course)
         node_data['dept'] = course.department.abbreviation
