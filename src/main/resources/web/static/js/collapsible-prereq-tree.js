@@ -1,7 +1,7 @@
 /* Prerequisite Tree */
 var margin = {top: 20, right: 120, bottom: 20, left: 120},
     width = 960 - margin.right - margin.left,
-    height = 400 - margin.top - margin.bottom;
+    height = 500 - margin.top - margin.bottom;
 
 var i = 0,
     duration = 750,
@@ -11,7 +11,7 @@ var tree = d3.layout.tree()
     .size([height, width]);
 
 function getViewBox() {
-  return "0" + "," + "0" + "," + (width) + "," + (height);
+  return "0,0," + (width) + "," + (height);
 }
 
 var diagonal = d3.svg.diagonal()
@@ -42,8 +42,6 @@ function make_tree(json_url) {
     update(root);
   });
 }
-
-d3.select(self.frameElement).style("height", height + "px");
 
 function update(source) {
 
@@ -135,6 +133,16 @@ function update(source) {
     d.x0 = d.x;
     d.y0 = d.y;
   });
+
+  // Update the SVG's viewbox if it needs to be resized.
+  nodes.forEach(function(d) {
+    if(d.y > width - margin.left - margin.right)
+      width = d.y + margin.left + margin.right;
+    if(d.x > height - margin.top - margin.bottom)
+      height = d.x + margin.top + margin.bottom;
+  });
+  d3.select("#tree")
+    .attr("viewBox", getViewBox());
 
 }
 
