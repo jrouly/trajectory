@@ -134,17 +134,23 @@ var i = 0,
 var tree = d3.layout.tree()
     .size([height, width]);
 
+function getViewBox() {
+  return "0" + "," + "0" + "," + (width) + "," + (height);
+}
+
 var diagonal = d3.svg.diagonal()
     .projection(function(d) { return [d.y, d.x]; });
 
 var svg = d3.select("#tree-container").append("svg")
-    .attr("width", width + margin.right + margin.left)
-    .attr("height", height + margin.top + margin.bottom)
+    .attr("id", "tree")
+    .attr("viewBox", getViewBox())
+    .attr("preserveAspectRatio", "xMidYMid meet")
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-d3.json("{{ url_for('prereq_tree', cid=course.id, format='tree') }}", function(error, flare) {
-  root = flare;
+d3.json("{{ url_for('prereq_tree', cid=course.id, format='tree') }}",
+    function(error, root_node) {
+  root = root_node;
   root.x0 = height / 2;
   root.y0 = 0;
 
@@ -252,6 +258,7 @@ function update(source) {
     d.x0 = d.x;
     d.y0 = d.y;
   });
+
 }
 
 // Toggle children on click.
