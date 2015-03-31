@@ -22,12 +22,8 @@
   overflow: auto;
   padding: 0px;
   margin: 0px;
-
-  border: 1px solid #f00;
 }
 
 #tree-container svg {
   height: 400px;
-
-  border: 1px solid #0f0;
 }
