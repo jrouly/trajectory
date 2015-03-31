@@ -1,0 +1,33 @@
+/* D3 Tree Styles */
+#tree-container .node {
+  stroke: #fff;
+  stroke-width: 1.5px;
+}
+#tree-container .link {
+  stroke: #999;
+  stroke-opacity: .6;
+}
+#tree-container .label {
+  color: #999;
+  stroke-opacity: .6;
+}
+#tree-container .label.prime {
+  fill: #f00;
+  fill-opacity: 1;
+  stroke-width: 0;
+}
+
+#tree-container {
+  width: 100%;
+  overflow: auto;
+  padding: 0px;
+  margin: 0px;
+
+  border: 1px solid #f00;
+}
+
+#tree-container svg {
+  height: 400px;
+
+  border: 1px solid #0f0;
+}
