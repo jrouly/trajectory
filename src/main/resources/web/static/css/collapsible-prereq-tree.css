@@ -23,19 +23,11 @@
   fill: none;
   stroke: #ccc;
   stroke-width: 1.5px;
-}
 
-#tree-container {
-  width: 100%;
-  overflow: auto;
-  padding: 0px;
-  margin: 0px;
-
-  border: 1px solid #f00;
+  shape-rendering: crispEdges;
+  vector-effect: non-scaling-stroke;
 }
 
 #tree-container svg {
-  height: 400px;
-
-  border: 1px solid #0f0;
+  height: 500px;
 }

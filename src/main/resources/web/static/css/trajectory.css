@@ -5,3 +5,11 @@
   max-height: 85vh;
   overflow-y: auto;
 }
+
+#tree-container {
+  width: 100%;
+  overflow: auto;
+  padding: 0px;
+  margin: 0px;
+  border: 1px solid #000;
+}

@@ -17,13 +17,6 @@
   stroke-width: 0;
 }
 
-#tree-container {
-  width: 100%;
-  overflow: auto;
-  padding: 0px;
-  margin: 0px;
-}
-
 #tree-container svg {
   height: 400px;
 }
