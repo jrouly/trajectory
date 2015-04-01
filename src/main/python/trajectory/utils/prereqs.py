@@ -65,7 +65,7 @@ def get_prereq_graph(course_id, format=None):
         # Add course and an edge from its parent, if relevant.
         G.add_node(cid, node_data)
         if parent is not None:
-            G.add_edge(parent, cid, label="prerequisite")
+            G.add_edge(parent, cid)
 
         # Recurse through the prerequisite tree and add in subtrees.
         if not seen:
