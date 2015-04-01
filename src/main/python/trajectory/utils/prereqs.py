@@ -44,11 +44,6 @@ def get_prereq_graph(course_id, format=None):
         prereqs = tree[1]  # unpack information
         course = session.query(Course).get(cid)
 
-        # Uniquely identify nodes based on their relationship with their
-        # parent. This creates a true tree.
-        if parent is not None:
-            cid = str(parent) + "-" + str(cid)
-
         # Insert all known data, including department abbreviation.
         node_data = row2dict(course)
         node_data['dept'] = course.department.abbreviation
@@ -59,13 +54,23 @@ def get_prereq_graph(course_id, format=None):
         else:
             node_data['prime'] = False
 
-        G.add_node(cid, node_data) # add this course
-        # add an edge from the parent to this course
+        # If the course has already been added, generate a unique ID for it
+        # based on its parent, and add it anyway. But don't recurse into
+        # its list of prereqs.
+        seen = False
+        if cid in G.nodes():
+            cid = str(parent) + "-" + str(cid)
+            seen = True
+
+        # Add course and an edge from its parent, if relevant.
+        G.add_node(cid, node_data)
         if parent is not None:
             G.add_edge(parent, cid, label="prerequisite")
-        # loop over prereq trees and recursively add them in
-        for prereq in prereqs:
-            add_tree(G, prereq, cid)
+
+        # Recurse through the prerequisite tree and add in subtrees.
+        if not seen:
+            for prereq in prereqs:
+                add_tree(G, prereq, cid)
 
     # Navigate the prerequisite tree and add the course ids as nodes, and
     # prerequisite relationships as unweighted edges.
