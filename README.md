@@ -2,7 +2,7 @@
 
 [![Join the chat at https://gitter.im/jrouly/trajectory](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/jrouly/trajectory?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-Trajectory is a working title for my CS 390 undergraduate research project. I am taking university course description data and applying LDA topic modeling.
+Trajectory is a software platform for automatically extracting topics from university course descriptions. It includes modules for data ingestion, learning, and visualization.
 
 ## Requirements
 
