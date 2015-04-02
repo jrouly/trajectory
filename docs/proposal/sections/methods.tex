@@ -55,9 +55,9 @@ A distributed implementation of K-Means available in the Python toolkit \texttt{
 %------------------------------------------------
 
 The high completeness values are promising: this indicates that many of the same course are assigned under the same cluster prototype.
-The low value of homogeneity is unsurprising given the initialization parameters used: K-Means was forced to detect only 20 clusters, a far smaller number than the magnitude of distinct course sections available.
+The low value of homogeneity is unsurprising given the initialization parameters used: K-Means was initialized to detect only 20 clusters, a far smaller number than the magnitude of distinct course sections available.
 The number 20 was chosen arbitrarily as a smaller count than the true number of distinct course sections in order to increase cluster size.
-Cursory visual inspection of the most common frequencies in the first few clusters also supports the structured nature of the dataset with semantically related terms grouped together in a logical fashion corresponding with an obvious, known GMU course.
+Cursory visual inspection of the most common frequencies in the first few clusters also supports the structured nature of the dataset with related terms grouped together in a logical fashion corresponding with an obvious, known GMU course.
 
 %------------------------------------------------
 
@@ -79,15 +79,16 @@ V-measure & 0.563 \\
 \subsection{Topic Modeling}
 \label{sec:topic-modeling}
 
-After the exploratory clustering process, we passed cleaned data into a topic modeling framework by exporting from the database layer to a common \ac{csv} format.
-The Java MALLET library is used to perform \acf{lda} on the combined syllabus data set.
+After the exploratory clustering process, we passed cleaned data into a topic modeling framework by exporting from the database layer to the filesystem in a structured ``bucket of files'' format.
+The Java MALLET library is used to perform \ac{lda} on the course description data.
 A data pipeline is constructed using the MALLET API that reads input data, tokenizes it, and trains an \ac{lda} topic model.
-The inferred topics are then read back into the database layer and applied to existing courses.
-Independent runs of \ac{lda} with distinct parameterization are segregated in the database, allowing sets of inferred topics to sit side by side without interfering.
+The inferred topics are then exported to a common \ac{csv} format and read back into the database layer and applied to existing courses.
+Independent runs of \ac{lda} with distinct parameterization are segregated in the database into ``Result Sets'', allowing sets of inferred topics to sit side by side without interfering.
+This also allows the presentation of different sets of inferred topics to the end user.
 
 %------------------------------------------------
 
-The initialization parameters of MALLET's \ac{lda} implementation are covered in \tref{table:lda-parameters}.
+The initialization parameters of MALLET's \ac{lda} implementation are summarized in \tref{table:lda-parameters}.
 Experiments were run varying parameters throughout the experimental range, including the MALLET default values.
 However, as the number of topics increased greatly beyond 750, and as $\beta$ decreased greatly below 0.0001, the MALLET framework began to encounter instability and errors.
 
@@ -115,18 +116,26 @@ Topics     & The number of topics to infer. & [100, 1000] & --- \\
 
 %------------------------------------------------
 
-An interactive, dynamic user visualization of course description topics has been prototyped.
+An interactive, dynamic user visualization of course descriptions and topics has been prototyped.
 The visualization is a web-based application built upon the Python Flask library.
 The tool interfaces with the same database layer used by the rest of the application framework to provide an aesthetically pleasing user-facing interface with several primary modules.
-First, the web application presents the user with a ``dashboarded'' higher level overview of the dataset and available result sets, where a result set is the topics inferred after a single run of the \ac{lda} module with a distinct initialization set.
+By default, the web application presents the user with a high level ``dashboard'' overview of the dataset and available result sets, where a result set is the set of topics inferred after a single run of the \ac{lda} module with a distinct initialization set.
 After selecting a result set, the user can browse the data by course, department, or university.
+
+%------------------------------------------------
+
 On selecting a course, the inferred topics are listed in order of their proportion in the course's description.
-An interactive graph of the course's prerequisites is displayed as well.
+Additionally, an interactive collapsible tree visualization of the course' prerequisite chain in the department is displayed.
+This tree visualization provides a view of the conceptual overlap of courses and prerequisites.
+
+%------------------------------------------------
+
 The user may also compare two university departments.
 Topics inferred from every course in the department are collected and displayed side by side, along with the intersection set of common topics.
 Similarity metrics describing the relationship between the two departments are given as well --- the Jaccard index, cosine similarity, and euclidean distance.
-The first metric is based solely on topic set cardinalities, while the second two sets are based on a ``topic-vector'' representation of the department.
+The first metric is based solely on topic set cardinalities, while the remaining are based on a ``topic-vector'' representation of the department.
 The topic-vector is a binary vector where each feature indicates whether a particular topic was inferred for the given department.
+Features are unweighted as the topic-vector indicates only whether a topic is present in a department's topic set, and not its frequency of occurrence.
 
 %------------------------------------------------
 
@@ -138,7 +147,6 @@ The topic-vector is a binary vector where each feature indicates whether a parti
 The \ac{acm} maintains an annual writeup of guidelines for undergraduate computer science education. \cite{CS2013}
 These course descriptions will be employed as a benchmark corpus introducing implicit expert knowledge.
 The tools developed to measure similarity between courses and departments based on inferred topics will allow comparison of these benchmark course descriptions against real university data.
-
 
 %------------------------------------------------
 
