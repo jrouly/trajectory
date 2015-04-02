@@ -93,7 +93,8 @@ def scrape(args):
             if prereq_index > -1:
 
                 # Grab the substring of prereqs and find matches.
-                prereq_string = description[prereq_index:]
+                notes_index = description.find("Notes")
+                prereq_string = description[prereq_index:notes_index]
                 description = description[:prereq_index]
                 matches = prereq_re.findall(prereq_string)
 
