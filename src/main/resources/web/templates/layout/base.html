@@ -6,18 +6,18 @@
     <title>{% block title %}{% endblock%} - Trajectory</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <link rel="stylesheet" href="/static/css/vendor/normalize.css" media="screen">
-    <link rel="stylesheet" href="/static/css/vendor/bootstrap.min.css" media="screen">
-    <link rel="stylesheet" href="/static/css/vendor/bootswatch.min.css" media="screen">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/vendor/normalize.css') }}" media="screen">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/vendor/bootstrap.min.css') }}" media="screen">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/vendor/bootswatch.min.css') }}" media="screen">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="/static/css/trajectory.css" media="screen">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/trajectory.css') }}" media="screen">
 
     <script src="//d3js.org/d3.v3.min.js"></script>
-    <script src="/static/js/vendor/jquery.min.js"></script>
-    <script src="/static/js/vendor/bootstrap.min.js"></script>
-    <script src="/static/js/vendor/jquery.hideseek.min.js"></script>
-    <script src="/static/js/vendor/jquery.cookie.min.js"></script>
-    <script src="/static/js/trajectory.js"></script>
+    <script src="{{ url_for('static', filename='js/vendor/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/vendor/bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/vendor/jquery.hideseek.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/vendor/jquery.cookie.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/trajectory.js') }}"></script>
   </head>
 
   <body id="top">
