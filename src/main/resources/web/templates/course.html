@@ -111,11 +111,55 @@
 
 <div class="row">
   <div class="col-lg-12">
+    <h3>Prerequisite Course Topics</h3>
+
+    <div class="list-group">
+    {% for prerequisite in course.prerequisites %}
+      {% set cid = prerequisite.id %}
+      {% set d = prerequisite.department.abbreviation %}
+      {% set u = prerequisite.department.university.abbreviation %}
+
+      <a href="{{url_for('course', u=u, d=d, cid=cid)}}" class="list-group-item">
+        <h4 class="list-group-item-heading">
+          {{ prerequisite.department.abbreviation }}
+          {{ prerequisite.number }}
+          {{ prerequisite.title }}
+        </h4>
+
+        {% for assoc in prerequisite.topics if assoc.topic.result_set.id == grs.id %}
+        {% set topic = assoc.topic %}
+        <p class="list-group-item-text{%if topic in topics%} text-success{%endif%}">
+          ({{ assoc.proportion }}) {{ topic.words }}
+        </p>
+        {% else %}
+        <p class="list-group-item-text">
+        No topics inferred.
+        </p>
+        {% endfor %}
+      </a>
+
+    {% else %}
+
+      <a href="#" class="list-group-item">
+        <h4 class="list-group-item-heading">List group item heading</h4>
+        <p class="list-group-item-text">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
+      </a>
+    no prerequsiites 
+
+    {% endfor %}
+    </div>
+
+  </div>
+</div>
+
+
+<div class="row">
+  <div class="col-lg-12">
     <h3>Prerequisite Tree</h3>
   </div>
 </div>
 
-<div class="row in" id="prereq-tree">
+<div class="row" id="prereq-tree">
   <div class="col-lg-12">
     <div id="tree-container"></div>
   </div>

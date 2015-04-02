@@ -92,7 +92,8 @@ def course(u=None, d=None, cid=None):
     if course is None:
         abort(404)
     return render_template("course.html",
-            course=course)
+            course=course,
+            topics=topic_list(course, result_set=g.result_set_raw))
 
 # Define routing for topic list.
 @app.route('/topics/')
