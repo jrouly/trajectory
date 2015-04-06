@@ -108,6 +108,7 @@
   </div>
 </div>
 
+{% if course.prerequisites %}
 
 <div class="row">
   <div class="col-lg-12">
@@ -137,14 +138,6 @@
         </p>
         {% endfor %}
       </a>
-
-    {% else %}
-
-      <a href="#" class="list-group-item">
-        <h4 class="list-group-item-heading">List group item heading</h4>
-        <p class="list-group-item-text">Donec id elit non mi porta gravida at eget metus. Maecenas sed diam eget risus varius blandit.</p>
-      </a>
-    no prerequsiites 
 
     {% endfor %}
     </div>
@@ -180,5 +173,15 @@ make_tree("{{ url_for('prereq_tree', cid=course.id, format='node') }}");
 <script>
 make_tree("{{ url_for('prereq_tree', cid=course.id, format='tree') }}");
 </script>
+
+{% else %}
+
+<div class="row">
+  <div class="col-lg-12">
+    <p><strong class="text-danger">No prerequisites registered.</strong></p>
+  </div>
+</div>
+
+{% endif %}
 
 {% endblock %}
