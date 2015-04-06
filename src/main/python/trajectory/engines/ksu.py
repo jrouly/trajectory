@@ -87,24 +87,25 @@ def scrape(args):
             content = ' '.join([r.text for r in result_set[1:]])
 
             # Clean up the description.
+            def strip_substring(body, substring):
+                try:    return body[:body.index(substring)]
+                except: return body
+
             description = content
-            try:
-                description = description[:description.index("When Offered")]
-            except:
-                pass
-            try:
-                description = description[:description.index("UGE course")]
-            except:
-                pass
+            description = strip_substring(description, "Note")
+            description = strip_substring(description, "Requisites")
+            description = strip_substring(description, "When Offered")
+            description = strip_substring(description, "UGE course")
 
             # Identify prerequisites.
-            prereq_index = description.find("Requisites")
+            prereq_index = content.find("Requisites")
             prereq_list = None
             if prereq_index > -1:
 
                 # Grab the substring of prereqs and find matches.
-                prereq_string = description[prereq_index:]
-                description = description[:prereq_index]
+                prereq_string = content[prereq_index:]
+                prereq_string = strip_substring(prereq_string, "Note")
+                prereq_string = strip_substring(prereq_string, "When Offered")
                 matches = prereq_re.findall(prereq_string)
 
                 if len(matches) > 0:
@@ -113,12 +114,6 @@ def scrape(args):
                             "d": match[0], # department
                             "n": match[2]  # number
                         } for match in matches]
-
-            # Clean up the description some more.
-            try:
-                description = description[:description.index(".Note")]
-            except:
-                pass
 
             # Clean the description string
             description_raw = description
