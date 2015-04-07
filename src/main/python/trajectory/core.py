@@ -195,7 +195,7 @@ def export(args):
 
         # CS department shortcut.
         if args.cs:
-            args.departments = ["ait", "cs", "cis", "csc", "csci"]
+            args.departments = ["ec", "ka", "ait", "cs", "cis", "csc", "csci"]
 
         # Filter by the requested departments.
         if args.departments:
