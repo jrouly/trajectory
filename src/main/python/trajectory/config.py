@@ -27,6 +27,10 @@ DATABASE_URI = "sqlite:///%s" % os.path.join(HOME, "data.db")
 # Resource locations.
 __RESOURCES = os.path.join(HOME, "src", "main", "resources")
 
+# ACM Data Files
+ACM_EXEMPLARS = os.path.join(__RESOURCES, "acm", "exemplar-descriptions.txt")
+ACM_KA = os.path.join(__RESOURCES, "acm", "knowledge-areas.txt")
+
 # Stop words cache.
 __STOP_WORDS_FILE = os.path.join(HOME, __RESOURCES, "stoplists", "en.txt")
 STOP_WORDS = set(open(__STOP_WORDS_FILE, "r").read().splitlines())

@@ -1,0 +1,17 @@
+{
+  "school":{
+    "name":"Association of Computing Machinery",
+    "abbreviation":"ACM",
+    "url":"acm.org"
+  },
+  "departments":[
+    {
+      "name":"Exemplar Courses",
+      "abbreviation":"EC"
+    },
+    {
+      "name":"Knowledge Areas",
+      "abbreviation":"KA"
+    }
+  ]
+}
