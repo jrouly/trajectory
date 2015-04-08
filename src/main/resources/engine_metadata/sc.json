@@ -1,0 +1,14 @@
+{
+  "school":{
+    "name":"University of South Carolina",
+    "abbreviation":"SC",
+    "url":"sc.edu"
+  },
+  "departments":[
+    {
+      "name":"Computer Science",
+      "abbreviation":"CSCE",
+      "url":"cse.sc.edu"
+    }
+  ]
+}
