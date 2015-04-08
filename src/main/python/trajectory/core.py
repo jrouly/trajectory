@@ -136,8 +136,8 @@ def clean(string):
     # Perform stopword removal using a cached stopword object.
     # Additionally, perform stemming on each word.
     from trajectory import config as TRJ
-    string = ' '.join(set([stem_word(word) for word in string.split()
-                            if word not in TRJ.STOP_WORDS]))
+    string = ' '.join([stem_word(word) for word in string.split()
+                            if word not in TRJ.STOP_WORDS])
 
     # Remove singletons or pairs of letters.
     singletons = re.compile("(?<!\w)\w{1,2}(\s|$)")
