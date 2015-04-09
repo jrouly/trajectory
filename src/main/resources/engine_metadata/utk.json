@@ -1,0 +1,759 @@
+{
+  "school":{
+    "name":"University of Tennessee, Knoxville",
+    "abbreviation":"UTK",
+    "url":"utk.edu"
+  },
+  "departments":[
+    {
+      "name":"Accounting",
+      "abbreviation":"ACCT",
+      "url":""
+    },
+    {
+      "name":"Advertising",
+      "abbreviation":"ADVT",
+      "url":""
+    },
+    {
+      "name":"Aerospace Engineering",
+      "abbreviation":"AE",
+      "url":""
+    },
+    {
+      "name":"Air Force Aerospace Studies",
+      "abbreviation":"AFAS",
+      "url":""
+    },
+    {
+      "name":"Africana Studies",
+      "abbreviation":"AFST",
+      "url":""
+    },
+    {
+      "name":"Agricultural and Natural Resources ",
+      "abbreviation":"AGNR",
+      "url":""
+    },
+    {
+      "name":"Agricultural Leadership, Education, and Communications",
+      "abbreviation":"ALEC",
+      "url":""
+    },
+    {
+      "name":"American Studies",
+      "abbreviation":"AMST",
+      "url":""
+    },
+    {
+      "name":"Animal Science",
+      "abbreviation":"ANSC",
+      "url":""
+    },
+    {
+      "name":"Anthropology",
+      "abbreviation":"ANTH",
+      "url":""
+    },
+    {
+      "name":"Arabic",
+      "abbreviation":"ARAB",
+      "url":""
+    },
+    {
+      "name":"Architecture",
+      "abbreviation":"ARCH",
+      "url":""
+    },
+    {
+      "name":"Agricultural and Resource Economics",
+      "abbreviation":"AREC",
+      "url":""
+    },
+    {
+      "name":"Art Education",
+      "abbreviation":"ARED",
+      "url":""
+    },
+    {
+      "name":"Art",
+      "abbreviation":"ART",
+      "url":""
+    },
+    {
+      "name":"Art Two Dimensional",
+      "abbreviation":"ARTA",
+      "url":""
+    },
+    {
+      "name":"Art Three Dimensional",
+      "abbreviation":"ARTB",
+      "url":""
+    },
+    {
+      "name":"Art Four Dimensional",
+      "abbreviation":"ARTC",
+      "url":""
+    },
+    {
+      "name":"Art Design / Graphic",
+      "abbreviation":"ARTD",
+      "url":""
+    },
+    {
+      "name":"Art History",
+      "abbreviation":"ARTH",
+      "url":""
+    },
+    {
+      "name":"American Sign Language",
+      "abbreviation":"ASL",
+      "url":""
+    },
+    {
+      "name":"Asian Studies",
+      "abbreviation":"ASST",
+      "url":""
+    },
+    {
+      "name":"Astronomy",
+      "abbreviation":"ASTR",
+      "url":""
+    },
+    {
+      "name":"Audiology and Speech Pathology",
+      "abbreviation":"AUSP",
+      "url":""
+    },
+    {
+      "name":"Business Analytics",
+      "abbreviation":"BAS",
+      "url":""
+    },
+    {
+      "name":"Biochemistry and Molecular Biology",
+      "abbreviation":"BCMB",
+      "url":""
+    },
+    {
+      "name":"Baker Center for Public Policy",
+      "abbreviation":"BCPP",
+      "url":""
+    },
+    {
+      "name":"Biology",
+      "abbreviation":"BIOL",
+      "url":""
+    },
+    {
+      "name":"Biomedical Engineering",
+      "abbreviation":"BME",
+      "url":""
+    },
+    {
+      "name":"Biosystems Engineering",
+      "abbreviation":"BSE",
+      "url":""
+    },
+    {
+      "name":"Biosystems Engineering Technology",
+      "abbreviation":"BSET",
+      "url":""
+    },
+    {
+      "name":"Business Administration",
+      "abbreviation":"BUAD",
+      "url":""
+    },
+    {
+      "name":"Business Law",
+      "abbreviation":"BULW",
+      "url":""
+    },
+    {
+      "name":"Chemical and Biomolecular Engineering",
+      "abbreviation":"CBE",
+      "url":""
+    },
+    {
+      "name":"Communication and Information",
+      "abbreviation":"CCI",
+      "url":""
+    },
+    {
+      "name":"Civil Engineering",
+      "abbreviation":"CE",
+      "url":""
+    },
+    {
+      "name":"Comparative and Experimental Medicine",
+      "abbreviation":"CEM",
+      "url":""
+    },
+    {
+      "name":"Child and Family Studies",
+      "abbreviation":"CFS",
+      "url":""
+    },
+    {
+      "name":"Chemistry",
+      "abbreviation":"CHEM",
+      "url":""
+    },
+    {
+      "name":"Chinese",
+      "abbreviation":"CHIN",
+      "url":""
+    },
+    {
+      "name":"Classics",
+      "abbreviation":"CLAS",
+      "url":""
+    },
+    {
+      "name":"Communication Studies",
+      "abbreviation":"CMST",
+      "url":""
+    },
+    {
+      "name":"Cinema Studies",
+      "abbreviation":"CNST",
+      "url":""
+    },
+    {
+      "name":"Comparative Literature",
+      "abbreviation":"COLI",
+      "url":""
+    },
+    {
+      "name":"Computer Science",
+      "abbreviation":"COSC",
+      "url":""
+    },
+    {
+      "name":"Counselor Education",
+      "abbreviation":"COUN",
+      "url":""
+    },
+    {
+      "name":"Cultural Studies in Education",
+      "abbreviation":"CSE",
+      "url":""
+    },
+    {
+      "name":"Design",
+      "abbreviation":"DSGN",
+      "url":""
+    },
+    {
+      "name":"Electrical and Computer Engineering",
+      "abbreviation":"ECE",
+      "url":""
+    },
+    {
+      "name":"Economics",
+      "abbreviation":"ECON",
+      "url":""
+    },
+    {
+      "name":"Education of the Deaf",
+      "abbreviation":"EDDE",
+      "url":""
+    },
+    {
+      "name":"Educational Psychology",
+      "abbreviation":"EDPY",
+      "url":""
+    },
+    {
+      "name":"Education",
+      "abbreviation":"EDUC",
+      "url":""
+    },
+    {
+      "name":"Ecology and Evolutionary Biology",
+      "abbreviation":"EEB",
+      "url":""
+    },
+    {
+      "name":"Engineering Fundamentals",
+      "abbreviation":"EF",
+      "url":""
+    },
+    {
+      "name":"Educational Interpreting",
+      "abbreviation":"EI",
+      "url":""
+    },
+    {
+      "name":"Elementary Education",
+      "abbreviation":"ELED",
+      "url":""
+    },
+    {
+      "name":"Educational Leadership and Policy Studies",
+      "abbreviation":"ELPS",
+      "url":""
+    },
+    {
+      "name":"English Education",
+      "abbreviation":"ENED",
+      "url":""
+    },
+    {
+      "name":"English",
+      "abbreviation":"ENGL",
+      "url":""
+    },
+    {
+      "name":"Entrepreneurship",
+      "abbreviation":"ENT",
+      "url":""
+    },
+    {
+      "name":"Entomology and Plant Pathology",
+      "abbreviation":"EPP",
+      "url":""
+    },
+    {
+      "name":"Environmental and Soil Sciences",
+      "abbreviation":"ESS",
+      "url":""
+    },
+    {
+      "name":"Educational Technology",
+      "abbreviation":"ETEC",
+      "url":""
+    },
+    {
+      "name":"Food Science and Technology",
+      "abbreviation":"FDST",
+      "url":""
+    },
+    {
+      "name":"Finance",
+      "abbreviation":"FINC",
+      "url":""
+    },
+    {
+      "name":"Forestry",
+      "abbreviation":"FORS",
+      "url":""
+    },
+    {
+      "name":"French",
+      "abbreviation":"FREN",
+      "url":""
+    },
+    {
+      "name":"Forestry, Wildlife, and Fisheries",
+      "abbreviation":"FWF",
+      "url":""
+    },
+    {
+      "name":"First Year Studies",
+      "abbreviation":"FYS",
+      "url":""
+    },
+    {
+      "name":"Geography",
+      "abbreviation":"GEOG",
+      "url":""
+    },
+    {
+      "name":"Geology",
+      "abbreviation":"GEOL",
+      "url":""
+    },
+    {
+      "name":"German",
+      "abbreviation":"GERM",
+      "url":""
+    },
+    {
+      "name":"Global Studies",
+      "abbreviation":"GLBS",
+      "url":""
+    },
+    {
+      "name":"Higher Education Administration",
+      "abbreviation":"HEAM",
+      "url":""
+    },
+    {
+      "name":"Hebrew",
+      "abbreviation":"HEBR",
+      "url":""
+    },
+    {
+      "name":"History",
+      "abbreviation":"HIST",
+      "url":""
+    },
+    {
+      "name":"College Scholars Honors",
+      "abbreviation":"HONR",
+      "url":""
+    },
+    {
+      "name":"Human Resource Management",
+      "abbreviation":"HRM",
+      "url":""
+    },
+    {
+      "name":"Hotel, Restaurantand Tourism",
+      "abbreviation":"HRT",
+      "url":""
+    },
+    {
+      "name":"Haslam Scholars Program",
+      "abbreviation":"HSP",
+      "url":""
+    },
+    {
+      "name":"International Business",
+      "abbreviation":"IB",
+      "url":""
+    },
+    {
+      "name":"Interior Design",
+      "abbreviation":"IDS",
+      "url":""
+    },
+    {
+      "name":"Industrial Engineering",
+      "abbreviation":"IE",
+      "url":""
+    },
+    {
+      "name":"Industrial",
+      "abbreviation":"INDS",
+      "url":""
+    },
+    {
+      "name":"Information Management",
+      "abbreviation":"INMT",
+      "url":""
+    },
+    {
+      "name":"Interdisciplinary Programs",
+      "abbreviation":"INPG",
+      "url":""
+    },
+    {
+      "name":"Information Sciences",
+      "abbreviation":"INSC",
+      "url":""
+    },
+    {
+      "name":"Italian",
+      "abbreviation":"ITAL",
+      "url":""
+    },
+    {
+      "name":"Japanese",
+      "abbreviation":"JAPA",
+      "url":""
+    },
+    {
+      "name":"Journalism and Electronic Media",
+      "abbreviation":"JREM",
+      "url":""
+    },
+    {
+      "name":"Judaic Studies",
+      "abbreviation":"JST",
+      "url":""
+    },
+    {
+      "name":"Kinesiology",
+      "abbreviation":"KNS",
+      "url":""
+    },
+    {
+      "name":"Latin American and Caribbean Studies",
+      "abbreviation":"LAC",
+      "url":""
+    },
+    {
+      "name":"Linguistics",
+      "abbreviation":"LING",
+      "url":""
+    },
+    {
+      "name":"Marketing",
+      "abbreviation":"MARK",
+      "url":""
+    },
+    {
+      "name":"Mathematics",
+      "abbreviation":"MATH",
+      "url":""
+    },
+    {
+      "name":"Mechanical Engineering",
+      "abbreviation":"ME",
+      "url":""
+    },
+    {
+      "name":"Mathematics Education",
+      "abbreviation":"MEDU",
+      "url":""
+    },
+    {
+      "name":"Modern Foreign Languages and Literatures",
+      "abbreviation":"MFLL",
+      "url":""
+    },
+    {
+      "name":"Management",
+      "abbreviation":"MGT",
+      "url":""
+    },
+    {
+      "name":"Microbiology",
+      "abbreviation":"MICR",
+      "url":""
+    },
+    {
+      "name":"Medical Laboratory Science",
+      "abbreviation":"MLS",
+      "url":""
+    },
+    {
+      "name":"Military Science and Leadership",
+      "abbreviation":"MLSL",
+      "url":""
+    },
+    {
+      "name":"Medieval and Renaissance Studies",
+      "abbreviation":"MRST",
+      "url":""
+    },
+    {
+      "name":"Materials Science and Engineering",
+      "abbreviation":"MSE",
+      "url":""
+    },
+    {
+      "name":"Musicology",
+      "abbreviation":"MUCO",
+      "url":""
+    },
+    {
+      "name":"Music Education",
+      "abbreviation":"MUED",
+      "url":""
+    },
+    {
+      "name":"Music Ensemble",
+      "abbreviation":"MUEN",
+      "url":""
+    },
+    {
+      "name":"Music Instrumental",
+      "abbreviation":"MUIN",
+      "url":""
+    },
+    {
+      "name":"Music Jazz",
+      "abbreviation":"MUJZ",
+      "url":""
+    },
+    {
+      "name":"Music Keyboard",
+      "abbreviation":"MUKB",
+      "url":""
+    },
+    {
+      "name":"Music Performance",
+      "abbreviation":"MUPF",
+      "url":""
+    },
+    {
+      "name":"Music General",
+      "abbreviation":"MUSC",
+      "url":""
+    },
+    {
+      "name":"Music Technology",
+      "abbreviation":"MUTC",
+      "url":""
+    },
+    {
+      "name":"Music Theory",
+      "abbreviation":"MUTH",
+      "url":""
+    },
+    {
+      "name":"Music Voice",
+      "abbreviation":"MUVC",
+      "url":""
+    },
+    {
+      "name":"Nuclear Engineering",
+      "abbreviation":"NE",
+      "url":""
+    },
+    {
+      "name":"Nursing",
+      "abbreviation":"NURS",
+      "url":""
+    },
+    {
+      "name":"Nutrition",
+      "abbreviation":"NUTR",
+      "url":""
+    },
+    {
+      "name":"Public Relations",
+      "abbreviation":"PBRL",
+      "url":""
+    },
+    {
+      "name":"Persian",
+      "abbreviation":"PERS",
+      "url":""
+    },
+    {
+      "name":"Philosophy",
+      "abbreviation":"PHIL",
+      "url":""
+    },
+    {
+      "name":"Physics",
+      "abbreviation":"PHYS",
+      "url":""
+    },
+    {
+      "name":"Plant Sciences",
+      "abbreviation":"PLSC",
+      "url":""
+    },
+    {
+      "name":"Political Science",
+      "abbreviation":"POLS",
+      "url":""
+    },
+    {
+      "name":"Portuguese",
+      "abbreviation":"PORT",
+      "url":""
+    },
+    {
+      "name":"Psychology",
+      "abbreviation":"PSYC",
+      "url":""
+    },
+    {
+      "name":"Public Health",
+      "abbreviation":"PUBH",
+      "url":""
+    },
+    {
+      "name":"Physical Education",
+      "abbreviation":"PYED",
+      "url":""
+    },
+    {
+      "name":"Retail and Consumer Sciences",
+      "abbreviation":"RCS",
+      "url":""
+    },
+    {
+      "name":"Reading Education",
+      "abbreviation":"REED",
+      "url":""
+    },
+    {
+      "name":"Religious Studies",
+      "abbreviation":"REST",
+      "url":""
+    },
+    {
+      "name":"Recreation and Sport Management",
+      "abbreviation":"RSM",
+      "url":""
+    },
+    {
+      "name":"Russian",
+      "abbreviation":"RUSS",
+      "url":""
+    },
+    {
+      "name":"Science Education",
+      "abbreviation":"SCED",
+      "url":""
+    },
+    {
+      "name":"Supply Chain Management",
+      "abbreviation":"SCM",
+      "url":""
+    },
+    {
+      "name":"Sociology",
+      "abbreviation":"SOCI",
+      "url":""
+    },
+    {
+      "name":"Social Work",
+      "abbreviation":"SOWK",
+      "url":""
+    },
+    {
+      "name":"Spanish",
+      "abbreviation":"SPAN",
+      "url":""
+    },
+    {
+      "name":"Special Education",
+      "abbreviation":"SPED",
+      "url":""
+    },
+    {
+      "name":"Social Science Education",
+      "abbreviation":"SSCE",
+      "url":""
+    },
+    {
+      "name":"Statistics",
+      "abbreviation":"STAT",
+      "url":""
+    },
+    {
+      "name":"Theatre",
+      "abbreviation":"THEA",
+      "url":""
+    },
+    {
+      "name":"Theory and Practice in Teacher Education",
+      "abbreviation":"TPTE",
+      "url":""
+    },
+    {
+      "name":"University Honors",
+      "abbreviation":"UNHO",
+      "url":""
+    },
+    {
+      "name":"University Studies",
+      "abbreviation":"UNST",
+      "url":""
+    },
+    {
+      "name":"Wildlife and Fisheries Science",
+      "abbreviation":"WFS",
+      "url":""
+    },
+    {
+      "name":"World Language Education/English as a Second Language Education",
+      "abbreviation":"WLEL",
+      "url":""
+    },
+    {
+      "name":"Women's Studies",
+      "abbreviation":"WOST",
+      "url":""
+    }
+  ]
+}
