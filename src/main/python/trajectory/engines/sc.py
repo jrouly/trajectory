@@ -62,7 +62,7 @@ def scrape(args):
         full_title = re.compile("\s+").split(course.text)
         prefix = full_title[0]
         cnum = full_title[1]
-        title = ' '.join(full_title[2:-1])
+        title = ' '.join(full_title[3:])
         title = title.replace("'", "")
 
         # Identify coid to get description.
