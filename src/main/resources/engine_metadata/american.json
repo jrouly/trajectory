@@ -1,0 +1,364 @@
+{
+  "school":{
+    "name":"American University",
+    "abbreviation":"AU",
+    "url":"american.edu"
+  },
+  "departments":[
+    {
+      "name":"Accounting",
+      "abbreviation":"ACCT",
+      "url":""
+    },
+    {
+      "name":"American Studies",
+      "abbreviation":"AMST",
+      "url":""
+    },
+    {
+      "name":"Anthropology",
+      "abbreviation":"ANTH",
+      "url":""
+    },
+    {
+      "name":"Arabic",
+      "abbreviation":"ARAB",
+      "url":""
+    },
+    {
+      "name":"Art History",
+      "abbreviation":"ARTH",
+      "url":""
+    },
+    {
+      "name":"Arts",
+      "abbreviation":"ARTS",
+      "url":""
+    },
+    {
+      "name":"Asian Studies",
+      "abbreviation":"ASIA",
+      "url":""
+    },
+    {
+      "name":"Audio Technology",
+      "abbreviation":"ATEC",
+      "url":""
+    },
+    {
+      "name":"Arab World Studies",
+      "abbreviation":"AWST",
+      "url":""
+    },
+    {
+      "name":"Biology",
+      "abbreviation":"BIO",
+      "url":""
+    },
+    {
+      "name":"Chemistry",
+      "abbreviation":"CHEM",
+      "url":""
+    },
+    {
+      "name":"Chinese",
+      "abbreviation":"CHIN",
+      "url":""
+    },
+    {
+      "name":"Communications",
+      "abbreviation":"COMM",
+      "url":""
+    },
+    {
+      "name":"Computer Science",
+      "abbreviation":"CSC",
+      "url":""
+    },
+    {
+      "name":"Economics",
+      "abbreviation":"ECON",
+      "url":""
+    },
+    {
+      "name":"Education",
+      "abbreviation":"EDU",
+      "url":""
+    },
+    {
+      "name":"Environmental Science",
+      "abbreviation":"ENVS",
+      "url":""
+    },
+    {
+      "name":"Finances",
+      "abbreviation":"FIN",
+      "url":""
+    },
+    {
+      "name":"French",
+      "abbreviation":"FREN",
+      "url":""
+    },
+    {
+      "name":"Game Design",
+      "abbreviation":"GAME",
+      "url":""
+    },
+    {
+      "name":"Graphic Design",
+      "abbreviation":"GDES",
+      "url":""
+    },
+    {
+      "name":"German",
+      "abbreviation":"GERM",
+      "url":""
+    },
+    {
+      "name":"General Education",
+      "abbreviation":"GNED",
+      "url":""
+    },
+    {
+      "name":"Government",
+      "abbreviation":"GOVT",
+      "url":""
+    },
+    {
+      "name":"Hebrew",
+      "abbreviation":"HEBR",
+      "url":""
+    },
+    {
+      "name":"Health and Fitness",
+      "abbreviation":"HFIT",
+      "url":""
+    },
+    {
+      "name":"History",
+      "abbreviation":"HIST",
+      "url":""
+    },
+    {
+      "name":"Honors",
+      "abbreviation":"HNRS",
+      "url":""
+    },
+    {
+      "name":"International Business",
+      "abbreviation":"IBUS",
+      "url":""
+    },
+    {
+      "name":"Interdisciplinary",
+      "abbreviation":"IDIS",
+      "url":""
+    },
+    {
+      "name":"Italian",
+      "abbreviation":"ITAL",
+      "url":""
+    },
+    {
+      "name":"Information Technology",
+      "abbreviation":"ITEC",
+      "url":""
+    },
+    {
+      "name":"Japanese",
+      "abbreviation":"JAPN",
+      "url":""
+    },
+    {
+      "name":"Justice and Law",
+      "abbreviation":"JLC",
+      "url":""
+    },
+    {
+      "name":"Jewish Studies",
+      "abbreviation":"JWST",
+      "url":""
+    },
+    {
+      "name":"Korean",
+      "abbreviation":"KOR",
+      "url":""
+    },
+    {
+      "name":"School of Business",
+      "abbreviation":"KSB",
+      "url":""
+    },
+    {
+      "name":"Literature",
+      "abbreviation":"LIT",
+      "url":""
+    },
+    {
+      "name":"Mathematics",
+      "abbreviation":"MATH",
+      "url":""
+    },
+    {
+      "name":"Management",
+      "abbreviation":"MGMT",
+      "url":""
+    },
+    {
+      "name":"Marketing",
+      "abbreviation":"MKTG",
+      "url":""
+    },
+    {
+      "name":"Music",
+      "abbreviation":"MUS",
+      "url":""
+    },
+    {
+      "name":"Neuroscience",
+      "abbreviation":"NEUR",
+      "url":""
+    },
+    {
+      "name":"Performing Arts",
+      "abbreviation":"PERF",
+      "url":""
+    },
+    {
+      "name":"Persian",
+      "abbreviation":"PERS",
+      "url":""
+    },
+    {
+      "name":"Philosophy",
+      "abbreviation":"PHIL",
+      "url":""
+    },
+    {
+      "name":"Physics",
+      "abbreviation":"PHYS",
+      "url":""
+    },
+    {
+      "name":"Project Monitoring and Evaluation",
+      "abbreviation":"PME",
+      "url":""
+    },
+    {
+      "name":"Portuguese",
+      "abbreviation":"PORT",
+      "url":""
+    },
+    {
+      "name":"Professional Science",
+      "abbreviation":"PSM",
+      "url":""
+    },
+    {
+      "name":"Psychology",
+      "abbreviation":"PSYC",
+      "url":""
+    },
+    {
+      "name":"Public Administration",
+      "abbreviation":"PUAD",
+      "url":""
+    },
+    {
+      "name":"Public Health",
+      "abbreviation":"PUBH",
+      "url":""
+    },
+    {
+      "name":"Real Estate",
+      "abbreviation":"REAL",
+      "url":""
+    },
+    {
+      "name":"Religion",
+      "abbreviation":"RELG",
+      "url":""
+    },
+    {
+      "name":"Russian",
+      "abbreviation":"RUSS",
+      "url":""
+    },
+    {
+      "name":"Semester Abroad",
+      "abbreviation":"SABD",
+      "url":""
+    },
+    {
+      "name":"International Studies 1",
+      "abbreviation":"SIS",
+      "url":""
+    },
+    {
+      "name":"International Studies 2",
+      "abbreviation":"SISA",
+      "url":""
+    },
+    {
+      "name":"International Studies - Government",
+      "abbreviation":"SISG",
+      "url":""
+    },
+    {
+      "name":"International Studies - Cultural Understanding",
+      "abbreviation":"SISU",
+      "url":""
+    },
+    {
+      "name":"Sociology",
+      "abbreviation":"SOCY",
+      "url":""
+    },
+    {
+      "name":"School of Public Affairs",
+      "abbreviation":"SPA",
+      "url":""
+    },
+    {
+      "name":"Spanish",
+      "abbreviation":"SPAN",
+      "url":""
+    },
+    {
+      "name":"Statistics",
+      "abbreviation":"STAT",
+      "url":""
+    },
+    {
+      "name":"Swahili",
+      "abbreviation":"SWAH",
+      "url":""
+    },
+    {
+      "name":"Teaching English as a Foreign Language",
+      "abbreviation":"TEFL",
+      "url":""
+    },
+    {
+      "name":"Teachin English as a Second Language",
+      "abbreviation":"TESL",
+      "url":""
+    },
+    {
+      "name":"Women, Gender, and Sexuality Studies",
+      "abbreviation":"WGSS",
+      "url":""
+    },
+    {
+      "name":"Writing",
+      "abbreviation":"WRTG",
+      "url":""
+    },
+    {
+      "name":"Washington Semester",
+      "abbreviation":"WSEM",
+      "url":""
+    }
+  ]
+}
