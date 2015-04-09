@@ -55,6 +55,7 @@ def scrape(args):
 
     prereq_dict = {} # Dictionary of Course : Prereq match list
     for prefix in prefixes:
+        if prefix not in ["cosc"]: continue
         catalog_index = requests.get(catalog_index_url % prefix)
         soup = BeautifulSoup(catalog_index.text)
 
@@ -69,7 +70,6 @@ def scrape(args):
             # Generate metadata
             log.debug(course.text)
             full_title = re.compile("\s+").split(course.text)
-            prefix = full_title[0]
             cnum = full_title[1]
             title = ' '.join(full_title[3:])
 
