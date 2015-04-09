@@ -1,0 +1,844 @@
+{
+  "school":{
+    "name":"University of Utah",
+    "abbreviation":"Utah",
+    "url":"utah.edu"
+  },
+  "departments":[
+    {
+      "name":"Accounting",
+      "abbreviation":"ACCTG",
+      "url":""
+    },
+    {
+      "name":"Aerospace",
+      "abbreviation":"AEROS",
+      "url":""
+    },
+    {
+      "name":"Anatomy",
+      "abbreviation":"ANAT",
+      "url":""
+    },
+    {
+      "name":"Anesthesiology",
+      "abbreviation":"ANES",
+      "url":""
+    },
+    {
+      "name":"Anthropology",
+      "abbreviation":"ANTH",
+      "url":""
+    },
+    {
+      "name":"Arabic",
+      "abbreviation":"ARAB",
+      "url":""
+    },
+    {
+      "name":"Architecture",
+      "abbreviation":"ARCH",
+      "url":""
+    },
+    {
+      "name":"Art",
+      "abbreviation":"ART",
+      "url":""
+    },
+    {
+      "name":"Art History",
+      "abbreviation":"ARTH",
+      "url":""
+    },
+    {
+      "name":"American Sign Language",
+      "abbreviation":"ASL",
+      "url":""
+    },
+    {
+      "name":"Asian Studies",
+      "abbreviation":"ASTP",
+      "url":""
+    },
+    {
+      "name":"Astronomy",
+      "abbreviation":"ASTR",
+      "url":""
+    },
+    {
+      "name":"Athletics",
+      "abbreviation":"ATHL",
+      "url":""
+    },
+    {
+      "name":"Atmospheric Sciences",
+      "abbreviation":"ATMOS",
+      "url":""
+    },
+    {
+      "name":"Ballet",
+      "abbreviation":"BALLE",
+      "url":""
+    },
+    {
+      "name":"Biochemistry",
+      "abbreviation":"BIO C",
+      "url":""
+    },
+    {
+      "name":"Bioengineering",
+      "abbreviation":"BIOEN",
+      "url":""
+    },
+    {
+      "name":"Biology",
+      "abbreviation":"BIOL",
+      "url":""
+    },
+    {
+      "name":"Biological Chemistry",
+      "abbreviation":"BLCHM",
+      "url":""
+    },
+    {
+      "name":"Biomedical Informatics",
+      "abbreviation":"BMI",
+      "url":""
+    },
+    {
+      "name":"Business",
+      "abbreviation":"BUS",
+      "url":""
+    },
+    {
+      "name":"Cambodian",
+      "abbreviation":"CAMB",
+      "url":""
+    },
+    {
+      "name":"Ceramics",
+      "abbreviation":"CERM",
+      "url":""
+    },
+    {
+      "name":"Chemical Engineering",
+      "abbreviation":"CH EN",
+      "url":""
+    },
+    {
+      "name":"Chemistry",
+      "abbreviation":"CHEM",
+      "url":""
+    },
+    {
+      "name":"Chinese",
+      "abbreviation":"CHIN",
+      "url":""
+    },
+    {
+      "name":"Classical Civilizations",
+      "abbreviation":"CL CV",
+      "url":""
+    },
+    {
+      "name":"Comparative Literature and Cultural Studies",
+      "abbreviation":"CLCS",
+      "url":""
+    },
+    {
+      "name":"City and Metropolitan Planning",
+      "abbreviation":"CMP",
+      "url":""
+    },
+    {
+      "name":"Communication",
+      "abbreviation":"COMM",
+      "url":""
+    },
+    {
+      "name":"Coptic Studies",
+      "abbreviation":"COPTC",
+      "url":""
+    },
+    {
+      "name":"Computer Science",
+      "abbreviation":"CS",
+      "url":""
+    },
+    {
+      "name":"Communication Science and Disorders",
+      "abbreviation":"CSD",
+      "url":""
+    },
+    {
+      "name":"Center for Teaching and Learning",
+      "abbreviation":"CTLE",
+      "url":""
+    },
+    {
+      "name":"Civil and Environmental Engineering",
+      "abbreviation":"CVEEN",
+      "url":""
+    },
+    {
+      "name":"Dance",
+      "abbreviation":"DANC",
+      "url":""
+    },
+    {
+      "name":"Dentistry",
+      "abbreviation":"DENT",
+      "url":""
+    },
+    {
+      "name":"Dermatology",
+      "abbreviation":"DERM",
+      "url":""
+    },
+    {
+      "name":"Design",
+      "abbreviation":"DES",
+      "url":""
+    },
+    {
+      "name":"Drawing",
+      "abbreviation":"DRAW",
+      "url":""
+    },
+    {
+      "name":"Entertainment Arts and Engineering",
+      "abbreviation":"EAE",
+      "url":""
+    },
+    {
+      "name":"Electrical And Computer Engineering",
+      "abbreviation":"ECE",
+      "url":""
+    },
+    {
+      "name":"Economics",
+      "abbreviation":"ECON",
+      "url":""
+    },
+    {
+      "name":"Education Culture and Society",
+      "abbreviation":"ECS",
+      "url":""
+    },
+    {
+      "name":"Educational Psychology",
+      "abbreviation":"ED PS",
+      "url":""
+    },
+    {
+      "name":"Education",
+      "abbreviation":"EDU",
+      "url":""
+    },
+    {
+      "name":"Environmental Humanities",
+      "abbreviation":"EHUM",
+      "url":""
+    },
+    {
+      "name":"Educational Leadership and Policy",
+      "abbreviation":"ELP",
+      "url":""
+    },
+    {
+      "name":"Engineering",
+      "abbreviation":"ENGIN",
+      "url":""
+    },
+    {
+      "name":"English",
+      "abbreviation":"ENGL",
+      "url":""
+    },
+    {
+      "name":"Entrepreneurship",
+      "abbreviation":"ENTP",
+      "url":""
+    },
+    {
+      "name":"Environmental and Sustainability Studies",
+      "abbreviation":"ENVST",
+      "url":""
+    },
+    {
+      "name":"Exercise and Sport Science",
+      "abbreviation":"ESS",
+      "url":""
+    },
+    {
+      "name":"ESS Fitness Course",
+      "abbreviation":"ESSF",
+      "url":""
+    },
+    {
+      "name":"Ethnic Studies",
+      "abbreviation":"ETHNC",
+      "url":""
+    },
+    {
+      "name":"Fine Arts",
+      "abbreviation":"FA",
+      "url":""
+    },
+    {
+      "name":"Family and Consumer Studies",
+      "abbreviation":"FCS",
+      "url":""
+    },
+    {
+      "name":"Film Studies",
+      "abbreviation":"FILM",
+      "url":""
+    },
+    {
+      "name":"Finance",
+      "abbreviation":"FINAN",
+      "url":""
+    },
+    {
+      "name":"Family and Preventative Medicine",
+      "abbreviation":"FP MD",
+      "url":""
+    },
+    {
+      "name":"French",
+      "abbreviation":"FRNCH",
+      "url":""
+    },
+    {
+      "name":"Geology and Geophysics",
+      "abbreviation":"GEO",
+      "url":""
+    },
+    {
+      "name":"Geography",
+      "abbreviation":"GEOG",
+      "url":""
+    },
+    {
+      "name":"German",
+      "abbreviation":"GERM",
+      "url":""
+    },
+    {
+      "name":"Gerontology",
+      "abbreviation":"GERON",
+      "url":""
+    },
+    {
+      "name":"Gender Studies",
+      "abbreviation":"GNDR",
+      "url":""
+    },
+    {
+      "name":"Greek",
+      "abbreviation":"GREEK",
+      "url":""
+    },
+    {
+      "name":"Health Promotion and Education",
+      "abbreviation":"H EDU",
+      "url":""
+    },
+    {
+      "name":"Human Genetics",
+      "abbreviation":"H GEN",
+      "url":""
+    },
+    {
+      "name":"Hebrew",
+      "abbreviation":"HEBR",
+      "url":""
+    },
+    {
+      "name":"Hindi",
+      "abbreviation":"HINDI",
+      "url":""
+    },
+    {
+      "name":"History",
+      "abbreviation":"HIST",
+      "url":""
+    },
+    {
+      "name":"Hinckley Institute",
+      "abbreviation":"HNKLY",
+      "url":""
+    },
+    {
+      "name":"Honors College",
+      "abbreviation":"HONOR",
+      "url":""
+    },
+    {
+      "name":"Health Society and Policy",
+      "abbreviation":"HSP",
+      "url":""
+    },
+    {
+      "name":"Humanities",
+      "abbreviation":"HUM",
+      "url":""
+    },
+    {
+      "name":"International Affairs and Global Enterprises",
+      "abbreviation":"IAGE",
+      "url":""
+    },
+    {
+      "name":"Internal Medicine",
+      "abbreviation":"INTMD",
+      "url":""
+    },
+    {
+      "name":"Information Systems",
+      "abbreviation":"IS",
+      "url":""
+    },
+    {
+      "name":"Italian",
+      "abbreviation":"ITAL",
+      "url":""
+    },
+    {
+      "name":"Japanese",
+      "abbreviation":"JAPAN",
+      "url":""
+    },
+    {
+      "name":"Korean",
+      "abbreviation":"KOREA",
+      "url":""
+    },
+    {
+      "name":"Languages and Literature",
+      "abbreviation":"LANG",
+      "url":""
+    },
+    {
+      "name":"Latin American Studies",
+      "abbreviation":"LAS",
+      "url":""
+    },
+    {
+      "name":"Latin",
+      "abbreviation":"LATIN",
+      "url":""
+    },
+    {
+      "name":"Law",
+      "abbreviation":"LAW",
+      "url":""
+    },
+    {
+      "name":"Leadership",
+      "abbreviation":"LDRSP",
+      "url":""
+    },
+    {
+      "name":"LEAP Program",
+      "abbreviation":"LEAP",
+      "url":""
+    },
+    {
+      "name":"Linguistics",
+      "abbreviation":"LING",
+      "url":""
+    },
+    {
+      "name":"Mathematis",
+      "abbreviation":"MATH",
+      "url":""
+    },
+    {
+      "name":"Masters in Business Adminstration",
+      "abbreviation":"MBA",
+      "url":""
+    },
+    {
+      "name":"Molecular Biology",
+      "abbreviation":"MBIOL",
+      "url":""
+    },
+    {
+      "name":"Pharmacy - Medical Chemistry",
+      "abbreviation":"MD CH",
+      "url":""
+    },
+    {
+      "name":"Medicine, Interdisciplinary",
+      "abbreviation":"MD ID",
+      "url":""
+    },
+    {
+      "name":"Medical Laboratory Science",
+      "abbreviation":"MD LB",
+      "url":""
+    },
+    {
+      "name":"Clinical Research Center",
+      "abbreviation":"MDCRC",
+      "url":""
+    },
+    {
+      "name":"Mechanical Engineering",
+      "abbreviation":"ME EN",
+      "url":""
+    },
+    {
+      "name":"Metallurgical Engineering",
+      "abbreviation":"MET E",
+      "url":""
+    },
+    {
+      "name":"Mining Engineering",
+      "abbreviation":"MG EN",
+      "url":""
+    },
+    {
+      "name":"Management",
+      "abbreviation":"MGT",
+      "url":""
+    },
+    {
+      "name":"Masters in Healthcare Administration",
+      "abbreviation":"MHA",
+      "url":""
+    },
+    {
+      "name":"Middle East Studies",
+      "abbreviation":"MID E",
+      "url":""
+    },
+    {
+      "name":"Military Sciences",
+      "abbreviation":"MIL S",
+      "url":""
+    },
+    {
+      "name":"Marketing",
+      "abbreviation":"MKTG",
+      "url":""
+    },
+    {
+      "name":"Materials Sciences and Engineering",
+      "abbreviation":"MSE",
+      "url":""
+    },
+    {
+      "name":"Masters of Science and Technology",
+      "abbreviation":"MST",
+      "url":""
+    },
+    {
+      "name":"Music",
+      "abbreviation":"MUSC",
+      "url":""
+    },
+    {
+      "name":"Nahuatl",
+      "abbreviation":"NAHTL",
+      "url":""
+    },
+    {
+      "name":"Navajo",
+      "abbreviation":"NAVJO",
+      "url":""
+    },
+    {
+      "name":"Neurology",
+      "abbreviation":"NEURO",
+      "url":""
+    },
+    {
+      "name":"Neuroscience",
+      "abbreviation":"NEUSC",
+      "url":""
+    },
+    {
+      "name":"Neurosurgery",
+      "abbreviation":"NSURG",
+      "url":""
+    },
+    {
+      "name":"Nuclear Engineering",
+      "abbreviation":"NUCL",
+      "url":""
+    },
+    {
+      "name":"Nursing",
+      "abbreviation":"NURS",
+      "url":""
+    },
+    {
+      "name":"Nutrition",
+      "abbreviation":"NUTR",
+      "url":""
+    },
+    {
+      "name":"Naval Science",
+      "abbreviation":"NV SC",
+      "url":""
+    },
+    {
+      "name":"Obstetrics",
+      "abbreviation":"OBST",
+      "url":""
+    },
+    {
+      "name":"Occupational Therapy",
+      "abbreviation":"OC TH",
+      "url":""
+    },
+    {
+      "name":"Operations and Information Systems",
+      "abbreviation":"OIS",
+      "url":""
+    },
+    {
+      "name":"Oncological Sciences",
+      "abbreviation":"ONCSC",
+      "url":""
+    },
+    {
+      "name":"Ophthalmmology",
+      "abbreviation":"OPHTH",
+      "url":""
+    },
+    {
+      "name":"Orthodontics",
+      "abbreviation":"ORTHO",
+      "url":""
+    },
+    {
+      "name":"Public Administration",
+      "abbreviation":"PADMN",
+      "url":""
+    },
+    {
+      "name":"Pathology",
+      "abbreviation":"PATH",
+      "url":""
+    },
+    {
+      "name":"Pharmacotherapy",
+      "abbreviation":"PCTH",
+      "url":""
+    },
+    {
+      "name":"Pediatrics",
+      "abbreviation":"PED",
+      "url":""
+    },
+    {
+      "name":"Persian",
+      "abbreviation":"PERS",
+      "url":""
+    },
+    {
+      "name":"Phys Medicine and Rehabilitation",
+      "abbreviation":"PH MD",
+      "url":""
+    },
+    {
+      "name":"Physical Therapy",
+      "abbreviation":"PH TH",
+      "url":""
+    },
+    {
+      "name":"Pharmacology and Toxicology",
+      "abbreviation":"PH TX",
+      "url":""
+    },
+    {
+      "name":"Pharmacy",
+      "abbreviation":"PHARM",
+      "url":""
+    },
+    {
+      "name":"Pharmaceutics and Pharmaceutics Chemistry",
+      "abbreviation":"PHCEU",
+      "url":""
+    },
+    {
+      "name":"Philosophy",
+      "abbreviation":"PHIL",
+      "url":""
+    },
+    {
+      "name":"Physics",
+      "abbreviation":"PHYS",
+      "url":""
+    },
+    {
+      "name":"Political Science",
+      "abbreviation":"POLS",
+      "url":""
+    },
+    {
+      "name":"Parks, Recreation, and Tourism",
+      "abbreviation":"PRT",
+      "url":""
+    },
+    {
+      "name":"PRT Outdoor Adventure - Land",
+      "abbreviation":"PRTL",
+      "url":""
+    },
+    {
+      "name":"PRT Outdoor Adventure - Snow",
+      "abbreviation":"PRTS",
+      "url":""
+    },
+    {
+      "name":"PRT Outdoor Adventure - Water",
+      "abbreviation":"PRTW",
+      "url":""
+    },
+    {
+      "name":"Pashto",
+      "abbreviation":"PSHTO",
+      "url":""
+    },
+    {
+      "name":"Psychology",
+      "abbreviation":"PSY",
+      "url":""
+    },
+    {
+      "name":"Psychiatry",
+      "abbreviation":"PSYCT",
+      "url":""
+    },
+    {
+      "name":"Portuguese",
+      "abbreviation":"PTGSE",
+      "url":""
+    },
+    {
+      "name":"Public Policy",
+      "abbreviation":"PUBPL",
+      "url":""
+    },
+    {
+      "name":"Quechua",
+      "abbreviation":"QUECH",
+      "url":""
+    },
+    {
+      "name":"Radiology",
+      "abbreviation":"RDLGY",
+      "url":""
+    },
+    {
+      "name":"Radiation Oncology",
+      "abbreviation":"RDONC",
+      "url":""
+    },
+    {
+      "name":"Real Estate Development",
+      "abbreviation":"REDEV",
+      "url":""
+    },
+    {
+      "name":"Religious Studies",
+      "abbreviation":"RELS",
+      "url":""
+    },
+    {
+      "name":"Rehabilitation Sciences",
+      "abbreviation":"RHSCI",
+      "url":""
+    },
+    {
+      "name":"Russian",
+      "abbreviation":"RUSS",
+      "url":""
+    },
+    {
+      "name":"Social and Behavioral Sciences",
+      "abbreviation":"SBS",
+      "url":""
+    },
+    {
+      "name":"Sociology",
+      "abbreviation":"SOC",
+      "url":""
+    },
+    {
+      "name":"Special Education",
+      "abbreviation":"SP ED",
+      "url":""
+    },
+    {
+      "name":"Spanish",
+      "abbreviation":"SPAN",
+      "url":""
+    },
+    {
+      "name":"Senior Electives",
+      "abbreviation":"SR EL",
+      "url":""
+    },
+    {
+      "name":"Statistics",
+      "abbreviation":"STAT",
+      "url":""
+    },
+    {
+      "name":"Strategy",
+      "abbreviation":"STRAT",
+      "url":""
+    },
+    {
+      "name":"Surgery",
+      "abbreviation":"SURG",
+      "url":""
+    },
+    {
+      "name":"Social Work",
+      "abbreviation":"SW",
+      "url":""
+    },
+    {
+      "name":"Theater",
+      "abbreviation":"THEA",
+      "url":""
+    },
+    {
+      "name":"Turkish",
+      "abbreviation":"TURK",
+      "url":""
+    },
+    {
+      "name":"University College Academic Advising",
+      "abbreviation":"UC",
+      "url":""
+    },
+    {
+      "name":"Undergraduate Studies",
+      "abbreviation":"UGS",
+      "url":""
+    },
+    {
+      "name":"Health Sciences Center",
+      "abbreviation":"UUHSC",
+      "url":""
+    },
+    {
+      "name":"Vietnamese",
+      "abbreviation":"VIET",
+      "url":""
+    },
+    {
+      "name":"Writing and Rhetoric Studies",
+      "abbreviation":"WRTG",
+      "url":""
+    }
+  ]
+}
