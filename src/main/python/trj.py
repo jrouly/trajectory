@@ -37,6 +37,9 @@ def main():
     download_parser.add_argument("targets", choices=engines.list(),
             nargs="+",
             help="Scraping targets, select one or more.")
+    download_parser.add_argument("--cs",
+            help="Shortcut for just CS departments.",
+            action="store_true")
 
     # Create arguments for exporting.
     export_parser = subparsers.add_parser("export",

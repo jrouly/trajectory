@@ -55,7 +55,7 @@ def scrape(args):
 
     prereq_dict = {} # Dictionary of Course : Prereq match list
     for prefix in prefixes:
-        if prefix not in ["cosc"]: continue
+        if args.cs and prefix not in ["cosc"]: continue
         catalog_index = requests.get(catalog_index_url % prefix)
         soup = BeautifulSoup(catalog_index.text)
 

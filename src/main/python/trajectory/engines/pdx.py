@@ -53,6 +53,8 @@ def scrape(args):
         cnum = re.sub('[/]', '-', full_title[1])
         title = ' '.join(full_title[2:])
 
+        if args.cs and prefix.lower() not in ["cs"]: continue
+
         try:
             course_url = course['href']
             course_soup = BeautifulSoup(requests.get(course_url).text)

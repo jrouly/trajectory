@@ -66,6 +66,12 @@ def scrape(args):
             # Loop over the departments defined in the metadata.
             departments = metadata.get("departments")
             for department in departments:
+
+                if args.cs and department.get("abbreviation").lower() not in [
+                        "ec", "ka", "cosc", "csce", "ait",
+                        "cs", "cis", "csc", "csci"
+                        ]: continue
+
                 department_query = session.query(Department)\
                         .join(University)\
                         .filter(Department.name==department.get("name"))\

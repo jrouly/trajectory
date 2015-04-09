@@ -48,7 +48,7 @@ def scrape(args):
 
     prereq_dict = {} # Dictionary of Course : Prereq match list
     for prefix in departments.keys():
-        if prefix not in ["cs"]: continue
+        if args.cs and prefix not in ["cis"]: continue
         catalog_index = requests.get(catalog_index_url % prefix)
         soup = BeautifulSoup(catalog_index.text)
 
