@@ -257,9 +257,25 @@ def evaluation(did=None):
             department=department,
             knowledge_areas=knowledge_areas,)
 
+
 ################################
 # Custom Filters and Functions #
 ################################
+
+@app.template_filter('ka_parse')
+def knowledge_area_abbreviation(ka):
+    """
+    Given an ACM knowledge area, split it up by its Abbreviation (eg. AL)
+    and its Title (eg. Algorithms and Complexity). This is done by
+    isolating the location of the abbreviation in the title string (where
+    the first left paren occurs) and only including the subsequent
+    characters.
+    """
+
+    return {
+            'abbr': ka.title,
+            'title': ka.title[ka.title.find('(')+1:-1]
+    }
 
 @app.template_filter('course_count')
 def course_count(data):
