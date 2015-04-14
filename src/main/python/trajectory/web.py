@@ -204,6 +204,23 @@ def compare_departments(daid=1, dbid=1): #TODO: set more reasonable defaults
             db_vector=b_vector_string,
     )
 
+# Define routing for departmental evaluation tool.
+@app.route('/evaluate/')
+@app.route('/evaluate/<string:did>/')
+def evaluation(did=None):
+
+    # Attempt to retreive the requested department.
+    department = None
+    try:
+        department = session.query(Department).get(did)
+    except:
+        pass
+    if department is None:
+        abort(404)
+
+    return render_template("evaluate_department.html",
+            department=department)
+
 ################################
 # Custom Filters and Functions #
 ################################
