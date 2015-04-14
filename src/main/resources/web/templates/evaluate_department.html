@@ -28,6 +28,25 @@
 
 <div class="row">
   <div class="col-lg-12">
+    <div class="form-horizontal" action="" method="get">
+      <div class="form-group">
+        <div class="col-lg-12">
+          <div class="input-group">
+            <span class="input-group-addon"><i class="fa fa-search"></i></span>
+            <input type="text" class="form-control" autocomplete="off"
+              placeholder="Course number or title"
+              {% if not university.departments %}disabled{% endif %}
+              id="search" data-list="#course-list">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="row">
+  <div class="col-lg-12">
 
     <div class="in" id="course-list-table">
       <div class="table-responsive">
