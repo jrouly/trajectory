@@ -131,8 +131,8 @@ def prereq_tree(cid, format="node"):
     return response
 
 # Define routing for department comparison page.
-@app.route('/compare/departments/')
-@app.route('/compare/departments/<string:daid>/<string:dbid>/')
+@app.route('/compare/')
+@app.route('/compare/<string:daid>/<string:dbid>/')
 def compare_departments(daid=None, dbid=None):
 
     if None in [daid, dbid]:
