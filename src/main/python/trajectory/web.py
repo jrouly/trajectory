@@ -133,7 +133,12 @@ def prereq_tree(cid, format="node"):
 # Define routing for department comparison page.
 @app.route('/compare/departments/')
 @app.route('/compare/departments/<string:daid>/<string:dbid>/')
-def compare_departments(daid=1, dbid=1): #TODO: set more reasonable defaults
+def compare_departments(daid=None, dbid=None):
+
+    if None in [daid, dbid]:
+        departments = app.db.query(Department).all()
+        return render_template("compare_departments_landing.html",
+                departments=departments)
 
     # Look up references to requested departments.
     department_a = app.db.query(Department).get(daid)

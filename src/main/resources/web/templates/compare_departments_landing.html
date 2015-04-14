@@ -1,0 +1,112 @@
+{% extends 'layout/base.html' %}
+
+{% block title %}Compare Departments{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+  <div class="row">
+    <div class="col-lg-12">
+      <h1>Compare Departments Tool</h1>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-12">
+    <ul class="breadcrumb">
+      <li></li>
+      <li class="active">Compare Departments</li>
+    </ul>
+  </div>
+</div>
+
+
+<div class="row">
+  <div class="col-lg-12">
+    <h1>About</h1>
+
+    <p>Departmental comparison compares the inferred topics of two distinct
+    university departments. It offers a set of high level statistical
+    comparisons, eg. the Jaccard coefficient of the two departments based
+    on their topical composition, as well as the cosine and Euclidean
+    distances between the topic vector of each department.</p>
+
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-12">
+    <p>Select two departments below to get started.</p>
+  </div>
+</div>
+
+
+<div class="row">
+
+  <form class="form-horizontal" id="d-select">
+
+    <div class="col-md-4">
+      <div class="form-group">
+        <div class="col-lg-12">
+          {% if departments %}
+          <select class="form-control" id="da-select">
+            {% for department in departments %}
+              <option value="{{department.id}}">
+                {{department.university.abbreviation}}
+                {{department.abbreviation}}
+              </option>
+            {% endfor %}
+          </select>
+          {% else %}
+          <p class="text-center text-danger">No departments found.</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="form-group">
+        <div class="col-lg-12">
+          {% if departments %}
+          <select class="form-control" id="db-select">
+            {% for department in departments %}
+              <option value="{{department.id}}">
+                {{department.university.abbreviation}}
+                {{department.abbreviation}}
+              </option>
+            {% endfor %}
+          </select>
+          {% else %}
+          <p class="text-center text-danger">No departments found.</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="form-group">
+        <div class="col-lg-12">
+          <input type="submit" value="Compare" class="form-control btn btn-default">
+        </div>
+      </div>
+    </div>
+
+  </form>
+
+</div>
+
+<script>
+$('#d-select').submit(function() {
+  var da = $('#da-select').val(),
+      db = $('#db-select').val(),
+      url = "{{url_for('compare_departments', daid='DA', dbid='DB')}}";
+
+  window.location = url.replace("DA", da)
+                       .replace("DB", db);
+
+  return false;
+});
+</script>
+
+{% endblock %}
