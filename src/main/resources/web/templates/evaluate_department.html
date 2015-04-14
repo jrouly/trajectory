@@ -100,14 +100,4 @@
   </div>
 </div>
 
-<script>
-$('.d-select').change(function() {
-  var d = $('#d-select').val(),
-      url = "{{url_for('compare_departments', daid='DA', dbid='DB')}}";
-
-  window.location = url.replace("DA", {{department.id}})
-                       .replace("DB", d);
-});
-</script>
-
 {% endblock %}
