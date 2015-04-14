@@ -52,16 +52,18 @@ def dashboard():
             universities=universities,
             result_sets=result_sets)
 
-# Define routing for university list.
-@app.route('/universities/')
-def university_list():
-    universities = app.db.query(University).all()
-    return render_template("universities.html",
-            universities=universities)
-
 # Define routing for university index pages.
+@app.route('/universities/')
 @app.route('/universities/<string:u>/')
 def university(u=None):
+
+    # If no university is requested, just serve up the uni list page.
+    if u is None:
+        universities = app.db.query(University).all()
+        return render_template("university_list.html",
+                universities=universities)
+
+    # If a university is requested, try to find it.
     university = app.db.query(University) \
             .filter(University.abbreviation==u) \
             .first()
