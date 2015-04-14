@@ -1,0 +1,39 @@
+{% extends 'layout/base.html' %}
+
+{% block title %}Departmental Evaluation{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+  <div class="row">
+    <div class="col-lg-12">
+      <h1>Departmental Evaluation Tool</h1>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-12">
+    <ul class="breadcrumb">
+      <li></li>
+      <li class="active">Evaluate</li>
+    </ul>
+  </div>
+</div>
+
+
+<div class="row">
+  <div class="col-lg-12">
+    <h1>About</h1>
+
+    <p>Departmental evaluation predicts which <a href="//acm.org">ACM</a>
+    knowledge areas a particular department's courses fall under. If
+    provided, this tool will additionally self-evaluate and display the
+    correctness of these predictions against a manually-annotated
+    ground-truth labeling of each course.</p>
+
+    <p><a href="{{url_for('university_list')}}">Select a department</a> to get started.</p>
+  </div>
+</div>
+
+{% endblock %}

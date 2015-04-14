@@ -208,17 +208,18 @@ def compare_departments(daid=1, dbid=1): #TODO: set more reasonable defaults
 
 # Define routing for departmental evaluation tool.
 @app.route('/evaluate/')
-@app.route('/evaluate/<string:did>/')
-def evaluation(did=None):
+@app.route('/evaluate/<string:u>/<string:d>/')
+def evaluation(u=None, d=None):
 
-    # Attempt to retreive the requested department.
-    department = None
-    try:
-        department = session.query(Department).get(did)
-    except:
-        pass
+    if u is None or d is None:
+        return render_template("evaluate_landing.html")
+
+    department = app.db.query(Department).join(University) \
+            .filter(University.abbreviation==u) \
+            .filter(Department.abbreviation==d) \
+            .first()
     if department is None:
-        abort(404)
+        abort(404) # department not found
 
     # Retrieve the set of predicted and ground truth knowledge area labels
     # for each course.
