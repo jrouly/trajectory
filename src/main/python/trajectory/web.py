@@ -222,20 +222,27 @@ def evaluation(did=None):
 
     # Retrieve the set of predicted and ground truth knowledge area labels
     # for each course.
-    knowledge_areas = {
-            'predicted': {
-                course.id: predicted_knowledge_areas(
-                                    course,
-                                    result_set=g.result_set_raw)
-                    for course in department.courses
-            },
-            'truth': {
-                course.id: ground_truth_knowledge_areas(
-                                    course,
-                                    result_set=g.result_set_raw)
-                    for course in department.courses
-            },
-    }
+    try:
+        knowledge_areas = {
+                'predicted': {
+                    course.id: predicted_knowledge_areas(
+                                        course,
+                                        result_set=g.result_set_raw)
+                        for course in department.courses
+                },
+                'truth': {
+                    course.id: ground_truth_knowledge_areas(
+                                        course,
+                                        result_set=g.result_set_raw)
+                        for course in department.courses
+                },
+        }
+    except RuntimeError:
+        # Return empty knowledge area lists if an error is encountered.
+        knowledge_areas = {
+            'predicted': {course.id: [] for course in department.courses},
+            'truth': {course.id: [] for course in department.courses},
+        }
 
     # Calculate the jaccard coefficient of the prediction/truth sets, use
     # this as a 'correctness' metric.
