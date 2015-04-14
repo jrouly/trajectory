@@ -58,7 +58,9 @@
                 </a></td>
               <td>
                 {% for ka in knowledge_areas['predicted'][cid] %}
-                {{ ka }}{% if not loop.last %}, {% endif %}
+                {% set ka=ka|ka_parse %}
+                <abbr title="{{ka['abbr']}}">{{ka['title']}}</abbr>{#
+                #}{% if not loop.last %}, {% endif %}
                 {% else %}
                 <span class="text-danger">None.</span>
                 {% endfor %}
