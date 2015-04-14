@@ -42,13 +42,18 @@ def predicted_knowledge_areas(course, result_set=None):
     course_topics = set(topic_list(course))
 
     # Generate the list of knowledge areas with conceptual overlap.
-    inferred_knowledge_areas = [
+    inferred_knowledge_areas = set([
             ka for ka in knowledge_areas_by_topic
             if course_topics.intersection(knowledge_areas_by_topic[ka])
-    ]
+    ])
 
     return inferred_knowledge_areas
 
 
 def ground_truth_knowledge_areas(course, result_set=None):
+    """
+    Look up the set of ground truth manually annotated knowledge areas for
+    a course. If none are found, simply return an empty list.
+    """
+
     return ["bar", "foo"]
