@@ -9,10 +9,10 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/vendor/normalize.css') }}" media="screen">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/vendor/bootstrap.min.css') }}" media="screen">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/vendor/bootswatch.min.css') }}" media="screen">
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/font-awesome.min.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/trajectory.css') }}" media="screen">
 
-    <script src="//d3js.org/d3.v3.min.js"></script>
+    <script src="{{ url_for('static', filename='js/vendor/d3.v3.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/vendor/jquery.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/vendor/bootstrap.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/vendor/jquery.hideseek.min.js') }}"></script>
