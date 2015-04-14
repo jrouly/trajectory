@@ -39,6 +39,7 @@
               <th>Title</th>
               <th>Knowledge Areas</th>
               <th>Ground Truth</th>
+              <th><abbr title="Jaccard Coefficient">Correctness</abbr></th>
             </tr>
           </thead>
           <tbody id="course-list">
@@ -47,6 +48,7 @@
             {% set u = department.university.abbreviation %}
             {% set d = department.abbreviation %}
             {% set cid = course.id %}
+            {% set correctness = knowledge_areas['jaccard'][cid] %}
 
             <tr id="{{course.id}}">
               <td>{{loop.index}}</td>
@@ -67,6 +69,14 @@
                 {% else %}
                 <span class="text-danger">None.</span>
                 {% endfor %}
+              </td>
+              <td>
+                <span class="{#
+                #}{% if correctness >= 0.75 %}text-success{#
+                #}{% elif correctness >= 0.5 %}text-warning{#
+                #}{% else %}text-danger{% endif %}">
+                {{ correctness }}
+                </span>
               </td>
             </tr>
 

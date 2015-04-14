@@ -10,6 +10,7 @@ from trajectory.utils.prereqs import get_prereq_graph
 from trajectory.utils.vector import jaccard, topic_list, topic_vector
 from trajectory.utils.vector import cosine_similarity, euclidean_distance
 from trajectory.utils.knowledge_areas import predicted_knowledge_areas
+from trajectory.utils.knowledge_areas import ground_truth_knowledge_areas
 from trajectory.models import University, Department, Course, ResultSet
 from trajectory.models import Topic, CourseTopicAssociation
 from trajectory.models.meta import session
@@ -226,7 +227,18 @@ def evaluation(did=None):
                                     result_set=g.result_set_raw)
                     for course in department.courses
             },
-            'truth': [],
+            'truth': {
+                course.id: ground_truth_knowledge_areas(
+                                    course,
+                                    result_set=g.result_set_raw)
+                    for course in department.courses
+            },
+    }
+    knowledge_areas['jaccard'] = {
+            course.id: jaccard(
+                knowledge_areas['predicted'][course.id],
+                knowledge_areas['truth'][course.id]
+            ) for course in department.courses
     }
 
     return render_template("evaluate_department.html",
