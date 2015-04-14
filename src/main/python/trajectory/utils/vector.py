@@ -8,9 +8,10 @@ Define a collection of vectorization and vector analysis tools.
 
 def jaccard(a, b):
     """
-    Calculate the jaccard coefficient of two lists.
+    Calculate the jaccard coefficient of two sets.
     """
 
+    (a, b) = (set(a), set(b))
     n = len(a.intersection(b))
     d = float(len(a) + len(b) - n)
     if d == 0:
