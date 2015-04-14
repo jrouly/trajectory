@@ -220,6 +220,8 @@ def evaluation(did=None):
     if department is None:
         abort(404)
 
+    # Retrieve the set of predicted and ground truth knowledge area labels
+    # for each course.
     knowledge_areas = {
             'predicted': {
                 course.id: predicted_knowledge_areas(
@@ -234,6 +236,9 @@ def evaluation(did=None):
                     for course in department.courses
             },
     }
+
+    # Calculate the jaccard coefficient of the prediction/truth sets, use
+    # this as a 'correctness' metric.
     knowledge_areas['jaccard'] = {
             course.id: jaccard(
                 knowledge_areas['predicted'][course.id],
