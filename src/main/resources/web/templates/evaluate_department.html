@@ -9,7 +9,7 @@
 <div class="page-header">
   <div class="row">
     <div class="col-lg-12">
-      <h1>{{ university.abbreviation }} {{ department.name }}</h1>
+      <h1>{{ university.abbreviation }} {{ department.name }} Evaluation</h1>
     </div>
   </div>
 </div>
@@ -29,8 +29,6 @@
 <div class="row">
   <div class="col-lg-12">
 
-    <h3><i class="fa fa-bed"></i>Course List</h3>
-
     <div class="in" id="course-list-table">
       <div class="table-responsive">
         <table class="table table-hover">
@@ -39,6 +37,8 @@
               <th>#</th>
               <th>Number</th>
               <th>Title</th>
+              <th>Knowledge Areas</th>
+              <th>Ground Truth</th>
             </tr>
           </thead>
           <tbody id="course-list">
@@ -48,54 +48,27 @@
             {% set d = department.abbreviation %}
             {% set cid = course.id %}
 
-            <tr data-toggle="collapse" data-target=".collapse{{course.id}}"
-              class="clickable" id="{{course.id}}">
+            <tr id="{{course.id}}">
               <td>{{loop.index}}</td>
               <td>{{ course.number }}</td>
               <td><a href="{{ url_for('course', u=u, d=d, cid=cid) }}">
                 {{ course.title }}
                 </a></td>
-            </tr>
-
-            <tr class="ignore info collapse collapse{{course.id}}">
-              <td colspan="3">
-                <div class="collapse collapse{{course.id}}">
-                  {{ course.description_raw }}
-                </div>
+              <td>
+                {% for ka in knowledge_areas['predicted'][cid] %}
+                {{ ka }}{% if not loop.last %}, {% endif %}
+                {% else %}
+                <span class="text-danger">None.</span>
+                {% endfor %}
+              </td>
+              <td>
+                {% for ka in knowledge_areas['truth'][cid] %}
+                {{ ka }}{% if not loop.last %}, {% endif %}
+                {% else %}
+                <span class="text-danger">None.</span>
+                {% endfor %}
               </td>
             </tr>
-
-            <tr class="ignore warning info collapse collapse{{course.id}}">
-              <td colspan="3">
-                <div class="collapse collapse{{course.id}}">
-                  {{ course.description }}
-                </div>
-              </td>
-            </tr>
-
-              {% for topic_association in course.topics
-                  if topic_association.result_set_id == grs.id %}
-              {% set topic = topic_association.topic %}
-              {% set proportion = topic_association.proportion %}
-
-              <tr class="ignore success collapse collapse{{course.id}}">
-                <td colspan="3">
-                  <div class="collapse collapse{{course.id}}">
-                    ({{ '%.3f' % proportion }})
-                    <a href="{{url_for('topics', _anchor=topic.id)}}">
-                      {{ topic.words }}</a>
-                  </div>
-                </td>
-              </tr>
-              {% else %}
-              <tr class="ignore collapse danger collapse{{course.id}}">
-                <td colspan="3">
-                  <div class="collapse collapse{{course.id}}">
-                    No topics inferred.
-                  </div>
-                </td>
-              </tr>
-              {% endfor %}
 
             {% else %}
             <tr>

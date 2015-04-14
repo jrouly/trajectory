@@ -7,8 +7,9 @@ import pickle
 
 from trajectory import config as TRJ
 from trajectory.utils.prereqs import get_prereq_graph
-from trajectory.utils.common import jaccard, topic_list, topic_vector
-from trajectory.utils.common import cosine_similarity, euclidean_distance
+from trajectory.utils.vector import jaccard, topic_list, topic_vector
+from trajectory.utils.vector import cosine_similarity, euclidean_distance
+from trajectory.utils.knowledge_areas import predicted_knowledge_areas
 from trajectory.models import University, Department, Course, ResultSet
 from trajectory.models import Topic, CourseTopicAssociation
 from trajectory.models.meta import session
@@ -218,8 +219,19 @@ def evaluation(did=None):
     if department is None:
         abort(404)
 
+    knowledge_areas = {
+            'predicted': {
+                course.id: predicted_knowledge_areas(
+                                    course,
+                                    result_set=g.result_set_raw)
+                    for course in department.courses
+            },
+            'truth': [],
+    }
+
     return render_template("evaluate_department.html",
-            department=department)
+            department=department,
+            knowledge_areas=knowledge_areas,)
 
 ################################
 # Custom Filters and Functions #
