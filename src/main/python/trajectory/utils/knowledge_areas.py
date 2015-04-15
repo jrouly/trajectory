@@ -35,11 +35,11 @@ def predicted_knowledge_areas(course, result_set=None):
     # This is the list of course objects representing knowledge areas.
     knowledge_areas = knowledge_areas.courses
     knowledge_areas_by_topic = {
-            ka:set(topic_list(ka))
+            ka:set(topic_list(ka, result_set=result_set))
             for ka in knowledge_areas
     }
 
-    course_topics = set(topic_list(course))
+    course_topics = set(topic_list(course, result_set=result_set))
 
     # Generate the list of knowledge areas with conceptual overlap.
     inferred_knowledge_areas = set([
