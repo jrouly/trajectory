@@ -24,7 +24,7 @@ run=1
 # Environment setup
 
 # Check for errors.
-set -e
+set +e
 
 # Create results directory.
 rm -rf results
@@ -68,6 +68,12 @@ for iter in $iter_values; do
             --course-file results/*/documents.csv \
             --alpha $alpha --beta $beta --iterations $iter
 
+  if [[ $? != 0 ]]; then
+    echo "> Error during learning step of experiment."
+    run=$((run + 1))
+    continue
+  fi
+
   # Remove old results.
   rm -rf results/*
 
@@ -76,6 +82,6 @@ for iter in $iter_values; do
 done
 done
 done
-done | tee run-tests.log
+done | tee -a run-tests.log
 
 exit
