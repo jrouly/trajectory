@@ -58,7 +58,8 @@
               <th>Title</th>
               <th>Knowledge Areas</th>
               <th>Ground Truth</th>
-              <th><abbr title="Jaccard Coefficient">Correctness</abbr></th>
+              <th><abbr title="Percentage correctness">Percent</abbr></th>
+              <th><abbr title="Jaccard Coefficient">Jaccard</abbr></th>
             </tr>
           </thead>
           <tbody id="course-list">
@@ -69,9 +70,11 @@
             {% set cid = course.id %}
 
             {% if knowledge_areas['truth'][course.id] %}
-            {% set correctness = knowledge_areas['jaccard'][cid] %}
+            {% set jaccard = knowledge_areas['jaccard'][cid] %}
+            {% set percent = knowledge_areas['percent'][cid] %}
             {% else %}
-            {% set correctness = "N/A" %}
+            {% set jaccard = "N/A" %}
+            {% set percent = "N/A" %}
             {% endif %}
 
             <tr id="{{course.id}}">
@@ -100,11 +103,22 @@
               </td>
               <td>
                 <span class="{#
-                #}{% if correctness == "N/A" %}{#
-                #}{% elif correctness >= 0.75 %}text-success{#
-                #}{% elif correctness >= 0.5 %}text-warning{#
+                #}{% if percent == "N/A" %}{#
+                #}{% elif percent >= 0.75 %}text-success{#
+                #}{% elif percent >= 0.5 %}text-warning{#
                 #}{% else %}text-danger{% endif %}">
-                {{ correctness }}
+                {% if percent == "N/A" %}{{ percent }}
+                {% else %}{{ "%.2f" % percent }}{% endif %}
+                </span>
+              </td>
+              <td>
+                <span class="{#
+                #}{% if jaccard == "N/A" %}{#
+                #}{% elif jaccard >= 0.75 %}text-success{#
+                #}{% elif jaccard >= 0.5 %}text-warning{#
+                #}{% else %}text-danger{% endif %}">
+                {% if jaccard == "N/A" %}{{ jaccard }}
+                {% else %}{{ "%.2f" % jaccard }}{% endif %}
                 </span>
               </td>
             </tr>

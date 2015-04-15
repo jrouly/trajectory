@@ -221,6 +221,8 @@ def evaluation(u=None, d=None):
     if u is None or d is None:
         return render_template("evaluate_landing.html")
 
+    import numpy
+
     department = app.db.query(Department).join(University) \
             .filter(University.abbreviation==u) \
             .filter(Department.abbreviation==d) \
@@ -250,13 +252,22 @@ def evaluation(u=None, d=None):
             'truth': {course.id: [] for course in department.courses},
         }
 
-    # Calculate the jaccard coefficient of the prediction/truth sets, use
-    # this as a 'correctness' metric.
+    # Calculate the jaccard coefficient and percentage correct of the
+    # prediction/truth sets, use these as 'correctness' metrics.
     knowledge_areas['jaccard'] = {
-            course.id: jaccard(
+            course.id: float(jaccard(
                 knowledge_areas['predicted'][course.id],
                 knowledge_areas['truth'][course.id]
-            ) for course in department.courses
+            )) for course in department.courses
+            if knowledge_areas['truth'][course.id]
+    }
+    knowledge_areas['percent'] = {
+            course.id:
+                float(len(set(knowledge_areas['predicted'][course.id])\
+                    .intersection(set(knowledge_areas['truth'][course.id])))\
+                / len(knowledge_areas['truth'][course.id]))
+            for course in department.courses
+            if knowledge_areas['truth'][course.id]
     }
 
     return render_template("evaluate_department.html",
