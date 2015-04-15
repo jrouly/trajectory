@@ -36,11 +36,12 @@ cp data.db data.db.bkp
 ##################################################
 # Execution
 
-# Iterate through values.
-for alpha in $alpha_values; do
-for beta in $beta_values; do
-for topics in $topic_values; do
-for iter in $iter_values; do
+run_experiment() {
+  local run=$1
+  local alpha=$2
+  local beta=$3
+  local topics=$4
+  local iter=$5
 
   # Print run information.
   date +%Y.%m.%d.%H.%M.%S
@@ -60,28 +61,33 @@ for iter in $iter_values; do
             -words 10 \
             -in data \
             -out results &>> "logs/learn-$run.log"
+}
 
-  # Read in results.
-  echo "Importing results."
-  bin/scrape import-results \
-            --topic-file results/*/topics.csv \
-            --course-file results/*/documents.csv \
-            --alpha $alpha --beta $beta --iterations $iter
+# Iterate through values.
+for alpha in $alpha_values; do
+for beta in $beta_values; do
+for topics in $topic_values; do
+for iter in $iter_values; do
 
-  if [[ $? != 0 ]]; then
-    echo "> Error during learning step of experiment."
-    run=$((run + 1))
-    continue
-  fi
+  # Delay experiment creation time.
+  sleep 2
 
-  # Remove old results.
-  rm -rf results/*
-
+  # Fork experiment to background.
+  run_experiment $run $alpha $beta $topics $iter &
   run=$((run + 1))
 
 done
 done
 done
 done | tee -a run-tests.log
+
+
+#  # Read in results.
+#  echo "Importing results."
+#  bin/scrape import-results \
+#            --topic-file results/*/topics.csv \
+#            --course-file results/*/documents.csv \
+#            --alpha $alpha --beta $beta --iterations $iter
+
 
 exit
