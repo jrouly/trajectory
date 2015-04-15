@@ -5,17 +5,14 @@
 
 # Document-topic similarity.
 # Defaults to number of topics.
-#alpha_values="1 10 100 250 500 1000"
-alpha_values="1 2 3"
+alpha_values="1 10 100 250 500 1000"
 
 # Document-word similarity.
 # Defaults to 0.01.
-#beta_values="0.0001 0.001 0.01 0.1 0.25 0.5 0.75 1.0"
-beta_values="0.0001"
+beta_values="0.0001 0.001 0.01 0.1 0.25 0.5 0.75 1.0"
 
 # Number of topics to infer.
-#topic_values="100 250 500 750 1000"
-topic_values="100"
+topic_values="100 250 500 750 1000"
 
 # Number of iterations to run.
 iter_values="100"
@@ -39,12 +36,11 @@ cp data.db data.db.bkp
 ##################################################
 # Execution
 
-run_experiment() {
-  local run=$1
-  local iter=$2
-  local topics=$3
-  local alpha=$4
-  local beta=$5
+# Iterate through values.
+for alpha in $alpha_values; do
+for beta in $beta_values; do
+for topics in $topic_values; do
+for iter in $iter_values; do
 
   # Print run information.
   date +%Y.%m.%d.%H.%M.%S
@@ -71,24 +67,15 @@ run_experiment() {
             --topic-file results/*/topics.csv \
             --course-file results/*/documents.csv \
             --alpha $alpha --beta $beta --iterations $iter
-}
 
-# Iterate through values.
-for alpha in $alpha_values; do
-  for beta in $beta_values; do
-    for topics in $topic_values; do
-      for iter in $iter_values; do
+  # Remove old results.
+  rm -rf results/*
 
-        run_experiment $run $iter $topics $alpha $beta
+  run=$((run + 1))
 
-        # Remove old results.
-        rm -rf results/*
-
-        run=$((run + 1))
-
-      done
-    done
-  done
 done
+done
+done
+done | tee run-tests.log
 
 exit
