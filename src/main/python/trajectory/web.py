@@ -239,9 +239,7 @@ def evaluation(u=None, d=None):
                         for course in department.courses
                 },
                 'truth': {
-                    course.id: ground_truth_knowledge_areas(
-                                        course,
-                                        result_set=g.result_set_raw)
+                    course.id: ground_truth_knowledge_areas(course)
                         for course in department.courses
                 },
         }

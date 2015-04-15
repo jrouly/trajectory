@@ -12,7 +12,7 @@ PROGRAM_DESC = "This Python application is used to acquire (scrape, clean) a dat
 PROGRAM_VERSION = PROGRAM_NAME + " 0.1"
 
 # Program home directory.
-import sys, os
+import sys, os, json
 if os.environ.get("TRJ_HOME") is None:
     print("Environment variable TRJ_HOME not set. Exiting.")
     sys.exit( 1 )
@@ -30,6 +30,7 @@ __RESOURCES = os.path.join(HOME, "src", "main", "resources")
 # ACM Data Files
 ACM_EXEMPLARS = os.path.join(__RESOURCES, "acm", "exemplar-descriptions.txt")
 ACM_KA = os.path.join(__RESOURCES, "acm", "knowledge-areas.txt")
+KA_TRUTH = json.load(open(os.path.join(__RESOURCES, "acm", "ground-truth.json")))
 
 # Stop words cache.
 __STOP_WORDS_FILE = os.path.join(HOME, __RESOURCES, "stoplists", "en.txt")

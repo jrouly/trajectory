@@ -50,10 +50,54 @@ def predicted_knowledge_areas(course, result_set=None):
     return inferred_knowledge_areas
 
 
-def ground_truth_knowledge_areas(course, result_set=None):
+def ground_truth_knowledge_areas(course):
     """
     Look up the set of ground truth manually annotated knowledge areas for
     a course. If none are found, simply return an empty list.
     """
 
-    return ["bar", "foo"]
+    from trajectory.models import University, Department, Course
+    from trajectory.models.meta import session
+    from trajectory import config as TRJ
+    import json
+
+    # Handle an empty course request.
+    if course is None:
+        return set([])
+
+    # Attempt to retrieve list of KAs from the ground truth set.
+    try:
+        university = TRJ.KA_TRUTH.get(course.department.university.abbreviation)
+        department = university.get(course.department.abbreviation)
+        labels = department.get(str(course.number))
+    except:
+        return set([])
+
+    if labels is None:
+        return set([])
+
+    # Kind of a hack, but guarantees the entered abbreviations will be
+    # unique to a knowledge area.
+    labels = ["(%s)" % label for label in labels]
+
+    # Query database for knowledge areas.
+    knowledge_areas = session.query(Department).join(University)\
+            .filter(University.abbreviation=="ACM")\
+            .filter(Department.abbreviation=="KA")\
+            .first()
+
+    # Handle case where ACM/KA is not present in the database.
+    if knowledge_areas is None:
+        raise RuntimeError("Knowledge areas not defined.")
+
+    # This is the list of course objects representing knowledge areas.
+    knowledge_areas = knowledge_areas.courses
+
+    ground_truth_labels = [
+            ka for ka in knowledge_areas
+            if ka.title[ka.title.find('('):] in labels
+    ]
+
+    return ground_truth_labels
+
+

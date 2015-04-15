@@ -67,7 +67,12 @@
             {% set u = department.university.abbreviation %}
             {% set d = department.abbreviation %}
             {% set cid = course.id %}
+
+            {% if knowledge_areas['truth'][course.id] %}
             {% set correctness = knowledge_areas['jaccard'][cid] %}
+            {% else %}
+            {% set correctness = "N/A" %}
+            {% endif %}
 
             <tr id="{{course.id}}">
               <td>{{loop.index}}</td>
@@ -86,14 +91,17 @@
               </td>
               <td>
                 {% for ka in knowledge_areas['truth'][cid] %}
-                {{ ka }}{% if not loop.last %}, {% endif %}
+                {% set ka=ka|ka_parse %}
+                <abbr title="{{ka['abbr']}}">{{ka['title']}}</abbr>{#
+                #}{% if not loop.last %}, {% endif %}
                 {% else %}
                 <span class="text-danger">None.</span>
                 {% endfor %}
               </td>
               <td>
                 <span class="{#
-                #}{% if correctness >= 0.75 %}text-success{#
+                #}{% if correctness == "N/A" %}{#
+                #}{% elif correctness >= 0.75 %}text-success{#
                 #}{% elif correctness >= 0.5 %}text-warning{#
                 #}{% else %}text-danger{% endif %}">
                 {{ correctness }}
