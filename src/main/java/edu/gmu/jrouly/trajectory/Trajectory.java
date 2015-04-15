@@ -232,7 +232,28 @@ public class Trajectory {
     if(!outPath.toFile().mkdir()) {
       System.out.println("> Unable to create run directory in output path.");
       System.exit(1);
+      return;
     }
+
+    // Write alpha, beta, iter, and num topics.
+    PrintWriter metaWriter;
+    try {
+      File metaFile = outPath.resolve(Paths.get("meta.txt")).toFile();
+      metaWriter = new PrintWriter(new FileWriter(metaFile));
+    } catch(IOException e) {
+      System.out.println("Unable to get a lock on output file.");
+      System.exit(1);
+      return;
+    }
+
+    // Print the meta information.
+    System.out.println("> Printing run meta information.");
+    metaWriter.println(alphaSum);
+    metaWriter.println(beta);
+    metaWriter.println(numIterations);
+    metaWriter.println(numTopics);
+    metaWriter.flush();
+    metaWriter.close(); // Close the active resource.
 
   }
 
