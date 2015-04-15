@@ -124,7 +124,12 @@ public class Trajectory {
       model.estimate();
     } catch(IOException exp) {
       // The model broke when reading in files.
-      System.err.println("> Error when reading from data set.");
+      System.out.println("> Error when reading from data set.");
+      System.exit(1);
+    } catch(Exception e) {
+      // Unknown error during estimation.
+      System.out.println("> Unknown error during estimation.");
+      e.printStackTrace();
       System.exit(1);
     }
 
@@ -201,13 +206,13 @@ public class Trajectory {
 
       // Verify that the I/O directories can be located on the disk.
       if(! inPath.toFile().isDirectory()) {
-        System.err.println("> Unable to resolve the input path \""
+        System.out.println("> Unable to resolve the input path \""
                             + inPath.toString() + "\".");
         System.exit(1);
       }
 
       if(! outPath.toFile().isDirectory()) {
-        System.err.println("> Unable to resolve the output path \""
+        System.out.println("> Unable to resolve the output path \""
                             + outPath.toString() + "\".");
         System.exit(1);
       }
@@ -215,7 +220,7 @@ public class Trajectory {
     } catch(InvalidPathException exp) {
 
       // The user-suggested path was invalid.
-      System.err.println("> Unable to resolve the requested I/O paths.");
+      System.out.println("> Unable to resolve the requested I/O paths.");
       System.exit(1);
 
     }
@@ -225,7 +230,7 @@ public class Trajectory {
         .format(new Date());
     outPath = outPath.resolve(Paths.get(timestamp));
     if(!outPath.toFile().mkdir()) {
-      System.err.println("> Unable to create run directory in output path.");
+      System.out.println("> Unable to create run directory in output path.");
       System.exit(1);
     }
 
@@ -328,7 +333,8 @@ public class Trajectory {
       documentWriter = new PrintWriter(new FileWriter(documentFile));
       topicWriter = new PrintWriter(new FileWriter(topicFile));
     } catch(IOException e) {
-      System.err.println("Unable to get a lock on output files.");
+      System.out.println("Unable to get a lock on output files.");
+      System.exit(1);
       return;
     }
 
