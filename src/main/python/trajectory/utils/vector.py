@@ -12,8 +12,8 @@ def jaccard(a, b):
     """
 
     (a, b) = (set(a), set(b))
-    n = len(a.intersection(b))
-    d = float(len(a) + len(b) - n)
+    n = len(a & b) # intersection
+    d = len(a | b) # union
     if d == 0:
         return 1
     return n / d
