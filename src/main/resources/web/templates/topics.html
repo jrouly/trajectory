@@ -64,7 +64,7 @@
           {% set proportion = course_assoc.proportion %}
 
           <p>({{ '%.3f' % proportion }})
-          <strong><a href="{{url_for('department', _anchor=course.id, u=university.abbreviation, d=department.abbreviation)}}">
+          <strong><a href="{{url_for('course', u=university.abbreviation, d=department.abbreviation, cid=course.id)}}">
             {{university.abbreviation}}
             {{department.abbreviation}}
             {{course.number}}</a></strong>
