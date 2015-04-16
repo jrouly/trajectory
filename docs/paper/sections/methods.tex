@@ -105,7 +105,7 @@ V-measure & 0.563 \\
 \subsection{Topic Modeling}
 \label{sec:topic-modeling}
 
-After the exploratory clustering process, we passed cleaned data into a topic modeling framework by exporting from the database layer to the filesystem in a structured ``bucket of files'' format.
+After the exploratory clustering process, we pass\-ed clean\-ed data into a topic modeling framework by exporting from the database layer to the filesystem in a structured ``bucket of files'' format.
 The Java MALLET library is used to perform \ac{lda} on the course description data.
 A data pipeline is constructed using the MALLET API that reads input data, tokenizes it, and trains an \ac{lda} topic model.
 The inferred topics are then exported to a common \ac{csv} format and read back into the database layer and applied to existing courses.
@@ -196,7 +196,7 @@ See \fref{fig:statistics} for an image of the departmental comparison tool.
 
 Using third party benchmarks discussed in \sref{sec:evaluation}, the tool also allows users to automatically evaluate the performance of a university department.
 The tool checks for conceptual overlap between courses and \ac{acm} Knowledge Areas and predicts Knowledge Area labels where overlap exists.
-Then, using manually annotated ground-truth labels, the tool self-evaluates its performance by measuring the similarity between prediction and truth label sets.
+Then, using manually annotated ground truth labels, the tool evaluates its performance by measuring the similarity between prediction and truth label sets.
 \fref{fig:evaluation} shows the evaluation tool in use.
 
 %------------------------------------------------

@@ -4,7 +4,7 @@
 %------------------------------------------------
 
 The preliminary results of this study have been positive.
-Exploratory K-Means clustering immediately resulted in clusters with a high level of completeness.
+Exploratory K-Means clustering resulted in clusters with a high level of completeness.
 Even superficial manual analysis of clusters indicated that the collected data were being appropriately grouped.
 Similar findings were encountered after the application of \ac{lda} topic modeling.
 
@@ -15,6 +15,14 @@ The first category of topic includes relevant terms and keywords found in the co
 A highly specialized course in a particular subfield might contain a set of these topics that relate to keywords from within the specific domain of the course.
 The second category of topic includes more generic words common to a large number of courses.
 Topics in this category often relate to concepts common across courses, eg.\ student research or exam and project information.
+
+%------------------------------------------------
+
+Take, for example, a computer science course in ethics.
+At George Mason University the seminal IT ethics course is CS 306.
+The primary topic inferred for this course in a given Result Set might look like ``ethic, comput, issu, profession, social, impact, privaci, digit, context, technolog.''
+Additionally, the prerequisite course to 306, CS 105, shares this same topic.
+While the topic itself is a frequency distribution over vocabulary, and does not quantifiably evaluate to an ``ethics'' topic, manual inspection clearly shows that this topic involves ethocs and social issues as they relate to technology professionals.
 
 %------------------------------------------------
 

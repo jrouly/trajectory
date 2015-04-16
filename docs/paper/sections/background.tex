@@ -1,4 +1,4 @@
-\section{Background on \acf{lda}}
+\section{Background on LDA}
 \label{sec:background}
 
 %------------------------------------------------
@@ -10,8 +10,8 @@ The topics discovered in a corpus can be used to categorize documents and provid
 
 %------------------------------------------------
 
-\acf{lda} is a specific type of topic modeling which assumes that a mix of multiple topics exist within a single document in some proportion (ie.\ were used to generate that document). \citep{Blei2003}
-\ac{lda} assumes a generative process where, for each word in the document, the algorithm selects a distribution over topics, selects a topic, and then selects a vocabulary term. \citep{Blei2003}
+\acf{lda} is a specific type of topic modeling which assumes that a mix of multiple topics exist within a single document in some proportion (ie.\ were used to generate that document). \cite{Blei2003}
+\ac{lda} assumes a generative process where, for each word in the document, the algorithm selects a distribution over topics, selects a topic, and then selects a vocabulary term. \cite{Blei2003}
 By picking a distribution over topics, multiple possible topics can be blended into a single document.
 Reversing this generative process is significantly more difficult because the topic distributions are unknown; this is what the ``hidden model'' or ``latent model'' refers to.
 
@@ -19,7 +19,7 @@ Reversing this generative process is significantly more difficult because the to
 
 \ac{lda} can best be understood through its generative process.
 Given the set of distributions as input, generating the corpus topics is a probabilistic process.
-Taking the variables $\theta_{d,k}$ (topic proportion for topic $k$ in document $d$), $\beta_{1:k}$ (topic $k$), $z_{d,n}$ (topic assignment for word $n$ in document $d$), and $w_{d,n}$ (the $n^{th}$ word in document $d$), \ac{lda} calculates the posterior probability in Equation~\ref{eq:posterior}. \citep{Blei2012}
+Taking the variables $\theta_{d,k}$ (topic proportion for topic $k$ in document $d$), $\beta_{1:k}$ (topic $k$), $z_{d,n}$ (topic assignment for word $n$ in document $d$), and $w_{d,n}$ (the $n^{th}$ word in document $d$), \ac{lda} calculates the posterior probability in Equation~\ref{eq:posterior}. \cite{Blei2012}
 
 \begin{equation}
 p(\beta_{1:K}, \theta_{1:D},z_{1:D} | w_{1:D}) = \frac{\beta_{1:K},
@@ -48,7 +48,7 @@ However it is based on related work.
 This work makes use of existing prerequisite relationships within departments.
 After inferring novel topics for each course, the conceptual overlap between prerequisite courses can be computed.
 However, similar approaches attempt to infer novel prerequisite relationships between courses.
-Yang et al.\ employ four distinct techniques to map courses into a conceptual space and then learn prerequisite relationships between similar courses.~\citep{Yang2015}
+Yang et al.\ employ four distinct techniques to map courses into a conceptual space and then learn prerequisite relationships between similar courses.~\cite{Yang2015}
 Two of their conceptual mapping techniques generate latent features, which have the downside of not being human-readable as in \ac{lda}.
 The remaining two techniques generate human-readable topics, but rely either on an outside source (Wikipedia) or simply represent concepts as the vocabulary of the document.
 The benefit of \ac{lda} as an information retrieval tool is its ability to generate pseudo human-readable topics while acting in a fully unsupervised manner on a single, large data set.
