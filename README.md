@@ -79,10 +79,5 @@ Activate the visualization server. See `gunicorn.py` for configuration settings.
 
 # ToDo
 
-1. Identify necessary RegExes to pull prereqs out of each existing engine.
-2. Create common engine frameworks for catalog installs to be more DRY.
-3. Extract ACM descriptions to an engine.
-4. Run test suite varying alpha/beta/topics parameters.
-5. Implement the "timeline" visualization tool (tracking prerequisites).
-6. Implement the "graph" visualization tool to visualize topics and courses.
-7. Refactor configuration objects as a module.
+1. Create common engine frameworks for catalog installs to be more DRY.
+2. Refactor configuration objects as a module.
