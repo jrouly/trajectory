@@ -70,3 +70,81 @@
   Url                      = {http://dx.doi.org/10.1145/2534860}
 }
 
+@InProceedings{Effland2015,
+  Title                    = {Focused Mining of University Course Descriptions from Highly Variable Sources (Abstract Only)},
+  Author                   = {Effland, Thomas D.},
+  Booktitle                = {Proceedings of the 46th ACM Technical Symposium on Computer Science Education},
+  Year                     = {2015},
+
+  Address                  = {New York, NY, USA},
+  Pages                    = {716--716},
+  Publisher                = {ACM},
+  Series                   = {SIGCSE '15},
+
+  Acmid                    = {2693630},
+  Doi                      = {10.1145/2676723.2693630},
+  ISBN                     = {978-1-4503-2966-8},
+  Keywords                 = {focused web traversal, hyper-text classification, information extraction, relevance prediction, weakly-supervised learning},
+  Location                 = {Kansas City, Missouri, USA},
+  Numpages                 = {1},
+  Owner                    = {jrouly},
+  Timestamp                = {2015.04.16},
+  Url                      = {http://doi.acm.org/10.1145/2676723.2693630}
+}
+
+@Article{krathwohl2002,
+  Title                    = {A revision of Bloom's taxonomy: An overview},
+  Author                   = {Krathwohl, David R},
+  Journal                  = {Theory into practice},
+  Year                     = {2002},
+  Number                   = {4},
+  Pages                    = {212--218},
+  Volume                   = {41},
+
+  Owner                    = {jrouly},
+  Publisher                = {Taylor \& Francis},
+  Timestamp                = {2015.04.16}
+}
+
+@Article{lloyd1982,
+  Title                    = {Least squares quantization in {PCM}},
+  Author                   = {Lloyd, S.},
+  Journal                  = {Information Theory, IEEE Transactions on},
+  Year                     = {1982},
+
+  Month                    = {Mar},
+  Number                   = {2},
+  Pages                    = {129-137},
+  Volume                   = {28},
+
+  Doi                      = {10.1109/TIT.1982.1056489},
+  ISSN                     = {0018-9448},
+  Keywords                 = {Least-squares approximation;PCM communication;Quantization
+(signal);Signal quantization;Amplitude modulation;Frequency;Helium;Laplace
+equations;Least squares methods;Phase change materials;Pulse
+modulation;Quantization;Sampling methods;Voltage},
+  Review                   = {This is the original KMeans paper.}
+}
+
+@InProceedings{Yang2015,
+  Title                    = {Concept Graph Learning from Educational Data},
+  Author                   = {Yang, Yiming and Liu, Hanxiao and Carbonell, Jaime and Ma, Wanli},
+  Booktitle                = {Proceedings of the Eighth ACM International Conference on Web Search and Data Mining},
+  Year                     = {2015},
+
+  Address                  = {New York, NY, USA},
+  Pages                    = {159--168},
+  Publisher                = {ACM},
+  Series                   = {WSDM '15},
+
+  Acmid                    = {2685292},
+  Doi                      = {10.1145/2684822.2685292},
+  ISBN                     = {978-1-4503-3317-7},
+  Keywords                 = {multi-scale directed graph learning, new inference algorithms, online education, transfer learning},
+  Location                 = {Shanghai, China},
+  Numpages                 = {10},
+  Owner                    = {jrouly},
+  Timestamp                = {2015.04.16},
+  Url                      = {http://doi.acm.org/10.1145/2684822.2685292}
+}
+
