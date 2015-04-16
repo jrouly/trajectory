@@ -31,7 +31,35 @@ p(\beta_{1:K}, \theta_{1:D},z_{1:D} | w_{1:D}) = \frac{\beta_{1:K},
 
 \noindent
 Using a variety of probabilistic methods to calculate or approximate the denominator (ie.\ evidence), \ac{lda} results in a usable set of vocabulary frequency distributions or topics.
-Specifically, Gibbs Sampling, a variety of Bayesian Inference, is used to approximate the \ac{lda} posterior probability. \cite{Blei2003}
+Specifically, Gibbs Sampling, a variety of Bayesian Inference, is used to approximate the \ac{lda} posterior probability.~\cite{Blei2003}
+
+%------------------------------------------------
+
+\subsection{Related Work}
+\label{sec:related-work}
+
+%------------------------------------------------
+
+The approach presented in this paper, specifically the inference of course concepts from catalog descriptions through \ac{lda} in order to evaluate and compare university departments, is novel.
+However it is based on related work.
+
+%------------------------------------------------
+
+This work makes use of existing prerequisite relationships within departments.
+After inferring novel topics for each course, the conceptual overlap between prerequisite courses can be computed.
+However, similar approaches attempt to infer novel prerequisite relationships between courses.
+Yang et al.\ employ four distinct techniques to map courses into a conceptual space and then learn prerequisite relationships between similar courses.~\citep{Yang2015}
+Two of their conceptual mapping techniques generate latent features, which have the downside of not being human-readable as in \ac{lda}.
+The remaining two techniques generate human-readable topics, but rely either on an outside source (Wikipedia) or simply represent concepts as the vocabulary of the document.
+The benefit of \ac{lda} as an information retrieval tool is its ability to generate pseudo human-readable topics while acting in a fully unsupervised manner on a single, large data set.
+
+%------------------------------------------------
+
+Additional work has been done in the area of course description retrieval.
+Our approach naively targets a set number of universities and tools web scrapers specifically to their computer science departments.
+Effland et al.\ introduces a robust web crawler system to automatically search for, identify, and extract course descriptions from disparate locations on the Internet.~\cite{Effland2015}
+Application of similar technology in this work was considered, and would greatly improve the scale of the analyzed data.
+
 
 %------------------------------------------------
 

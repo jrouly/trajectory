@@ -31,29 +31,3 @@ The primary software libraries employed to support this project are listed in \t
 
 %------------------------------------------------
 
-\section{Datasets}
-\label{app:datasets}
-
-See \tref{table:data-sources} for the list of universities analyzed and the number of courses scraped from their catalogs.
-Note that some universities had their entire catalog scraped (resulting in several thousand courses) while others only had the Computer Science (or comparable) department scraped.
-The additional departments are only used for visualization purposes --- \ac{lda} is restricted to the Computer Science courses at each university.
-
-\begin{table*}[ht]
-\centering
-\begin{tabular}{lll}
-\toprule
-University & Course Count & URL \\
-\midrule
-George Mason University & 6840 & \url{catalog.gmu.edu} \\
-Portland State University & 193 & \url{pdx.edu/computer-science} \\
-Kansas State University & 4045 & \url{catalog.k-state.edu} \\
-Louisiana State University & 59 & \url{catalog.lsu.edu} \\
-Rensselaer Polytechnic Institute & 61 & \url{catalog.rpi.edu} \\
-Stanford University & 69 & \url{explorecourses.stanford.edu} \\
-\bottomrule
-\end{tabular}
-\caption{Current data input sources\label{table:data-sources}}
-\end{table*}
-
-%------------------------------------------------
-

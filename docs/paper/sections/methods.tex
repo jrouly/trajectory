@@ -18,7 +18,8 @@ Finally, the collected data and inferred topics are presented in a user-facing w
 %------------------------------------------------
 
 The primary data manipulated in this study are university catalog course descriptions.
-The current experimental data sources are described in \sref{app:datasets}.
+The current experimental data sources are described in \tref{tbl:dataset}.
+Note that only Computer Science departments are included in this dataset, in order to simplify the evaluation process and the required number of inferred topics.
 Simple web scrapers were written using Python and BeautifulSoup to download publicly available descriptions from university catalogs.
 Descriptions and catalog webpages appear in a vast variety of different formats, structures, and HTML correctness, so a parser was written for each university to acquire the unstructured text.
 This text was then passed through a cleaning procedure to remove abbreviations and non-English characters, as well as common English stop words.
@@ -26,6 +27,31 @@ Finally the text was passed through a stemmer to strip morphology from the words
 At the same time, departmental course prerequisite data is collected from the catalog as well.
 Prerequisites are limited to courses in the database, meaning that references older courses that are no longer present in the catalog are ignored.
 Non-specific prerequisite references (eg.\ \texttt{400-level}) are ignored as well.
+
+%------------------------------------------------
+
+\begin{table}
+  \centering
+  \begin{tabular}{lcl}
+    \toprule
+    University & Course Count \\
+    \midrule
+    American University & 32 \\
+    George Mason University & 145 \\
+    Kansas State University & 83 \\
+    Louisiana State University & 59 \\
+    Portland State University & 190 \\
+    Rensselaer Polytechnic Institute & 61 \\
+    University of South Carolina & 64 \\
+    Stanford University & 69 \\
+    University of Utah & 142 \\
+    University of Tennessee, Knoxville & 29 \\
+    \midrule
+    ACM Exemplar Courses & 68 \\
+    \bottomrule
+  \end{tabular}
+  \caption{University dataset\label{tbl:dataset}}
+\end{table}
 
 %------------------------------------------------
 
@@ -42,7 +68,7 @@ The database layer also stores inferred topics.
 %------------------------------------------------
 
 In addition to \ac{lda}, other unsupervised machine learning tools can be applied to the same data set.
-Simple clustering algorithms (eg. K-Means) when given the same bag of words corpus as input act to identify groupings of similar documents according to their term frequency vector Euclidean distance. \cite{lloyd1982}
+Simple clustering algorithms (eg. K-Means) when given the same bag of words corpus as input act to identify groupings of similar documents according to their term frequency vector Euclidean distance.~\cite{lloyd1982}
 Additional, similar clustering algorithms can be applied in a similar manner.
 
 %------------------------------------------------
@@ -91,6 +117,8 @@ This also allows the presentation of different sets of inferred topics to the en
 The initialization parameters of MALLET's \ac{lda} implementation are summarized in \tref{table:lda-parameters}.
 Experiments were run varying parameters throughout the experimental range, including the MALLET default values.
 However, as the number of topics increased greatly beyond 750, and as $\beta$ decreased greatly below 0.0001, the MALLET framework began to encounter instability and errors.
+Any runs which encountered infinite or ``not-a-number'' values were immediately discarded.
+Ultimately 77 result sets were retained for analysis.
 
 %------------------------------------------------
 
@@ -136,32 +164,6 @@ Similarity metrics describing the relationship between the two departments are g
 The first metric is based solely on topic set cardinalities, while the remaining are based on a ``topic-vector'' representation of the department.
 The topic-vector is a binary vector where each feature indicates whether a particular topic was inferred for the given department.
 Features are unweighted as the topic-vector indicates only whether a topic is present in a department's topic set, and not its frequency of occurrence.
-
-%------------------------------------------------
-
-\subsection{Evaluation}
-\label{sec:evaluation}
-
-%------------------------------------------------
-
-The \ac{acm} maintains an annual writeup of guidelines for undergraduate computer science education. \cite{CS2013}
-These course descriptions will be employed as a benchmark corpus introducing implicit expert knowledge.
-The tools developed to measure similarity between courses and departments based on inferred topics will allow comparison of these benchmark course descriptions against real university data.
-
-%------------------------------------------------
-
-%\subsection{Timeline}
-%\label{sec:timeline}
-%
-%\begin{itemize}
-%  \item {\color{green}Complete CS 390}
-%  \item {\color{yellow}Collect 20 university databases (3/1)}
-%  \item Collect all of GMU's courses in addition to CS (3/5)
-%  \item {\color{green}Add stemming to the text cleaning process (done)}
-%  \item Include parsing prerequisite metadata (3/30)
-%  \item Test out topic modeling on prereq chain (long term)
-%  \item Build visualization tool (long term)
-%\end{itemize}
 
 %------------------------------------------------
 
