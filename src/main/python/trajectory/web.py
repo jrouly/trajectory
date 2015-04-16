@@ -180,7 +180,7 @@ def compare_departments(daid=None, dbid=None):
     }
 
     # Remove common topics from the topic sets.
-    intersection = department_a_topics.intersection(department_b_topics)
+    intersection = department_a_topics & department_b_topics
     department_a_topics = department_a_topics - intersection
     department_b_topics = department_b_topics - intersection
 

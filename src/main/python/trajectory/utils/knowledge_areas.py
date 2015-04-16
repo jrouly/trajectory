@@ -44,7 +44,7 @@ def predicted_knowledge_areas(course, result_set=None):
     # Generate the list of knowledge areas with conceptual overlap.
     inferred_knowledge_areas = set([
             ka for ka in knowledge_areas_by_topic
-            if course_topics.intersection(knowledge_areas_by_topic[ka])
+            if (course_topics & knowledge_areas_by_topic[ka])
     ])
 
     return inferred_knowledge_areas
