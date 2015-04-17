@@ -21,6 +21,7 @@ The primary data manipulated in this study are university catalog course descrip
 The current experimental data sources are described in \tref{tbl:dataset}.
 Note that only Computer Science departments are included in this dataset, in order to simplify the evaluation process and the required number of inferred topics.
 Simple web scrapers were written using Python and BeautifulSoup to download publicly available descriptions from university catalogs.
+These will be made publicly available at \url{http://github.com/jrouly/trajectory}.
 Descriptions and catalog webpages appear in a vast variety of different formats, structures, and HTML correctness, so a parser was written for each university to acquire the unstructured text.
 This text was then passed through a cleaning procedure to remove abbreviations and non-English characters, as well as common English stop words.
 Finally the text was passed through a stemmer to strip morphology from the words and eliminate duplicate terms.
@@ -50,7 +51,7 @@ Non-specific prerequisite references (eg.\ \texttt{400-level}) are ignored as we
     ACM Exemplar Courses & 68 \\
     \bottomrule
   \end{tabular}
-  \caption{University dataset\label{tbl:dataset}}
+  \caption{CS program statistics\label{tbl:dataset}}
 \end{table}
 
 %------------------------------------------------
