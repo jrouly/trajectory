@@ -1,5 +1,3 @@
-Archey3==0.4
-doge==3.3.0
 feedparser==5.1.3
 ipython==3.0.0
 lxml==3.4.2
