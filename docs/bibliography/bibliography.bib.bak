@@ -71,7 +71,7 @@
 }
 
 @InProceedings{Effland2015,
-  Title                    = {Focused Mining of University Course Descriptions from Highly Variable Sources (Abstract Only)},
+  Title                    = {Focused Mining of University Course Descriptions from Highly Variable Sources},
   Author                   = {Effland, Thomas D.},
   Booktitle                = {Proceedings of the 46th ACM Technical Symposium on Computer Science Education},
   Year                     = {2015},
