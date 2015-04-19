@@ -21,7 +21,12 @@ The primary data manipulated in this study are university catalog course descrip
 The current experimental data sources are described in \tref{tbl:dataset}.
 Note that only Computer Science departments are included in this dataset, in order to simplify the evaluation process and the required number of inferred topics.
 Simple web scrapers were written using Python and BeautifulSoup to download publicly available descriptions from university catalogs.
-These will be made publicly available at \url{http://github.com/jrouly/trajectory}.
+These will be made publicly available at
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% TODO: Blind replace.
+\url{http://redacted}.
+% \url{http://github.com/jrouly/trajectory}.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 Descriptions and catalog webpages appear in a vast variety of different formats, structures, and HTML correctness, so a parser was written for each university to acquire the unstructured text.
 This text was then passed through a cleaning procedure to remove abbreviations and non-English characters, as well as common English stop words.
 Finally the text was passed through a stemmer to strip morphology from the words and eliminate duplicate terms.
@@ -48,7 +53,7 @@ Non-specific prerequisite references (eg.\ \texttt{400-level}) are ignored as we
     University of Utah & 142 \\
     University of Tennessee, Knoxville & 29 \\
     \midrule
-    ACM Exemplar Courses & 68 \\
+    \ac{ec} & 68 \\
     \bottomrule
   \end{tabular}
   \caption{CS program statistics\label{tbl:dataset}}
@@ -69,14 +74,19 @@ The database layer also stores inferred topics.
 %------------------------------------------------
 
 In addition to \ac{lda}, other unsupervised machine learning tools can be applied to the same data set.
-Simple clustering algorithms (eg. K-Means) when given the same bag of words corpus as input act to identify groupings of similar documents according to their term frequency vector Euclidean distance.~\cite{lloyd1982}
+Simple clustering algorithms (eg.\ K-Means) when given the same bag of words corpus as input act to identify groupings of similar documents according to their term frequency vector Euclidean distance.~\cite{lloyd1982}
 Additional, similar clustering algorithms can be applied in a similar manner.
 
 %------------------------------------------------
 
 Preliminary exploratory results are promising.
-We applied K-Means clustering to a sample dataset of syllabi scraped just from the GMU Computer Science online archive of syllabi.
-Using course sections across semesters as ground-truth labels, we obtained metrics summarized in \tref{table:cluster-metrics}.
+We applied K-Means clustering to a sample dataset of course descriptions selected from the George Mason University Computer Science online catalog across multiple semesters.
+Using course section IDs as ground-truth labels, we clustered the course descriptions.
+\tref{table:cluster-metrics} summarizes the metrics computed on the resulting clustering.
+Homogeneity represents the ``same-ness'' of a cluster, or the degree to which each cluster contains only members of a single type.
+Completeness represents the ``spread'' of courses across clusters, or the degree to which every member of the same type is assigned to the same cluster.
+V-Measure is simply the harmonic mean of the prior two metrics.
+For each metric, higher is better, and they are bounded from 0 to 1.
 A distributed implementation of K-Means available in the Python toolkit \texttt{scikit-learn} was used to perform the clustering.
 
 %------------------------------------------------
@@ -84,7 +94,6 @@ A distributed implementation of K-Means available in the Python toolkit \texttt{
 The high completeness values are promising: this indicates that many of the same course are assigned under the same cluster prototype.
 The low value of homogeneity is unsurprising given the initialization parameters used: K-Means was initialized to detect only 20 clusters, a far smaller number than the magnitude of distinct course sections available.
 The number 20 was chosen arbitrarily as a smaller count than the true number of distinct course sections in order to increase cluster size.
-Cursory visual inspection of the most common frequencies in the first few clusters also supports the structured nature of the dataset with related terms grouped together in a logical fashion corresponding with an obvious, known GMU course.
 
 %------------------------------------------------
 
@@ -92,7 +101,7 @@ Cursory visual inspection of the most common frequencies in the first few cluste
 \centering
 \begin{tabular}{ll}
 \toprule
-Execution time & 0.144568s \\
+Execution time & 0.144s \\
 Homogeneity & 0.415 \\
 Completeness & 0.877 \\
 V-measure & 0.563 \\
@@ -149,63 +158,74 @@ An interactive, dynamic user visualization of course descriptions and topics has
 The visualization is a web-based application built upon the Python Flask library.
 The tool interfaces with the same database layer used by the rest of the application framework to provide an aesthetically pleasing user-facing interface with several primary modules.
 By default, the web application presents the user with a high level ``dashboard'' overview of the dataset and available result sets, where a result set is the set of topics inferred after a single run of the \ac{lda} module with a distinct initialization set.
-\fref{fig:dashboard} shows the dashboard view.
-After selecting a result set, the user can browse the data by course, department, or university.
+After selecting a result set, the user can browse the data by course, department, university, or inferred topics.
+The remainder of this section describes implementation details of the tool's primary features.
 
 %------------------------------------------------
 
-\begin{figure}
-  \centering
-  \includegraphics[width=0.45\textwidth]{figures/screenshots/dashboard/result_set_overview.png}
-  \caption{Result Set Overview in Dashboard view\label{fig:dashboard}}
-\end{figure}
+\subsubsection{Explore Courses}
+\label{sec:vis-course}
 
 %------------------------------------------------
 
-On selecting a course, the inferred topics are listed in order of their proportion in the course's description.
-Additionally, an interactive collapsible tree visualization of the course' prerequisite chain in the department is displayed.
-This tree visualization provides a view of the conceptual overlap of courses and prerequisites.
+When presented with the complete university dataset, the user may interactively search for a university.
+Once a university is selected, the user may search through its registered departments and select a course of interest.
+On selecting a course, the text of its description is displayed in both its original format and its cleaned, stemmed format.
+Additionally, the course's inferred topics are listed in order of their proportion within the course description.
+These topics are expandable, and upon interaction present the user with the list of other known courses with that inferred topic.
+Any topics appearing in a document with proportion under 0.15 are automatically hidden from the user.
+This design choice was implemented to reduce visual clutter from inferred topics with low relevance to the class.
+
+%------------------------------------------------
+
+\paragraph{Prerequisite Chain Analysis}
+\label{sec:vis-prerequisites}
+
+%------------------------------------------------
+
+In addition to the course-specific data, an interactive, collapsible tree visualization of the course' prerequisite chain is displayed.
+The recursively generated tree visualization provides a high level view of the course's position within a department.
 \fref{fig:prerequisite-detail} details the prerequisite tree visualization.
+Above this visualization is the prerequisite chain conceptual analysis tool.
+This tool automatically provides a view of any registered prerequisite courses along with their inferred topics.
+Any shared topics between the prerequisites and the selected course are highlighted to indicate conceptual overlap.
 
 %------------------------------------------------
 
-\begin{figure}
+\begin{figure*}
   \centering
-  \includegraphics[width=0.45\textwidth]{figures/screenshots/course/prerequisite_detail.png}
+  \includegraphics[width=\textwidth]{figures/screenshots/course/prerequisite_detail_cropped.png}
   \caption{Interactive prerequisite tree visualization tool\label{fig:prerequisite-detail}}
-\end{figure}
+\end{figure*}
+
+%------------------------------------------------
+
+\subsubsection{Compare Departments}
+\label{sec:vis-compare}
 
 %------------------------------------------------
 
 The user may also compare two university departments.
-Topics inferred from every course in the department are collected and displayed side by side, along with the intersection set of common topics.
-Similarity metrics describing the relationship between the two departments are given as well --- the Jaccard index, cosine similarity, and euclidean distance.
-The first metric is based solely on topic set cardinalities, while the remaining are based on a ``topic-vector'' representation of the department.
-The topic-vector is a binary vector where each feature indicates whether a particular topic was inferred for the given department.
-Features are unweighted as the topic-vector indicates only whether a topic is present in a department's topic set, and not its frequency of occurrence.
-See \fref{fig:statistics} for an image of the departmental comparison tool.
+Topics inferred from every course in the department are collected and displayed side by side.
+Topics unique to each department are displayed separately from the intersection set of common topics.
+Similarity metrics describing the relationship between the two departments are defined as well --- Jaccard index, cosine similarity, and Euclidean distance.
+Defined as $\frac{\left| A \cap B\right|}{\left| A \cup B\right|}$, the Jaccard index is based on the number of items unique to and shared between each set.~\cite{jaccard1912}
+The remaining metrics are based on a novel ``topic-vector'' representation of each department.
+The topic-vector is a binary vector where each bit indicates whether a particular topic was inferred for the given department.
+Features are unweighted and the topic-vector indicates only whether a topic is present in a department's topic set, and not its frequency of occurrence.
+Interpreting this vector representation geometrically, the Euclidean and cosine distances are calculated.
 
 %------------------------------------------------
 
-\begin{figure}
-  \centering
-  \includegraphics[width=0.45\textwidth]{figures/screenshots/compare/statistics.png}
-  \caption{Statistics generated by departmental comparison tool\label{fig:statistics}}
-\end{figure}
+\subsubsection{Evaluate Department}
+\label{sec:vis-evaluate}
 
 %------------------------------------------------
 
-Using third party benchmarks discussed in \sref{sec:evaluation}, the tool also allows users to automatically evaluate the performance of a university department.
+The tool also allows users to easily evaluate university departments against third party benchmarks.
+The benchmarks used in this study are the \ac{acm} Knowledge Areas.
+\sref{sec:evaluation} discusses the departmental evaluation process more in depth, but the web tool automatically evaluates the performance of a university department.
 The tool checks for conceptual overlap between courses and \ac{acm} Knowledge Areas and predicts Knowledge Area labels where overlap exists.
-Then, using manually annotated ground truth labels, the tool evaluates its performance by measuring the similarity between prediction and truth label sets.
-\fref{fig:evaluation} shows the evaluation tool in use.
-
-%------------------------------------------------
-
-\begin{figure}
-  \centering
-  \includegraphics[width=0.45\textwidth]{figures/screenshots/evaluate/evaluation.png}
-  \caption{Evaluation tool in use\label{fig:evaluation}}
-\end{figure}
+Additionally, if the department has been manually annotated with Knowledge Areas, these ``ground truth'' labels are compared against the predicted labels, and the Jaccard coefficient between the two sets is computed.
 
 %------------------------------------------------

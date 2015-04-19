@@ -4,58 +4,168 @@
 %------------------------------------------------
 
 The \ac{acm} maintains an annual writeup of guidelines for undergraduate computer science education.~\cite{CS2013}
-These guidelines include two important sections, the Exemplar Courses and Knowledge Areas.
+These guidelines include two important sections, the \acf{ec} and Knowledge Areas.
 The Knowledge Areas are 18 broad topics within Computer Science as put forth by the \ac{acm}.
-Exemplar Courses include real course descriptions from disparate sources compiled by the \ac{acm} and manually annotated with the Knowledge Areas they cover.
+\ac{ec} include real course descriptions from disparate sources compiled by the \ac{acm} and manually annotated with the Knowledge Areas they cover.
 These data sets are used to perform primary evaluation.
 
 %------------------------------------------------
 
-Using manually annotated course descriptions (the \ac{acm} Exemplar Courses or the George Mason University Computer Science department courses\footnote{\url{http://cs.gmu.edu/~white/Curriculum2013}}) as a ground truth label set, Knowledge Area predictions are compared against known Knowledge Areas.
-Knowledge Areas predictions are made by determining which Knowledge Areas share inferred topics with each course in a department.
+Using manually annotated course descriptions (eg.\ the \ac{ec} or the George Mason University Computer Science department courses\footnote{\url{http://cs.gmu.edu/~white/Curriculum2013}}) as a ground truth label set, Knowledge Area predictions are compared against known Knowledge Areas.
+Knowledge Areas prediction are made by determining which Knowledge Areas share inferred topics with each course in a department.
 Evaluation is performed by computing the similarity between the predicted and ground truth Knowledge Area labels.
 The label set similarity is computed in two ways.
 First, the Jaccard index of the predicted and ground truth labels is calculated.
 Then, the percent of the ground truth labels included in the prediction set is calculated.
-The results of evaluating George Mason University's Computer Science department in this way across the 77 Result Sets are summarized in \tref{tbl:evaluation-before}.
-However, after removing result sets where less than one knowledge area was predicted on average per course, results were improved.
-These improved results are summarized in \tref{tbl:evaluation-after}.
+The web visualization provides an automatic interface for performing this evaluation process, discussed in \sref{sec:vis-evaluate}.
 
 %------------------------------------------------
 
-\begin{table}[ht]
-\centering
-\begin{tabular}{lll}
-\toprule
-& Jaccard & Percent \\
-\midrule
-mean   & 0.145 & 0.229 \\
-median & 0.156 & 0.217 \\
-\midrule
-max    & 0.007 & 0.007 \\
-min    & 0.311 & 0.709 \\
-\bottomrule
-\end{tabular}
-\caption{Evaluation of all result sets\label{tbl:evaluation-before}}
+In the sequel, three case studies are described in depth to exemplify the main features of the tool.
+First, \sref{sec:eval-prerequisites} discusses the prerequisite analysis features of the tool, and presents a summary of statistics about the universities included in this study.
+Second, \sref{sec:eval-topics} considers a single area within Computer Science and discusses the inferred topics for courses within that area.
+Finally, \sref{sec:eval-comparison} details the similarities and differences between two university departments and also presents a summary of comparisons between all the universities in this study.
+
+%------------------------------------------------
+
+%\begin{table}[ht]
+%\centering
+%\begin{tabular}{lll}
+%\toprule
+%& Jaccard & Percent \\
+%\midrule
+%mean   & 0.145 & 0.229 \\
+%median & 0.156 & 0.217 \\
+%\midrule
+%max    & 0.007 & 0.007 \\
+%min    & 0.311 & 0.709 \\
+%\bottomrule
+%\end{tabular}
+%\caption{Evaluation of all result sets\label{tbl:evaluation-before}}
+%\end{table}
+
+%------------------------------------------------
+
+%\begin{table}[ht]
+%\centering
+%\begin{tabular}{lll}
+%\toprule
+%& Jaccard & Percent \\
+%\midrule
+%mean   & 0.203 & 0.377\\
+%median & 0.206 & 0.351\\
+%\midrule
+%max    & 0.058 & 0.082\\
+%min    & 0.311 & 0.709\\
+%\bottomrule
+%\end{tabular}
+%\caption{Evaluation of result sets with more than one predicted knowledge area on average per course\label{tbl:evaluation-after}}
+%\end{table}
+
+%------------------------------------------------
+
+\subsection{Case Study: Prerequisite Analysis}
+\label{sec:eval-prerequisites}
+
+%------------------------------------------------
+
+To understand how a course fits into a department, its position in the prerequisite chain must be analyzed.
+Take, for example, a course in mobile application development.
+We predict that any course of this nature will most likely be an upper level elective with a moderate number of prerequisite courses.
+Indeed, we see this is the case with George Mason's CS 477, Portland State's CS 410, and Stanford's 231M.
+However, many of the topics covered in a mobile development course are niche topics, and specific to that field.
+Therefore, it might not be the case that any particular lower level courses will cover specific, overlapping topics.
+
+%------------------------------------------------
+
+Let us consider George Mason University's CS 477 ``Mobile Application Development''.
+The course description discusses mobile platforms and the various software design issues specific to mobile platforms.
+There are two inferred topics for this course.
+The first topic, with 32\% proportion, includes the terms ``develop'', ``platform'', and ``mobile'' at high frequency.
+The second topic, with only 15\% proportion, is more generic and includes terms like ``system'', ``computer'', and ``topic''.
+The course also has two registered prerequisites: CS 310 ``Data Structures'' and CS 367 ``Computer Systems and Programming''.
+Within the context of the department, these two courses are major prerequisites for any upper level course.
+As expected, neither of the two prerequisite courses share the mobile-specific topic inferred for CS 477.
+CS 310, however, does overlap with the generic computer systems topic.
+We therefore conclude that the CS 477 course registers its prerequisites primarily to ensure a baseline level of maturity and skill among its students, rather than because some necessary concepts are introduced at a lower level and expanded upon at the higher level.
+
+%------------------------------------------------
+
+To quantify the typical level of conceptual overlap between prerequisites within a department, we introduce a novel vector representation of a course, the ``weighted topic-vector''.
+Like the unweighted topic-vector representation of a department, the weighted topic-vector is a vector of uniform length corresponding to the total number of inferred topics among all known courses.
+However, the features of a weighted topic-vector represent the proportion with which the particular topic is represented in the course's description.
+In this way, the weighted topic-vector takes into account the importance of a topic to a course, rather than simply binary topic membership as in the unweighted topic-vector.
+By computing the average distance between the weighted topic-vectors of a course and its prerequisites, the level of conceptual overlap for that course can be quantified.
+Averaging these distance measures over every course in the department that has registered prerequisites results in a measure of average prerequisite conceptual overlap within the department.
+\tref{tbl:prereq-topic-overlap} summarizes the levels of conceptual overlap for the five universities in the dataset with registered prerequisite trees, where a higher average value of conceptual overlap indicates a closer relationship between courses and their prerequisites.
+The five universities not included did not have prerequisite relationships in their collected data, and thus this analysis could not be performed.
+
+%------------------------------------------------
+
+\begin{table}
+  \centering
+  \begin{tabular}{rcc}
+    \toprule
+     & Prereq$_\mu$ & Prereq$_\sigma$ \\
+    \midrule
+    GMU  & 0.324 & 0.211 \\
+    AU   & 0.278 & 0.134 \\
+    KSU  & 0.273 & 0.213 \\
+    Utah & 0.257 & 0.249 \\
+    UTK  & 0.201 & 0.256 \\
+    \bottomrule
+  \end{tabular}
+  \caption{Level of conceptual overlap between courses and their prerequisites in five universities. Prereq$_\mu$ is the average level of conceptual overlap between prerequisites, Prereq$_\sigma$ is the standard deviation.\label{tbl:prereq-topic-overlap}}
 \end{table}
 
 %------------------------------------------------
 
-\begin{table}[ht]
-\centering
-\begin{tabular}{lll}
-\toprule
-& Jaccard & Percent \\
-\midrule
-mean   & 0.203 & 0.377\\
-median & 0.206 & 0.351\\
-\midrule
-max    & 0.058 & 0.082\\
-min    & 0.311 & 0.709\\
-\bottomrule
-\end{tabular}
-\caption{Evaluation of result sets with more than one predicted knowledge area on average per course\label{tbl:evaluation-after}}
-\end{table}
+\subsection{Case Study: Ethics In Computer Science}
+\label{sec:eval-topics}
 
 %------------------------------------------------
 
+Computer Science is a wide ranging field, with a number of disparate subfields --- according to the \ac{acm}, there are 18 distinct Knowledge Areas.~\cite{CS2013}
+At any given university, the Computer Science department will, ideally, cover all or most of these areas.
+One particular area covered by most universities in this study is ``Social Issues and Professional Practice''.
+A clear example of a course within this Knowledge Area is any course in computing and ethics.
+Take, for example, Kansas State's CIS 415 ``Ethics and Computing Technology.''
+The description is brief and to the point, focusing on computing ethics within a professional context.
+The only topic inferred for this course, at 64\% proportion, includes the terms ``ethics'', ``computer'', ``profession'', ``issue'', and ``social'' at high frequency.
+Searching for other courses that teach to the same topic yields 30 courses across nine universities (every university in the study except for Rensselaer Polytechnic).
+These courses have titles like ``Computer Ethics and Society'' (GMU CS 105) and ``Ethics in Computing'' (LSU CSC 1200).
+This demonstrates the ability of our tool to not only automatically infer relevant concepts from a course description, but to match related courses across universities.
+
+%------------------------------------------------
+
+\subsection{Case Study: George Mason vs Stanford}
+\label{sec:eval-comparison}
+
+%------------------------------------------------
+
+While institutions generally cover a wide range of topics, there are always certain topics that cannot be or are not taught.
+Take for example George Mason University and Stanford University.
+The two computer science departments share a lot in common.
+Of 68 total topics covered between the two, 41 are common to both while only 14 are unique to Stanford and 13 unique to George Mason.
+The shared topics contain terms that directly relate to similar courses at each school.
+For example ``secure'' and ``network'' are terms in a topic taught in network security classes at both schools.
+However, a topic containing ``linux'', ``unix'', ``lab'' appears unique to Stanford, covered by CS 1U ``Practical Unix'', a course that does not exist at George Mason.
+Similarly, a topic containing ``parallel'' and ``algorithm'' appears unique to George Mason.
+The course GMU CS 683 ``Parallel Algorithms'' teaches to this topic, with no analogous course at Stanford.
+
+%------------------------------------------------
+
+By analyzing the set of unique and shared topics within two departments, simple coefficients can be computed to quantify the degree of similarity.
+The Jaccard coefficient is computed as the most basic representation of departmental similarity, along with Euclidean and cosine similarity metrics discussed in \sref{sec:vis-compare}.
+A pairwise comparison of the universities in this study is presented in \fref{fig:heatmap}.
+In this figure, darker shades of blue represent a higher degree of similarity.
+Also note that the \ac{ec} are included in this diagram as a benchmark set of courses.
+
+%------------------------------------------------
+
+\begin{figure}
+  \includegraphics[width=0.5\textwidth]{figures/10by10heatmap}
+  \caption{Pairwise similarity of CS departments using the Jaccard index. Darker shades indicate higher similarity. ACM EC refers to the \acf{ec}. (\sref{sec:evaluation})\label{fig:heatmap}}
+\end{figure}
+
+%------------------------------------------------

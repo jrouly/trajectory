@@ -19,7 +19,9 @@ Reversing this generative process is significantly more difficult because the to
 
 \ac{lda} can best be understood through its generative process.
 Given the set of distributions as input, generating the corpus topics is a probabilistic process.
-Taking the variables $\theta_{d,k}$ (topic proportion for topic $k$ in document $d$), $\beta_{1:k}$ (topic $k$), $z_{d,n}$ (topic assignment for word $n$ in document $d$), and $w_{d,n}$ (the $n^{th}$ word in document $d$), \ac{lda} calculates the posterior probability in Equation~\ref{eq:posterior}. \cite{Blei2012}
+Taking the variables $\theta_{d,k}$ (topic proportion for topic $k$ in document $d$), $\beta_{1:k}$ (topic $k$), $z_{d,n}$ (topic assignment for word $n$ in document $d$), and $w_{d,n}$ (the $n^{th}$ word in document $d$), \ac{lda} calculates the posterior probability in \eref{eq:posterior}. \cite{Blei2012}
+
+%------------------------------------------------
 
 \begin{equation}
 p(\beta_{1:K}, \theta_{1:D},z_{1:D} | w_{1:D}) = \frac{\beta_{1:K},
@@ -32,6 +34,19 @@ p(\beta_{1:K}, \theta_{1:D},z_{1:D} | w_{1:D}) = \frac{\beta_{1:K},
 \noindent
 Using a variety of probabilistic methods to calculate or approximate the denominator (ie.\ evidence), \ac{lda} results in a usable set of vocabulary frequency distributions or topics.
 Specifically, Gibbs Sampling, a variety of Bayesian Inference, is used to approximate the \ac{lda} posterior probability.~\cite{Blei2003}
+
+%------------------------------------------------
+
+A graphical ``plate'' diagram of \ac{lda} is given in \fref{fig:lda-plates}, reproduced from \cite{Blei2003}.
+Circular nodes represent latent variables while rectangular plates represent duplication.
+This representation is identical to \eref{eq:posterior}, with $N$ the number of words in a document and $D$ the number of documents.
+
+%------------------------------------------------
+
+\begin{figure}
+  \includegraphics[width=0.45\textwidth]{figures/lda-plates}
+  \caption{LDA graphical diagram from \cite{Blei2012}\label{fig:lda-plates}}
+\end{figure}
 
 %------------------------------------------------
 
