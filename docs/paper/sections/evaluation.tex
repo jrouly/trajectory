@@ -183,10 +183,7 @@ By analyzing the set of unique and shared topics within two departments, simple 
 The Jaccard coefficient is computed as the most basic representation of departmental similarity, along with Euclidean and cosine similarity metrics discussed in \sref{sec:vis-compare}.
 A pairwise comparison of the universities in this study is presented in \fref{fig:heatmap}.
 In this figure, darker shades of blue represent a higher degree of similarity.
-Also note that the \ac{ec} are included in this diagram as a benchmark set of courses.
-Each course from the \ac{ec} was entered into the dataset along with every other university course, and had topics inferred by \ac{lda} in the same manner.
-In this way the \ac{ec} act as control courses with a ground truth label set.
-High similarity to the \ac{ec} indicates a high degree of compliance with \ac{acm} standards.
+Also see \tref{tbl:heatmap-key} for the specific computed similarity values.
 
 %------------------------------------------------
 
@@ -195,7 +192,35 @@ High similarity to the \ac{ec} indicates a high degree of compliance with \ac{ac
 
 %------------------------------------------------
 
-add another case study on a nother topic
+The \ac{ec} provide a wide view of different courses from institutions around the world.
+If we assume the \ac{ec} to compose a single, hypothetical university's CS department, we can compare existing departments against it in the same fashion as was used in \sref{sec:eval-comparison-stanford}.
+Take George Mason University, for example, to compare against the \ac{ec}.
+Both departments share a great deal in common, with 38 overlapping topics.
+There are additionally not that many topics unique to the two departments, with 14 unique to the \ac{ec} and 18 unique to GMU.
+A number of interesting artifacts appear, however, upon closer inspection.
+
+%------------------------------------------------
+
+Two topics unique to the \ac{ec} include the terms ``moral'' and ``religious'', one each.
+Inspecting these topics reveals two members of the \ac{ec} with the titles ``Ethics \& the Information Age'' and ``Technology, Ethics, and Global Society''.
+Both of these courses teach ethics in computation, but from a vastly different perspective than the ethics course at George Mason.
+These two \ac{ec} ethics courses include professional ethics, but also moral, religious, and social philosophies of ethical behavior, while the George Mason ethics courses (\eg\ CS 105 ``Computer Ethics and Society'') only discuss professional ethics.
+This is an important yet subtle distinction to make, which might be overlooked by simply considering course titles.
+
+%------------------------------------------------
+
+Another unique topic to the \ac{ec} includes the terms ``design'', ``circuit'', and ``digital''.
+The courses which teach to this topic, across institutions, are primarily digital design and logic courses.
+Inspecting the George Mason CS curriculum reveals that an analogous course is required within the CS degree, ECE 301 ``Digital Electronics'', but is not contained within the CS department, unlike some other universities.
+This particular artifact appears because the scope of our data sets include only CS departments.
+We make the assumption that necessary courses to the CS program at an institution will fall under the heading of Computer Science, which in this case is not true.
+
+%------------------------------------------------
+
+Note that included in \fref{fig:heatmap} are the \ac{ec}.
+Each course from the \ac{ec} was entered into the dataset along with every other university course, and had topics inferred by \ac{lda} in the same manner.
+In this way the \ac{ec} act as control courses with a ground truth label set.
+High similarity to the \ac{ec} indicates a high degree of compliance with \ac{acm} standards.
 
 %------------------------------------------------
 
