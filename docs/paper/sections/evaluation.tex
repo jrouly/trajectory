@@ -11,7 +11,7 @@ These data sets are used to perform primary evaluation.
 
 %------------------------------------------------
 
-Using manually annotated course descriptions (eg.\ the \ac{ec} or the George Mason University Computer Science department courses\footnote{\url{http://cs.gmu.edu/~white/Curriculum2013}}) as a ground truth label set, Knowledge Area predictions are compared against known Knowledge Areas.
+Using manually annotated course descriptions (\eg\ the \ac{ec} or the George Mason University Computer Science department courses\footnote{\url{http://cs.gmu.edu/~white/Curriculum2013}}) as a ground truth label set, Knowledge Area predictions are compared against known Knowledge Areas.
 Knowledge Areas prediction are made by determining which Knowledge Areas share inferred topics with each course in a department.
 Evaluation is performed by computing the similarity between the predicted and ground truth Knowledge Area labels.
 The label set similarity is computed in two ways.
@@ -160,6 +160,9 @@ The Jaccard coefficient is computed as the most basic representation of departme
 A pairwise comparison of the universities in this study is presented in \fref{fig:heatmap}.
 In this figure, darker shades of blue represent a higher degree of similarity.
 Also note that the \ac{ec} are included in this diagram as a benchmark set of courses.
+Each course from the \ac{ec} was entered into the dataset along with every other university course, and had topics inferred by \ac{lda} in the same manner.
+In this way the \ac{ec} act as control courses with a ground truth label set.
+High similarity to the \ac{ec} indicates a high degree of compliance with \ac{acm} standards.
 
 %------------------------------------------------
 

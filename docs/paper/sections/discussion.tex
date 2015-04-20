@@ -14,7 +14,7 @@ Inferred topics generally fall into one of two categories for each course.
 The first category of topic includes relevant terms and keywords found in the course description.
 A highly specialized course in a particular subfield might contain a set of these topics that relate to keywords from within the specific domain of the course.
 The second category of topic includes more generic words common to a large number of courses.
-Topics in this category often relate to concepts common across courses, eg.\ student research or exam and project information.
+Topics in this category often relate to concepts common across courses, \eg\ student research or exam and project information.
 
 %------------------------------------------------
 
@@ -28,9 +28,25 @@ While the topic itself is a frequency distribution over vocabulary, and does not
 
 Our confidence in the applicability of \ac{lda} as a course content inference system stems from the appearance of the same or related topics within the same or related courses.
 Inspecting the same course at different institutions results in the same topics being inferred at each institution.
-Inspecting prerequisite courses within the same institution illustrates the relationship between the courses by highlighting conceptual overlap, ie.\ the appearance of the same topic in both course and prerequisite.
+Inspecting prerequisite courses within the same institution illustrates the relationship between the courses by highlighting conceptual overlap, \ie\ the appearance of the same topic in both course and prerequisite.
 As mentioned in \sref{sec:evaluation}, third party course descriptions act as an additional evaluative metric for this approach.
 A high level of consistency is indicated by the same topics being inferred for the same course at multiple institutions, related courses within the same institution, and the third party benchmark course.
 
 %------------------------------------------------
 
+There are several known limitations of this work.
+As discussed prior, our work focuses entirely on formal learning environments.
+This is an artifact of the data used in the study.
+The same approaches introduced here could be applied to similar data collected from alternative learning environments.
+Additionally, our methodology operates under the assumption that course description data is accurate, up to date, and descriptive.
+In truth, this is not always the case.
+Oftentimes course descriptions do not fully describe the actual content of what is taught in a course, or the course description might only apply to some sections of a given course.
+It has even been observed that some course descriptions are merely held as filler text until a later date, and do not provide any useful information about the course.
+However, while these circumstances lie outside of our control, we take measures to prevent invalid course descriptions from entering the dataset.
+The cleaning process described in \sref{sec:data-acquisition} removes descriptions that are unlikely to be valid based on length and vocabulary size.
+Another major limitation of our approach is the inability to meaningfully summarize or categorize inferred topics.
+While the raw topics are used internally for comparison, they do not provide an ideal interface for the end user.
+This limitation stems from our use of \ac{lda} as the primary topic inference tool.
+We propose a solution in the following \sref{sec:future-work}.
+
+%------------------------------------------------
