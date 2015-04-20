@@ -260,9 +260,21 @@ Interpreting this vector representation geometrically, the Euclidean and cosine 
 %------------------------------------------------
 
 The tool also allows users to easily evaluate university departments against third party benchmarks.
+The \ac{acm} maintains an annual writeup of guidelines for undergraduate computer science education~\cite{CS2013}.
+These guidelines include two important sections, the \acf{ec} and Knowledge Areas.
+The Knowledge Areas are 18 broad topics within Computer Science as put forth by the \ac{acm}.
+\ac{ec} include real course descriptions from disparate sources compiled by the \ac{acm} and manually annotated with the Knowledge Areas they cover.
+These data sets are used to perform primary evaluation.
 The benchmarks used in this study are the \ac{acm} Knowledge Areas.
-\sref{sec:evaluation} discusses the departmental evaluation process more in depth, but the web tool automatically evaluates the performance of a university department.
+
+%------------------------------------------------
+
+The web tool automatically evaluates the performance of a university department.
 The tool checks for conceptual overlap between courses and \ac{acm} Knowledge Areas and predicts Knowledge Area labels where overlap exists.
-Additionally, if the department has been manually annotated with Knowledge Areas, these ``ground truth'' labels are compared against the predicted labels, and the Jaccard coefficient between the two sets is computed.
+Additionally, if the department has been manually annotated with Knowledge Areas, these ``ground truth'' labels are compared against the predicted labels, and similarity coefficients between the two sets are computed.
+The label set similarity coefficient is computed in two ways.
+First, the Jaccard index of the predicted and ground truth labels is calculated.
+Then, the percent of the ground truth labels included in the prediction set is calculated.
+The web visualization provides an automatic interface for performing this evaluation process.
 
 %------------------------------------------------
