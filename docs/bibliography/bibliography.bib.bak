@@ -2,6 +2,17 @@
 % Encoding: UTF-8
 
 
+@Misc{ABET2015,
+  Title                    = {Criteria for Accrediting Computing Programs},
+
+  Author                   = {{Accreditation  Board  for  Engineering  and  Technology}},
+  HowPublished             = {Web},
+  Year                     = {2015},
+
+  Owner                    = {jrouly},
+  Timestamp                = {2015.04.19}
+}
+
 @Article{Blei2012,
   Title                    = {Probabilistic Topic Models},
   Author                   = {Blei, David M.},
@@ -59,6 +70,50 @@
   Url                      = {http://eltj.oxfordjournals.org/content/60/3/279.abstract}
 }
 
+@InProceedings{Boustedt2011,
+  Title                    = {Students' Perceptions of the Differences Between Formal and Informal Learning},
+  Author                   = {Boustedt, Jonas and Eckerdal, Anna and McCartney, Robert and Sanders, Kate and Thomas, Lynda and Zander, Carol},
+  Booktitle                = {Proceedings of the Seventh International Workshop on Computing Education Research},
+  Year                     = {2011},
+
+  Address                  = {New York, NY, USA},
+  Pages                    = {61--68},
+  Publisher                = {ACM},
+  Series                   = {ICER '11},
+
+  Acmid                    = {2016926},
+  Doi                      = {10.1145/2016911.2016926},
+  ISBN                     = {978-1-4503-0829-8},
+  Keywords                 = {informal learning, self-directed learning},
+  Location                 = {Providence, Rhode Island, USA},
+  Numpages                 = {8},
+  Owner                    = {jrouly},
+  Timestamp                = {2015.04.19},
+  Url                      = {http://doi.acm.org/10.1145/2016911.2016926}
+}
+
+@InProceedings{Brown2013,
+  Title                    = {A Tale of Three Sites: Resource and Knowledge Sharing Amongst Computer Science Educators},
+  Author                   = {Brown, Neil Christopher Charles and K\"{o}lling, Michael},
+  Booktitle                = {Proceedings of the Ninth Annual International ACM Conference on International Computing Education Research},
+  Year                     = {2013},
+
+  Address                  = {New York, NY, USA},
+  Pages                    = {27--34},
+  Publisher                = {ACM},
+  Series                   = {ICER '13},
+
+  Acmid                    = {2493398},
+  Doi                      = {10.1145/2493394.2493398},
+  ISBN                     = {978-1-4503-2243-0},
+  Keywords                 = {educator communities, online communities, online discussion, resource repositories},
+  Location                 = {San Diego, San California, USA},
+  Numpages                 = {8},
+  Owner                    = {jrouly},
+  Timestamp                = {2015.04.19},
+  Url                      = {http://doi.acm.org/10.1145/2493394.2493398}
+}
+
 @TechReport{CS2013,
   Title                    = {Computer Science Curricula 2013},
   Author                   = {ACM/IEEE-CS Joint Task Force on Computing Curricula},
@@ -90,6 +145,32 @@
   Owner                    = {jrouly},
   Timestamp                = {2015.04.16},
   Url                      = {http://doi.acm.org/10.1145/2676723.2693630}
+}
+
+@InProceedings{hubwieser2013,
+  Title                    = {Towards a conceptualization of pedagogical content knowledge for computer science},
+  Author                   = {Hubwieser, Peter and Magenheim, Johannes and M{\"u}hling, Andreas and Ruf, Alexander},
+  Booktitle                = {Proceedings of the ninth annual international ACM conference on International computing education research},
+  Year                     = {2013},
+  Organization             = {ACM},
+  Pages                    = {1--8},
+
+  Owner                    = {jrouly},
+  Timestamp                = {2015.04.19}
+}
+
+@Article{jaccard1912,
+  Title                    = {The distribution of the flora in the alpine zone. 1},
+  Author                   = {Jaccard, Paul},
+  Journal                  = {New phytologist},
+  Year                     = {1912},
+  Number                   = {2},
+  Pages                    = {37--50},
+  Volume                   = {11},
+
+  Owner                    = {jrouly},
+  Publisher                = {Wiley Online Library},
+  Timestamp                = {2015.04.17}
 }
 
 @Article{krathwohl2002,
@@ -124,6 +205,28 @@
 equations;Least squares methods;Phase change materials;Pulse
 modulation;Quantization;Sampling methods;Voltage},
   Review                   = {This is the original KMeans paper.}
+}
+
+@InProceedings{ShinnersKennedyFincher2013,
+  Title                    = {Identifying Threshold Concepts: From Dead End to a New Direction},
+  Author                   = {Shinners-Kennedy, Dermot and Fincher, Sally A.},
+  Booktitle                = {Proceedings of the Ninth Annual International ACM Conference on International Computing Education Research},
+  Year                     = {2013},
+
+  Address                  = {New York, NY, USA},
+  Pages                    = {9--18},
+  Publisher                = {ACM},
+  Series                   = {ICER '13},
+
+  Acmid                    = {2493396},
+  Doi                      = {10.1145/2493394.2493396},
+  ISBN                     = {978-1-4503-2243-0},
+  Keywords                 = {hindsight bias, pck, threshold concepts},
+  Location                 = {San Diego, San California, USA},
+  Numpages                 = {10},
+  Owner                    = {jrouly},
+  Timestamp                = {2015.04.19},
+  Url                      = {http://doi.acm.org/10.1145/2493394.2493396}
 }
 
 @InProceedings{Yang2015,
