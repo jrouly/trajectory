@@ -10,8 +10,8 @@ The topics discovered in a corpus can be used to categorize documents and provid
 
 %------------------------------------------------
 
-\acf{lda} is a specific type of topic modeling which assumes that a mix of multiple topics exist within a single document in some proportion (\ie\ were used to generate that document).~\cite{Blei2003}
-\ac{lda} assumes a generative process where, for each word in the document, the algorithm selects a distribution over topics, selects a topic, and then selects a vocabulary term.~\cite{Blei2003}
+\acf{lda} is a specific type of topic modeling which assumes that a mix of multiple topics exist within a single document in some proportion (\ie\ were used to generate that document)~\cite{Blei2003}.
+\ac{lda} assumes a generative process where, for each word in the document, the algorithm selects a distribution over topics, selects a topic, and then selects a vocabulary term~\cite{Blei2003}.
 By picking a distribution over topics, multiple possible topics can be blended into a single document.
 Reversing this generative process is significantly more difficult because the topic distributions are unknown; this is what the ``hidden model'' or ``latent model'' refers to.
 
@@ -19,7 +19,7 @@ Reversing this generative process is significantly more difficult because the to
 
 \ac{lda} can best be understood through its generative process.
 Given the set of distributions as input, generating the corpus topics is a probabilistic process.
-Taking the variables $\theta_{d,k}$ (topic proportion for topic $k$ in document $d$), $\beta_{1:k}$ (topic $k$), $z_{d,n}$ (topic assignment for word $n$ in document $d$), and $w_{d,n}$ (the $n^{th}$ word in document $d$), \ac{lda} calculates the posterior probability in \eref{eq:posterior}.~\cite{Blei2012}
+Taking the variables $\theta_{d,k}$ (topic proportion for topic $k$ in document $d$), $\beta_{1:k}$ (topic $k$), $z_{d,n}$ (topic assignment for word $n$ in document $d$), and $w_{d,n}$ (the $n^{th}$ word in document $d$), \ac{lda} calculates the posterior probability in \eref{eq:posterior}~\cite{Blei2012}.
 
 %------------------------------------------------
 
@@ -33,7 +33,7 @@ p(\beta_{1:K}, \theta_{1:D},z_{1:D} | w_{1:D}) = \frac{\beta_{1:K},
 
 \noindent
 Using a variety of probabilistic methods to calculate or approximate the denominator (\ie\ evidence), \ac{lda} results in a usable set of vocabulary frequency distributions or topics.
-Specifically, Gibbs Sampling, a variety of Bayesian Inference, is used to approximate the \ac{lda} posterior probability.~\cite{Blei2003}
+Specifically, Gibbs Sampling, a variety of Bayesian Inference, is used to approximate the \ac{lda} posterior probability~\cite{Blei2003}.
 
 %------------------------------------------------
 
@@ -45,7 +45,7 @@ This representation is identical to \eref{eq:posterior}, with $N$ the number of 
 
 \begin{figure}
   \includegraphics[width=0.45\textwidth]{figures/lda-plates}
-  \caption{LDA graphical diagram from~\cite{Blei2012}\label{fig:lda-plates}}
+  \caption{LDA graphical diagram from~\cite{Blei2012}\label{fig:lda-plates}.}
 \end{figure}
 
 %------------------------------------------------
@@ -55,10 +55,10 @@ This representation is identical to \eref{eq:posterior}, with $N$ the number of 
 
 %------------------------------------------------
 
-Our research complements other efforts within Computer Science education that are directed towards categorization of content to improve pedagogy, \eg\ Hubwieser et al.\cite{hubwieser2013}
+Our research complements other efforts within Computer Science education that are directed towards categorization of content to improve pedagogy, \eg\ Hubwieser et al~\cite{hubwieser2013}.
 We believe that our project contributes both by identifying content (\ie\ topics) being taught across institutions and by identifying gaps and unique contributions.
 This information can be compared to teacher competencies and used to design assessment and instruments to measure them.
-Another area in which this work can assist is in identification of concepts and their classification, especially ``threshold concepts.''~\cite{ShinnersKennedyFincher2013}
+Another area in which this work can assist is in identification of concepts and their classification, especially ``threshold concepts''~\cite{ShinnersKennedyFincher2013}.
 Overall, we believe our data-driven approach complements other qualitative efforts by building on them and by automating some aspects of the research.
 As CS educators, who often have deficient resources to improve their pedagogy~\cite{Brown2013}, look towards online or virtual mechanisms to support them the system we have designed can be very useful.
 Based on ideas discussed by Brown and K\"{o}lling~\cite{Brown2013}, one potential we see for future work is the integration of our system with an existing virtual community of CS educators, or the creation of community features around the system we have designed.
@@ -73,12 +73,12 @@ However, we believe that the techniques we use can also be applied to better und
 %------------------------------------------------
 
 Other work has also attempted to extract concept information from course data.
-Yang et al.\ employ four distinct techniques to map courses into a conceptual space and then learn prerequisite relationships between similar courses.~\cite{Yang2015}
+Yang et al.\ employ four distinct techniques to map courses into a conceptual space and then learn prerequisite relationships between similar courses~\cite{Yang2015}.
 Two of their conceptual mapping techniques generate latent features, which have the downside of not being human-readable as in \ac{lda}.
 The remaining two techniques generate human-readable topics, but rely either on an outside source (Wikipedia) or simply represent concepts as the vocabulary of the document.
 The benefit of \ac{lda} as an information retrieval tool is its ability to generate pseudo human-readable topics while acting in a fully unsupervised manner on a single, large data set.
 Our approach naively targets a dataset of fixed universities and customizes web scrapers specifically for their computer science departments.
-Effland et al.\ introduces a robust web crawler system to automatically search for, identify, and extract course descriptions from disparate locations on the Internet.~\cite{Effland2015}
+Effland et al.\ introduces a robust web crawler system to automatically search for, identify, and extract course descriptions from disparate locations on the Internet~\cite{Effland2015}.
 Application of similar technology in this work was considered, and would greatly improve the scale of the analyzed data.
 
 %------------------------------------------------

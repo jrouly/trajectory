@@ -74,7 +74,7 @@ The database layer also stores inferred topics.
 %------------------------------------------------
 
 In addition to \ac{lda}, other unsupervised machine learning tools can be applied to the same data set.
-Simple clustering algorithms (\eg\ K-Means) when given the same bag of words corpus as input act to identify groupings of similar documents according to their term frequency vector Euclidean distance.~\cite{lloyd1982}
+Simple clustering algorithms (\eg\ K-Means) when given the same bag of words corpus as input act to identify groupings of similar documents according to their term frequency vector Euclidean distance~\cite{lloyd1982}.
 Additional, similar clustering algorithms can be applied in a similar manner.
 
 %------------------------------------------------
@@ -209,7 +209,7 @@ The user may also compare two university departments.
 Topics inferred from every course in the department are collected and displayed side by side.
 Topics unique to each department are displayed separately from the intersection set of common topics.
 Similarity metrics describing the relationship between the two departments are defined as well --- Jaccard index, cosine similarity, and Euclidean distance.
-Defined as $\frac{\left| A \cap B\right|}{\left| A \cup B\right|}$, the Jaccard index is based on the number of items unique to and shared between each set.~\cite{jaccard1912}
+Defined as $\frac{\left| A \cap B\right|}{\left| A \cup B\right|}$, the Jaccard index is based on the number of items unique to and shared between each set~\cite{jaccard1912}.
 The remaining metrics are based on a novel ``topic-vector'' representation of each department.
 The topic-vector is a binary vector where each bit indicates whether a particular topic was inferred for the given department.
 Features are unweighted and the topic-vector indicates only whether a topic is present in a department's topic set, and not its frequency of occurrence.
