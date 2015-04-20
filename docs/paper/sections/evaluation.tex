@@ -21,10 +21,10 @@ The web visualization provides an automatic interface for performing this evalua
 
 %------------------------------------------------
 
-In the sequel, three case studies are described in depth to exemplify the main features of the tool.
+In the sequel, five case studies are described in depth to exemplify the main features of the tool.
 First, \sref{sec:eval-prerequisites} discusses the prerequisite analysis features of the tool, and presents a summary of statistics about the universities included in this study.
-Second, \sref{sec:eval-topics} considers a single area within Computer Science and discusses the inferred topics for courses within that area.
-Finally, \sref{sec:eval-comparison} details the similarities and differences between two university departments and also presents a summary of comparisons between all the universities in this study.
+Second, \sref{sec:eval-topics-ethics} and \sref{sec:eval-topics-ai} both closely consider single areas within Computer Science and discuss the inferred topics for courses within those areas.
+Finally, \sref{sec:eval-comparison-stanford} and \sref{sec:eval-comparison-acmec} detail the similarities and differences between two university departments and also present a summary of comparisons between all the universities in this study.
 
 %------------------------------------------------
 
@@ -91,7 +91,7 @@ We therefore conclude that the CS 477 course registers its prerequisites primari
 
 %------------------------------------------------
 
-To quantify the typical level of conceptual overlap between prerequisites within a department, we introduce a novel vector representation of a course, the ``weighted topic-vector''.
+To quantify the typical level of conceptual overlap between prerequisites within a department, we introduce a vector representation of a course, the ``weighted topic-vector''.
 Like the unweighted topic-vector representation of a department, the weighted topic-vector is a vector of uniform length corresponding to the total number of inferred topics among all known courses.
 However, the features of a weighted topic-vector represent the proportion with which the particular topic is represented in the course's description.
 In this way, the weighted topic-vector takes into account the importance of a topic to a course, rather than simply binary topic membership as in the unweighted topic-vector.
@@ -121,7 +121,7 @@ The five universities not included did not have prerequisite relationships in th
 %------------------------------------------------
 
 \subsection{Case Study: Ethics In Computer Science}
-\label{sec:eval-topics}
+\label{sec:eval-topics-ethics}
 
 %------------------------------------------------
 
@@ -138,8 +138,32 @@ This demonstrates the ability of our tool to not only automatically infer releva
 
 %------------------------------------------------
 
+\subsection{Case Study: Artificial Intelligence}
+\label{sec:eval-topics-ai}
+
+%------------------------------------------------
+
+Another major topic within computer science is the study of \ac{ai}.
+\ac{ai} itself contains a great number of subfields and areas of specialization, but it is defined in \ac{acm} Knowledge Area ``Intelligent Systems'' as ``the study of solutions for problems that are difficult or impractical to solve with traditional methods''~\cite{CS2013}.
+Consider Portland State's CS 441 ``Artificial Intelligence.''
+Its course description is highly typical of \ac{ai} courses included in this study: brief and to the point, it lists a number of subfields within \ac{ai} that will be touched upon in the course.
+The only topic inferred for this course, at 86\% proportion, includes the terms ``intelligence'', ``knowledge'', ``artificial'', and ``agent'' at high frequencies.
+Every other university in this study also contains at least one course which teaches to this topic in some proportion.
+George Mason's CS 480 ``Introduction to Artificial Intelligence'', Louisiana State's CSC 4444 ``Artificial Intelligence'' and University of Utah's CS 6380 ``Multi-Agent Systems'' to name a few.
+Indeed, many of these courses share very similar descriptions.
+
+%------------------------------------------------
+
+However, one of the most unique examples of a course with this topic is the University of Tennessee's COSC 420 ``Biologically-Inspired Computation.''
+The title alone might not suggest that this is an \ac{ai} based class, and indeed it is not entirely \ac{ai}.
+The course description talks about swarm intelligences, multi-agent systems, and other biomimetic computational systems.
+While the common \ac{ai} topic discussed prior is inferred at 42\%, two other topics, one with terms from biology and one with terms from neural networks, a subfield of \ac{ai}, appear at proportions 24\% and 17\% respectively.
+UTK's COSC 420 is an excellent example of \ac{lda}'s ability to infer many possibly unrelated topics in a mixture within a document in order to represent the full nature of the text.
+
+%------------------------------------------------
+
 \subsection{Case Study: George Mason vs Stanford}
-\label{sec:eval-comparison}
+\label{sec:eval-comparison-stanford}
 
 %------------------------------------------------
 
@@ -166,9 +190,42 @@ High similarity to the \ac{ec} indicates a high degree of compliance with \ac{ac
 
 %------------------------------------------------
 
+\subsection{Case Study: George Mason vs ACM EC}
+\label{sec:eval-comparison-acmec}
+
+%------------------------------------------------
+
+add another case study on a nother topic
+
+%------------------------------------------------
+
 \begin{figure}
   \includegraphics[width=0.5\textwidth]{figures/10by10heatmap}
-  \caption{Pairwise similarity of CS departments using the Jaccard index. Darker shades indicate higher similarity. ACM EC refers to the \acf{ec}. (\sref{sec:evaluation})\label{fig:heatmap}}
+  \caption{Pairwise similarity of CS departments using the Jaccard index. Darker shades indicate higher similarity. ACM EC refers to the \acf{ec}. See \tref{tbl:heatmap-key} for the specific recorded values.\label{fig:heatmap}}
 \end{figure}
+
+%------------------------------------------------
+
+\begin{table*}
+  \centering
+  \begin{tabular}{lccccccccccc}
+    \toprule
+    & ACM EC & AU & GMU & KSU & LSU & PDX & RPI & SC & Stanford & Utah & UTK \\
+    \midrule
+    ACM EC & 1.000 & 0.420 & 0.433 & 0.426 & 0.407 & 0.386 & 0.433 & 0.443 & 0.366 & 0.427 & 0.373 \\
+    AU & 0.420 & 1.000 & 0.339 & 0.480 & 0.522 & 0.342 & 0.431 & 0.500 & 0.377 & 0.382 & 0.462 \\
+    GMU & 0.433 & 0.339 & 1.000 & 0.500 & 0.532 & 0.460 & 0.463 & 0.471 & 0.603 & 0.545 & 0.439 \\
+    KSU & 0.426 & 0.480 & 0.500 & 1.000 & 0.623 & 0.494 & 0.561 & 0.655 & 0.493 & 0.528 & 0.587 \\
+    LSU & 0.407 & 0.522 & 0.532 & 0.623 & 1.000 & 0.462 & 0.491 & 0.554 & 0.524 & 0.514 & 0.500 \\
+    PDX & 0.386 & 0.342 & 0.460 & 0.494 & 0.462 & 1.000 & 0.427 & 0.469 & 0.488 & 0.586 & 0.347 \\
+    RPI & 0.433 & 0.431 & 0.463 & 0.561 & 0.491 & 0.427 & 1.000 & 0.525 & 0.547 & 0.535 & 0.532 \\
+    SC & 0.443 & 0.500 & 0.471 & 0.655 & 0.554 & 0.469 & 0.525 & 1.000 & 0.443 & 0.521 & 0.480 \\
+    Stanford & 0.366 & 0.377 & 0.603 & 0.493 & 0.524 & 0.488 & 0.547 & 0.443 & 1.000 & 0.600 & 0.407 \\
+    Utah & 0.427 & 0.382 & 0.545 & 0.528 & 0.514 & 0.586 & 0.535 & 0.521 & 0.600 & 1.000 & 0.409 \\
+    UTK & 0.373 & 0.462 & 0.439 & 0.587 & 0.500 & 0.347 & 0.532 & 0.480 & 0.407 & 0.409 & 1.000 \\
+    \bottomrule
+  \end{tabular}
+  \caption{Pairwise similarity of CS departments computed as Jaccard index of department topic sets.\label{tbl:heatmap-key}}
+\end{table*}
 
 %------------------------------------------------

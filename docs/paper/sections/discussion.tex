@@ -34,7 +34,6 @@ A high level of consistency is indicated by the same topics being inferred for t
 
 %------------------------------------------------
 
-There are several known limitations of this work.
 As discussed prior, our work focuses entirely on formal learning environments.
 This is an artifact of the data used in the study.
 The same approaches introduced here could be applied to similar data collected from alternative learning environments.
@@ -44,6 +43,10 @@ Oftentimes course descriptions do not fully describe the actual content of what 
 It has even been observed that some course descriptions are merely held as filler text until a later date, and do not provide any useful information about the course.
 However, while these circumstances lie outside of our control, we take measures to prevent invalid course descriptions from entering the dataset.
 The cleaning process described in \sref{sec:data-acquisition} removes descriptions that are unlikely to be valid based on length and vocabulary size.
+However, it should be noted that this is a general purpose technique which can also be applied to intake other course related information, such as syllabi and assignment data instead of course descriptions.
+
+%------------------------------------------------
+
 Another major limitation of our approach is the inability to meaningfully summarize or categorize inferred topics.
 While the raw topics are used internally for comparison, they do not provide an ideal interface for the end user.
 This limitation stems from our use of \ac{lda} as the primary topic inference tool.

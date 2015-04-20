@@ -24,7 +24,7 @@ Simple web scrapers were written using Python and BeautifulSoup to download publ
 These will be made publicly available at
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % TODO: Blind replace.
-\url{http://redacted}.
+\url{http://redacted} (This will be available upon publication and is not available for blind submission).
 % \url{http://github.com/jrouly/trajectory}.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 Descriptions and catalog webpages appear in a vast variety of different formats, structures, and HTML correctness, so a parser was written for each university to acquire the unstructured text.
@@ -42,16 +42,16 @@ Non-specific prerequisite references (\eg\ \texttt{400-level}) are ignored as we
     \toprule
     University & Course Count \\
     \midrule
-    American University & 32 \\
-    George Mason University & 145 \\
-    Kansas State University & 83 \\
-    Louisiana State University & 59 \\
-    Portland State University & 190 \\
-    Rensselaer Polytechnic Institute & 61 \\
-    University of South Carolina & 64 \\
-    Stanford University & 69 \\
-    University of Utah & 142 \\
-    University of Tennessee, Knoxville & 29 \\
+    American University (AU) & 32 \\
+    George Mason University (GMU) & 145 \\
+    Kansas State University (KSU) & 83 \\
+    Louisiana State University (LSU) & 59 \\
+    Portland State University (PDX) & 190 \\
+    Rensselaer Polytechnic Institute (RPI) & 61 \\
+    University of South Carolina (SC) & 64 \\
+    Stanford University (Stanford) & 69 \\
+    University of Utah (Utah) & 142 \\
+    University of Tennessee, Knoxville (UTK) & 29 \\
     \midrule
     \ac{ec} & 68 \\
     \bottomrule
@@ -173,12 +173,12 @@ Once a university is selected, the user may search through its registered depart
 On selecting a course, the text of its description is displayed in both its original format and its cleaned, stemmed format.
 Additionally, the course's inferred topics are listed in order of their proportion within the course description.
 These topics are expandable, and upon interaction present the user with the list of other known courses with that inferred topic.
-Any topics appearing in a document with proportion under 0.15 are automatically hidden from the user.
+Any topics appearing in a document with proportion under 15\% are automatically hidden from the user.
 This design choice was implemented to reduce visual clutter from inferred topics with low relevance to the class.
 
 %------------------------------------------------
 
-\paragraph{Prerequisite Chain Analysis}
+\subsubsection{Prerequisite Chain Analysis}
 \label{sec:vis-prerequisites}
 
 %------------------------------------------------
@@ -192,11 +192,48 @@ Any shared topics between the prerequisites and the selected course are highligh
 
 %------------------------------------------------
 
+Observe the course CS 310 ``Data Structures'' in the upper middle of the prerequisite tree.
+\tref{tbl:310-topics} details its topics, along with the topics of its prerequisite courses CS 105 ``Computer Ethics and Society'' and CS 211 ``Object-Oriented Programming''.
+Clearly there is a significant area of overlap between a data structures course and an introductory course in object oriented programming, as illustrated by the two italicized overlapping topics.
+Specifically, the overlap is in the areas of algorithms and data structures as well as object oriented programming.
+The ethics course, however, does not share any conceptual overlap with CS 310.
+Inspecting the context of these courses, however, reveals that CS 105 is a common freshman requirement at George Mason, and many upper level classes depend on its completion.
+It is intended as a baseline of student maturity rather than a prerequisite because of the concepts it introduces.
+
+%------------------------------------------------
+
 \begin{figure*}
   \centering
   \includegraphics[width=\textwidth]{figures/screenshots/course/prerequisite_detail_cropped.png}
   \caption{Interactive prerequisite tree visualization tool\label{fig:prerequisite-detail}}
 \end{figure*}
+
+%------------------------------------------------
+
+\begin{table*}[ht!]
+  \centering
+  \begin{tabular}{ll}
+    \toprule
+    GMU CS 310 Topics & Proportion \\
+    \midrule
+    \emph{languag, object, program, orient, includ, type, abstract, design, implement, concept} & 29.946\% \\
+    \emph{program, problem, solv, algorithm, data, structur, comput, introduct, languag, techniqu} & 21.461\% \\
+    includ, design, system, topic, comput, introduct, cover, applic, algorithm, techniqu & 26.117\% \\
+    \midrule
+    GMU CS 211 Topics & Proportion \\
+    \midrule
+    \emph{languag, object, program, orient, includ, type, abstract, design, implement, concept} & 29.433\% \\
+    \emph{program, problem, solv, algorithm, data, structur, comput, introduct, languag, techniqu} & 26.772\% \\
+    code, compil, pars, analysi, optim, gener, languag, lexic, techniqu, construct & 18.685\% \\
+    comput, method, theori, basic, principl, includ, topic, model, cover, scientif & 16.076\% \\
+    \midrule
+    GMU CS 105 Topics & Proportion \\
+    \midrule
+    ethic, comput, issu, profession, social, technolog, privaci, legal, relat, digit & 75.964\% \\
+    \bottomrule
+  \end{tabular}
+  \caption{Topics of GMU CS 310 and its prerequisite courses, CS 105 and CS 211. Overlapping topics are italicized.\label{tbl:310-topics}}
+\end{table*}
 
 %------------------------------------------------
 
@@ -210,7 +247,7 @@ Topics inferred from every course in the department are collected and displayed 
 Topics unique to each department are displayed separately from the intersection set of common topics.
 Similarity metrics describing the relationship between the two departments are defined as well --- Jaccard index, cosine similarity, and Euclidean distance.
 Defined as $\frac{\left| A \cap B\right|}{\left| A \cup B\right|}$, the Jaccard index is based on the number of items unique to and shared between each set~\cite{jaccard1912}.
-The remaining metrics are based on a novel ``topic-vector'' representation of each department.
+The remaining metrics are based on a ``topic-vector'' representation of each department.
 The topic-vector is a binary vector where each bit indicates whether a particular topic was inferred for the given department.
 Features are unweighted and the topic-vector indicates only whether a topic is present in a department's topic set, and not its frequency of occurrence.
 Interpreting this vector representation geometrically, the Euclidean and cosine distances are calculated.
