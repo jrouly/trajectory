@@ -12,8 +12,8 @@
 
 \usemintedstyle{trac}
 
-\title{Unsupervised academic curricula evaluation through topic modeling}
-\subtitle{}
+\title{What Are We Teaching?}
+\subtitle{Automated Evaluation of CS Curricula Content Using Topic Modeling}
 \date{\today}
 \author[jrouly@gmu.edu]{Jean Michel Rouly}
 \institute[Department of Computer Science]{George Mason University}
@@ -25,20 +25,24 @@
 \maketitle
 
 
-\begin{frame}{What to expect from this talk}
-  \begin{itemize}[<+- | alert@+>]
-    \item Overview
-    \item Background
-    \item Data
-    \item \textbf{Trajectory}
-  \end{itemize}
-\end{frame}
-
-
 \section{Overview}
 
 
-\begin{frame}{Motivation}
+\begin{frame}{Computer Science Education}
+  \begin{itemize}
+    \item From 2007, number of new CS undergrads has increased 28.9\%
+    \item Fifth straight year of increase
+  \end{itemize}
+
+  \begin{figure}
+    \centering
+    \includegraphics[width=0.5\textwidth]{figs/zweben-cs-majors.png}
+    \caption{From Zweben, 2011.}
+  \end{figure}
+\end{frame}
+
+
+\begin{frame}{Departmental Evaluation}
 
   Evaluating a department on its conceptual coverage involves\ldots
   \vfill
@@ -55,7 +59,7 @@
 \end{frame}
 
 
-\begin{frame}{Motivation}
+\begin{frame}{Available Data}
   \begin{block}{What we've got:}
     \onslide<+->
     \begin{enumerate}[<+- | alert@+>]
@@ -96,7 +100,8 @@
     Build a tool that automatically\ldots
     \onslide<+->
     \begin{itemize}[<+- | alert@+>]
-      \item infers topics from a collection of course descriptions
+      \item ingests large collection of course descriptions
+      \item infers topics from course descriptions
       \item computes comparisons between departments
       \item evaluates departments on their concepts
     \end{itemize}
@@ -109,7 +114,10 @@
 
 
 \begin{frame}{Topic Modeling}
-  Attempts to discover the abstract \alert{topics} of a dataset.
+
+  \begin{block}{Topic Modeling}
+    Attempts to discover the abstract \alert{topics} of a dataset.
+  \end{block}
 
   \begin{block}{Topics}
     A \alert{topic} is a frequency distribution over terms, roughly
@@ -226,14 +234,138 @@
 \end{frame}
 
 
-\plain{Live Demo \\\small wish me luck!}
+%\plain{Live Demo \\\small wish me luck!}
+\plain{(Not So) Live Demo}
+
+
+\begin{frame}
+  \frametitle{Disclaimer}
+  Images have been modified to fit in this presentation.
+  \vfill
+  Visit \url{trajectory.rouly.net} on your smart device to follow along.
+\end{frame}
+
+\section{Browse}
+
+\begin{frame}
+  \frametitle{Trajectory / Web / Browse}
+  \begin{figure}
+    \centering
+    \includegraphics[width=0.95\textwidth]{figs/shots/departments.png}
+    \caption{Browse a university's departments.}
+  \end{figure}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Trajectory / Web / Browse}
+  \begin{figure}
+    \centering
+    \includegraphics[width=0.75\textwidth]{figs/shots/courses.png}
+    \caption{Browse a department's courses.}
+  \end{figure}
+\end{frame}
+
+\section{Understand}
+
+\begin{frame}
+  \frametitle{Trajectory / Web / Understand}
+  \begin{figure}
+    \centering
+    \includegraphics[width=0.95\textwidth]{figs/shots/course_detail.png}
+    \caption{View a course's inferred topics.}
+  \end{figure}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Trajectory / Web / Understand}
+  \begin{figure}
+    \centering
+    \includegraphics[width=0.95\textwidth]{figs/shots/related_ethics.png}
+    \caption{View related courses.}
+  \end{figure}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Trajectory / Web / Understand}
+  \begin{figure}
+    \centering
+    \includegraphics[width=0.95\textwidth]{figs/shots/related_data_mining.png}
+    \caption{View related courses.}
+  \end{figure}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Trajectory / Web / Understand}
+  \begin{figure}
+    \centering
+    \includegraphics[width=0.95\textwidth]{figs/shots/related_game_design.png}
+    \caption{View related courses.}
+  \end{figure}
+\end{frame}
+
+\section{Analyze}
+
+\begin{frame}
+  \frametitle{Trajectory / Web / Analyze}
+  \begin{figure}
+    \centering
+    \includegraphics[width=0.95\textwidth]{figs/shots/prereq_tree.png}
+    \caption{Course prerequisite tree.}
+  \end{figure}
+\end{frame}
+
+\section{Compare}
+
+\begin{frame}
+  \frametitle{Trajectory / Web / Compare}
+  \begin{figure}
+    \centering
+    \includegraphics[width=0.95\textwidth]{figs/shots/compare.png}
+    \caption{Compare departmental concept coverage.}
+  \end{figure}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Trajectory / Web / Compare}
+  \begin{figure}
+    \centering
+    \includegraphics[width=0.95\textwidth]{figs/shots/stats.png}
+    \caption{Quick departmental comparison.}
+  \end{figure}
+\end{frame}
+
+\section{Evaluate}
+
+\begin{frame}
+  \frametitle{Trajectory / Web / Evaluate}
+  \begin{figure}
+    \centering
+    \includegraphics[width=0.95\textwidth]{figs/shots/evaluation.png}
+    \caption{Evaluate department against Knowledge Areas.}
+  \end{figure}
+\end{frame}
+
+
+\section{Wrap up}
+
+
+\begin{frame}
+  \frametitle{Future Goals}
+  \begin{itemize}
+    \item Learning Outcomes meta-analysis
+    \item Alternative methods
+    \item Topic summarization
+    \item Extension to workforce preparedness
+    \item Smart web scraping
+  \end{itemize}
+\end{frame}
 
 
 \begin{frame}{Summary}
 
   Try out \textbf{Trajectory} online at
 
-  \begin{center}\url{trajectory.staging.rouly.net}\end{center}
+  \begin{center}\url{trajectory.rouly.net}\end{center}
 
   Get the source of this presentation and the \textbf{Trajectory} project
   at
@@ -249,17 +381,6 @@
 \end{frame}
 
 
-\begin{frame}
-  \frametitle{Future Goals}
-  \begin{itemize}
-    \item Learning Outcomes meta-analysis
-    \item Alternative methods
-    \item Topic summarization
-  \end{itemize}
-\end{frame}
-
-
-
 \begin{frame}{Credits}
   Co-authors:
   \begin{itemize}
@@ -269,6 +390,21 @@
 
   Presentation theme:
   \begin{itemize}\item\url{github.com/matze/mtheme}\end{itemize}
+\end{frame}
+
+
+\begin{frame}{Primary Sources}
+  \begin{itemize}
+    \item D. M. Blei, A. Y. Ng, and M. I. Jordan. Latent Dirichlet Allocation.
+      \emph{J. Mach. Learn. Res.}, 3:993–1022, Mar. 2003.
+    \item ACM/IEEE-CS Joint Task Force on Computing
+      Curricula. Computer science curricula 2013. Technical
+      report, ACM Press and IEEE Computer Society
+      Press, December 2013.
+    \item S. Zweben. Computing degree and enrollment trends.
+      Technical report, Computing Research Association,
+      2011.
+  \end{itemize}
 \end{frame}
 
 
