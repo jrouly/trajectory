@@ -23,6 +23,17 @@ bin/util/pysetup
 # Ensure that the virtual environment is enabled.
 source env/bin/activate
 
+if [ "$#" -ne 1 ]; then
+  echo "Enter a subcommand -- start/stop."
+else
+  if [ "$1" = "start" ]; then
+    gunicorn -c gunicorn.py trajectory.web:app
+  elif [ "$1" = "stop" ]; then
+    cat web.gunicorn.pid | xargs kill
+  else
+    echo "Unrecognized command."
+  fi
+fi
 
 # Activate gunicorn server.
-gunicorn -c gunicorn.py $@ trajectory.web:app
+#gunicorn -c gunicorn.py $@ trajectory.web:app
