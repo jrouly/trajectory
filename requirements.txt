@@ -11,6 +11,7 @@ MarkupSafe==0.23
 networkx==1.9.1
 numpy==1.9.2
 PorterStemmer==0.5
+PyMySQL==0.6.6
 requests==2.4.1
 SQLAlchemy==0.9.8
 Werkzeug==0.9.6
